@@ -6,7 +6,7 @@ public class Main {
 		System.out.println("Hello World");
 		System.out.println("Savvy added.");
 		System.out.println("Sara added to Java 1.8.");
-		
+		System.out.println("Push test");
 	}
 
 }
