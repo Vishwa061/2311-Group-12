@@ -1,13 +1,22 @@
 package TAB2MXL;
 
 import java.util.*;
-import java.io.File;
+import java.io.*;
 
 public class TabReader {
 	
-	public ArrayList<Object> tabArray = new ArrayList<Object>();
+	public List<String> tabArray = new ArrayList<String>();
 	public File inputTabFile;
 	public String outputXMLFile;
+	
+	public TabReader(String fileLocation) {
+		inputTabFile = new File(fileLocation);
+		outputXMLFile = "<?xml version = 1.0 encoding = UTF-8 standalone = no?>";
+		tabArray = new ArrayList<String>();
+		this.readFile();
+	}
+
+	
 	
 	public void readFile() {
 		Scanner sc = null;
@@ -17,12 +26,27 @@ public class TabReader {
 				tabArray.add(sc.nextLine());
 			}
 		}
-		catch (FileNotFoundExpception e) {
+		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		finally {
 			sc.close();
 		}
 	}
+		
+		public ArrayList<String> getTabArray(){
+			ArrayList<String> tabArr = new ArrayList<String>();
+			for (String line:this.tabArray) {
+				tabArr.add(line);
+			}
+			
+			return tabArr;
+			
+		}
+		
+		public void XMLTextBuilder() {
+			// parse and build text file 
+		}
+	}
 
-}
+

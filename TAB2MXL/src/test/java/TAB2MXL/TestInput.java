@@ -8,7 +8,7 @@ import java.util.List;
 public class TestInput {
 	@Test
 	public void testReadFile() {
-		Main main = new Main();
+		TabReader testing = new TabReader("test_tabs_reading.txt");
 		
 		List<String> expected = new ArrayList<String>();
 		expected.add("e |-------------0-0-0-0-0-0-----0-------0-0-0-0-0---|");
@@ -18,7 +18,7 @@ public class TestInput {
 		expected.add("A |---------0---0-0-0-0-0-----------0---0-0-0-0-0---|");
 		expected.add("E |-------------------------------------------------|");
 		
-		List<String> actual = main.readFile("test_tabs_reading.txt");
+		List<String> actual = testing.getTabArray();
 		
 		assertEquals(expected, actual);
 	}
