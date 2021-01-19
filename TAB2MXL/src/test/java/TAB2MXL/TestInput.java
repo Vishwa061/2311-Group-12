@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestInput {
+	private final String PATH = "src/test/resources/";
+	
 	@Test
 	public void testReadFile() {
-		TabReader testing = new TabReader("test_tabs_reading.txt");
+		Main testing = new Main();
 		
 		List<String> expected = new ArrayList<String>();
 		expected.add("e |-------------0-0-0-0-0-0-----0-------0-0-0-0-0---|");
@@ -18,7 +20,7 @@ public class TestInput {
 		expected.add("A |---------0---0-0-0-0-0-----------0---0-0-0-0-0---|");
 		expected.add("E |-------------------------------------------------|");
 		
-		List<String> actual = testing.getTabArray();
+		List<String> actual = testing.readFile(PATH + "test_tabs_reading.txt");
 		
 		assertEquals(expected, actual);
 	}
