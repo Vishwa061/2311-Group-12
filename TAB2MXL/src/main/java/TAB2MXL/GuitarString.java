@@ -1,6 +1,6 @@
 package TAB2MXL;
 
-class GuitarString {
+public class GuitarString {
 	private static final String[] ALL_NOTES = {"E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#"};
 	private int tuningValue;
 	private int stringNumber;
