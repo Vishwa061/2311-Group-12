@@ -1,6 +1,8 @@
 package TAB2MXL;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 
 public class TabReader {
@@ -43,6 +45,32 @@ public class TabReader {
 			return tabArr;
 			
 		}
+		
+		public void parser() {
+			String correctLine = "^(\\||\\-|[0-9])([\\x5c\\|\\-\\s,*\\+<>0-9^\\(\\)hp=gSs%ex/]+)(\\s?)+"+")(\\||\\-|[0-9])" ;
+			//need to update the correctLine string since not entirely sure how to declare the required regex in java
+			String measureSeparators = "|";
+			ArrayList<String> tabArr = this.getTabArray();
+			int count = 0;
+			
+			 for (int i = 0; i < tabArr.size(); i++ ) {      
+			      boolean match = tabArr.get(i).matches(correctLine);
+			      //breaking the tablature into 6 lines a piece
+			      if (match) {
+			        count++;                
+			        if (count == 6) {
+			          count = 0;
+			        }
+			      }
+			      else { 
+			        count = 0;
+			        }    
+			      //recombine conveniently to convert into what we actually need
+			      //to do
+			  }
+		}
+		
+		
 		
 		public void XMLTextBuilder() {
 			// parse and build text file 
