@@ -49,6 +49,7 @@ public class TabReader {
 		public void parser() {
 			String correctLine = "^(\\||\\-|[0-9])([\\x5c\\|\\-\\s,*\\+<>0-9^\\(\\)hp=gSs%ex/]+)(\\s?)+"+")(\\||\\-|[0-9])" ;
 			//need to update the correctLine string since not entirely sure how to declare the required regex in java
+			//
 			String measureSeparators = "|";
 			ArrayList<String> tabArr = this.getTabArray();
 			int count = 0;
