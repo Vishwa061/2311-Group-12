@@ -22,4 +22,9 @@ public class Pitch {
 	public int getOctave() {
 		return octave;
 	}
+	
+	@Override
+	public String toString() {
+		return "Step: " + getStep() + ", Alter: " + getAlter() + ", Octave: " + getOctave();
+	}
 }

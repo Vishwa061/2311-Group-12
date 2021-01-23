@@ -9,6 +9,12 @@ public class GuitarString {
 	private int tuningValue;
 	private int stringNumber;
 
+	/**
+	 * A guitar string that can return Pitches given a fret
+	 * 
+	 * @param stringNumber a number from 1 to 6, 1 being the thinnest string and 6 the thickest
+	 * @param stringTuning the tuning note on the left of the tabs (C, C#, D, D#, E, F, F#, G, G#, A, A#, B);
+	 */
 	public GuitarString(int stringNumber, String stringTuning) {
 		this.stringNumber = stringNumber;
 		for (int i = 0; i < ALL_NOTES.length; i++) {
