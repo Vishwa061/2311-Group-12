@@ -25,6 +25,17 @@ public class Pitch {
 	
 	@Override
 	public String toString() {
-		return "Step: " + getStep() + ", Alter: " + getAlter() + ", Octave: " + getOctave();
+		return "Step: " + step + ", Alter: " + alter + ", Octave: " + octave;
+	}
+	
+	public String toMXL() {
+		String mxl = "<pitch>\n";
+		
+		mxl += "<step>" + step +"</step>\n";
+		mxl += "<alter>" + alter +"</alter>\n";
+		mxl += "<octave>" + octave +"</octave>\n";
+		
+		mxl += "</pitch>\n";
+		return mxl;
 	}
 }
