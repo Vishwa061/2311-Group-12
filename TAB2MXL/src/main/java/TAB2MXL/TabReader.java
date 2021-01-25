@@ -78,7 +78,7 @@ public class TabReader {
 			 
 				 ArrayList<String> tab = new ArrayList<String>();
 				 ArrayList<String> matched = new ArrayList<String>();
-				 ArrayList<String> tabPhrase = new ArrayList<String>();
+				 ArrayList<String> tabNote = new ArrayList<String>();
 				 ArrayList<String> tabArr = this.getTabArray();
 			  String correctLine = "^(\\||\\-|[0-9])([\\x5c\\|\\-\\s,*\\+<>0-9^\\(\\)hp=gSs%ex/]+)(\\s?)+"+")(\\||\\-|[0-9])" ;
 			 
@@ -86,17 +86,16 @@ public class TabReader {
 			      boolean match = tabArr.get(i).matches(correctLine);
 			       
 			      if (match) {
-			        tabPhrase.add(tabArr.get(i));
-			        if (tabPhrase.size() == 6)
+			        tabNote.add(tabArr.get(i));
+			        if (tabNote.size() == 6)
 			        	//change the if condition
 			        {
-			          tab.addAll(tabPhrase);
-			          tabPhrase = new ArrayList<String>();                            
+			          tab.addAll(tabNote);
+			          tabNote = new ArrayList<String>();                            
 			        }
 			      }
 			      else { 
-			        tabPhrase = new ArrayList<String>();
-			      }      
+			        }      
 			  }
 			  return tab;
 			 }
