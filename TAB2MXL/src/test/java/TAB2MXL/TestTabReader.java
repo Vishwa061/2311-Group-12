@@ -5,12 +5,12 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestInput {
+public class TestTabReader {
 	private final String PATH = "src/test/resources/";
 	
 	@Test
 	public void testReadFile() {
-		Main testing = new Main();
+		TabReader reader = new TabReader(PATH + "test_tabs_reading.txt");
 		
 		List<String> expected = new ArrayList<String>();
 		expected.add("e |-------------0-0-0-0-0-0-----0-------0-0-0-0-0---|");
@@ -20,9 +20,15 @@ public class TestInput {
 		expected.add("A |---------0---0-0-0-0-0-----------0---0-0-0-0-0---|");
 		expected.add("E |-------------------------------------------------|");
 		
-		List<String> actual = testing.readFile(PATH + "test_tabs_reading.txt");
+		List<String> actual = reader.getTabArray();
 		
 		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void test1() {
+		TabReader reader = new TabReader(PATH + "test1.txt");
+		System.out.println(reader.parseTab());
 	}
 
 }
