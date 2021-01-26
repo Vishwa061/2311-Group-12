@@ -47,3 +47,11 @@ public class ReadTab {
 	}
 		 return tab;
 }
+	
+	String correctLine = "^(\\||\\-|[0-9])([\\x5c\\|\\-\\s,*\\+<>0-9^\\(\\)hp=gSs%ex/]+)(\\s?)+"+")(\\||\\-|[0-9])" ;
+	for ()
+	
+	
+	
+	
+}

@@ -28,7 +28,8 @@ public class TestTabReader {
 	@Test
 	public void test1() {
 		TabReader reader = new TabReader(PATH + "test1.txt");
-		System.out.println(reader.parseTab());
+		//System.out.println(reader.parseTab());
+		System.out.println(reader.split2());
 	}
 
 }
