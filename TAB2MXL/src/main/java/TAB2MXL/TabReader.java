@@ -72,6 +72,7 @@ public class TabReader {
 			 }
 			      //recombine conveniently to convert into what we actually need
 			      //to do
+			 
 			  }
 			 public ArrayList<String> parseTab() {
 			 
