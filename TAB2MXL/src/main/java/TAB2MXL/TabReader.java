@@ -99,6 +99,15 @@ public class TabReader {
 			  }
 			  return tab;
 			 }
+			 
+			 public void splitMeasures() {
+					ArrayList<String> split = new ArrayList<String>();
+					for(String meas : tabArray) {
+						for (String list : meas.split("\t")) {
+							split.add(list);
+						}
+					}
+			 }
 			
 
 		
