@@ -3,6 +3,9 @@ package TAB2MXL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.common.collect.Tables;
+
 import java.io.*;
 
 public class TabReader {
@@ -65,11 +68,40 @@ public class TabReader {
 			      }
 			      else { 
 			        count = 0;
-			        }    
+			      }
+			 }
 			      //recombine conveniently to convert into what we actually need
 			      //to do
 			  }
-		}
+			 public ArrayList<String> parseTab() {
+			 
+			 
+				 ArrayList<String> tab = new ArrayList<String>();
+				 ArrayList<String> matched = new ArrayList<String>();
+				 ArrayList<String> tabNote = new ArrayList<String>();
+				 ArrayList<String> tabArr = this.getTabArray();
+			  String correctLine = "^(\\||\\-|[0-9])([\\x5c\\|\\-\\s,*\\+<>0-9^\\(\\)hp=gSs%ex/]+)(\\s?)+"+")(\\||\\-|[0-9])" ;
+			 
+			  for (int i = 0; i < tabArr.size(); i++ ) {      
+			      boolean match = tabArr.get(i).matches(correctLine);
+			       
+			      if (match) {
+			        tabNote.add(tabArr.get(i));
+			        if (tabNote.size() == 6)
+			        	//change the if condition
+			        {
+			          tab.addAll(tabNote);
+			          tabNote = new ArrayList<String>();                            
+			        }
+			      }
+			      else { 
+			        }      
+			  }
+			  return tab;
+			 }
+			
+
+		
 		
 		
 		
