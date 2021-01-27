@@ -18,7 +18,7 @@ public class GuitarString {
 	public GuitarString(int stringNumber, String stringTuning) {
 		this.stringNumber = stringNumber;
 		for (int i = 0; i < ALL_NOTES.length; i++) {
-			if (stringTuning == ALL_NOTES[i]) {
+			if (stringTuning.equals(ALL_NOTES[i])) {
 				tuningValue = i;
 				break;
 			}
