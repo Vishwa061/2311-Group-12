@@ -17,13 +17,14 @@ public class MainV2 {
 		MainV2 test2 = new MainV2("src/main/java/TAB2MXL/StairwayHeaven.txt");
 		test2.setTuning(test2.tabArray);
 		test2.makeMeasures(test2.tabArray);
-		test2.makeNotes();
+//		test2.makeNotes();
 //		System.out.println(allMeasures.size());
-//		for (int i = 0; i < allMeasures.size(); i++) {
-//			for(int j = 0; j < 6; j++) {
-//				System.out.println(allMeasures.get(i).get(j));
-//			}
-//		}
+		for (int i = 0; i < allMeasures.size(); i++) {
+			for(int j = 0; j < 6; j++) {
+				System.out.println(allMeasures.get(i).get(j));
+			}
+			System.out.println();
+		}
 		
 	}
 

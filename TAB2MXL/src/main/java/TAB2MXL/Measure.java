@@ -15,11 +15,12 @@ public class Measure {
 		notes.add(note);
 	}
 	
-	public String toMXL() {
+	@Override
+	public String toString() {
 		String mxl = "<measure number=\"" + measureNumber + "\">\n";
 		
 		for (Note note : notes) {
-			mxl += note.toMXL() + "\n";
+			mxl += note + "\n";
 		}
 		
 		mxl += "</measure>";
@@ -33,7 +34,7 @@ public class Measure {
 		mxl += a.toMXL() + "\n";
 		
 		for (Note note : notes) {
-			mxl += note.toMXL() + "\n";
+			mxl += note + "\n";
 		}
 		
 		mxl += "</measure>";
