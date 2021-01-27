@@ -14,7 +14,7 @@ public class Main {
 
 		System.out.println("Hello World Nishiket"); 
 
-		System.out.println("Hello World, kkaneez"); 
+		System.out.println("Hello World"); 
 		System.out.println("Hello World, kaneez");
 		System.out.println("Hello World, savvy"); 
 
