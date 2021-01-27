@@ -13,10 +13,10 @@ public class PitchV2 {
 	public int octave;
 	public int indexWithinMeasure;
 
-	public PitchV2(String tuningVal, int fretVal, int charIndexVal) {
+	public PitchV2(String tuningVal, int fretVal) {
 		this.step = calcStep(tuningVal, fretVal);
 		this.octave = calcOctave(tuningVal, fretVal);
-		indexWithinMeasure = charIndexVal;
+		
 	}
 
 	public String calcStep(String tuningVal, int fretVal) {
