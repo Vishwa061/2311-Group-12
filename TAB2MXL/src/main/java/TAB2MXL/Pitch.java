@@ -25,13 +25,13 @@ public class Pitch {
 	
 	@Override
 	public String toString() {
-		String mxl = "<pitch>\n";
+		String mxl = "\t\t<pitch>\n";
 		
-		mxl += "\t<step>" + step +"</step>\n";
-		mxl += "\t<alter>" + alter +"</alter>\n";
-		mxl += "\t<octave>" + octave +"</octave>\n";
+		mxl += "\t\t\t<step>" + step +"</step>\n";
+		mxl += "\t\t\t<alter>" + alter +"</alter>\n";
+		mxl += "\t\t\t<octave>" + octave +"</octave>\n";
 		
-		mxl += "</pitch>\n";
+		mxl += "\t\t</pitch>\n";
 		return mxl;
 	}
 }

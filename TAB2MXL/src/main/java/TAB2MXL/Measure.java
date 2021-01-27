@@ -24,9 +24,9 @@ public class Measure {
 	public String toString() {
 		String mxl = "<measure number=\"" + measureNumber + "\">\n";
 		
-		if (measureNumber == 1) {
-			mxl += a;
-		}
+//		if (measureNumber == 1) {
+//			mxl += a;
+//		}
 		
 		for (Note note : notes) {
 			mxl += note + "\n";

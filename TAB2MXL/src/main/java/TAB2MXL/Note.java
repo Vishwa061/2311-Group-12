@@ -16,11 +16,11 @@ public class Note {
 
 	@Override
 	public String toString() {
-		String toMXL = "<note>\n" + this.pitch 
-		+ "            <duration> method not complete </duration>\r\n"
-		+ "            <type> method not complete </type>\r\n"
-		+ "            <staff>1</staff>\r\n"
-		+ "            </note>";
+		String toMXL = "\t<note>\n" + this.pitch 
+		+ "\t\t<duration> method not complete </duration>\n"
+		+ "\t\t<type> method not complete </type>\n"
+		+ "\t\t<staff>1</staff>\n"
+		+ "\t</note>";
 
 		return toMXL;
 	}
