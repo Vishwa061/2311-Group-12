@@ -129,8 +129,10 @@ public class MainV2 {
 	}
 	
 	public void makeNotes() {
+		GuitarString[] strings = new GuitarString[6];
 		for (int i = 0; i < allMeasures.size(); i++) {
 			for(int j = 0; j < 6; j++) {
+				strings[j] = new GuitarString(j+1, Character.toString(guitarTuning.get(j)).toUpperCase());
 				String currentLine = allMeasures.get(i).get(j);
 					for(int k = 0; k < currentLine.length(); k++) {
 						if (currentLine.charAt(k) != '-') {
