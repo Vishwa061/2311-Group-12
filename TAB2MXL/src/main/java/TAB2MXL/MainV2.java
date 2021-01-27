@@ -17,14 +17,14 @@ public class MainV2 {
 		MainV2 test2 = new MainV2("src/main/java/TAB2MXL/StairwayHeaven.txt");
 		test2.setTuning(test2.tabArray);
 		test2.makeMeasures(test2.tabArray);
-//		test2.makeNotes();
+		test2.makeNotes();
 //		System.out.println(allMeasures.size());
-		for (int i = 0; i < allMeasures.size(); i++) {
-			for(int j = 0; j < 6; j++) {
-				System.out.println(allMeasures.get(i).get(j));
-			}
-			System.out.println();
-		}
+//		for (int i = 0; i < allMeasures.size(); i++) {
+//			for(int j = 0; j < 6; j++) {
+//				System.out.println(allMeasures.get(i).get(j));
+//			}
+//			System.out.println();
+//		}
 		
 	}
 
@@ -131,9 +131,11 @@ public class MainV2 {
 	
 	public void makeNotes() {
 		GuitarString[] strings = new GuitarString[6];
+		ArrayList<Measure> measureElements = new ArrayList<Measure>();
 		for (int i = 0; i < allMeasures.size(); i++) {
+			Measure measure = new Measure(i + 1);
 			for(int j = 0; j < 6; j++) {
-				strings[j] = new GuitarString(j+1, Character.toString(guitarTuning.get(j)).toUpperCase());
+				strings[j] = new GuitarString(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase());
 				String currentLine = allMeasures.get(i).get(j);
 					for(int k = 0; k < currentLine.length(); k++) {
 						if (currentLine.charAt(k) != '-') {
@@ -142,20 +144,25 @@ public class MainV2 {
 //							System.out.println(fret);
 //							String guitarTune = guitarTuning.get(j).toString();
 //							System.out.println(guitarTune);
-							System.out.println("Measure Number: " + (i + 1));
+//							System.out.println("Measure Number: " + (i + 1));
 							Pitch pitch = strings[j].createPitch(fret);
 //							PitchV2 pitch2 = new PitchV2(guitarTuning.get(j).toString(), fret);
 							Note note = new Note(pitch, k);
+							measure.addNote(note);
 //							System.out.println(pitch.getStep());
 //							System.out.println(note.getStep());
-							System.out.println(note.toString());
+//							System.out.println(note);
+							
 						}
 							//allMeasuresNotes.get(i).notesArray.add(note);
-							
-							
 					}
-				
 			}
+			measureElements.add(measure);
+		}
+		
+		// print to see all measures
+		for (Measure m : measureElements) {
+			System.out.println(m);
 		}
 	}
 }

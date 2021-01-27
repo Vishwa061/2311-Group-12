@@ -6,7 +6,8 @@ public class Attributes {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public String toMXL() {
+	@Override
+	public String toString() {
 		// TODO
 		return null;
 	}

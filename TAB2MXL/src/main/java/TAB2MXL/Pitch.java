@@ -27,9 +27,9 @@ public class Pitch {
 	public String toString() {
 		String mxl = "<pitch>\n";
 		
-		mxl += "<step>" + step +"</step>\n";
-		mxl += "<alter>" + alter +"</alter>\n";
-		mxl += "<octave>" + octave +"</octave>\n";
+		mxl += "\t<step>" + step +"</step>\n";
+		mxl += "\t<alter>" + alter +"</alter>\n";
+		mxl += "\t<octave>" + octave +"</octave>\n";
 		
 		mxl += "</pitch>\n";
 		return mxl;
