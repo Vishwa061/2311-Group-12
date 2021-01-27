@@ -142,7 +142,8 @@ public class MainV2 {
 //							String guitarTune = guitarTuning.get(j).toString();
 //							System.out.println(guitarTune);
 							System.out.println("Measure Number: " + (i + 1));
-							PitchV2 pitch = new PitchV2(guitarTuning.get(j).toString(), fret);
+							Pitch pitch = strings[j].createPitch(fret);
+//							PitchV2 pitch2 = new PitchV2(guitarTuning.get(j).toString(), fret);
 							Note note = new Note(pitch, k);
 //							System.out.println(pitch.getStep());
 //							System.out.println(note.getStep());

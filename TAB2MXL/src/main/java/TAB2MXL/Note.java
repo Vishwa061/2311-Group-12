@@ -3,13 +3,13 @@ package TAB2MXL;
 
 public class Note {
 	
-	public PitchV2 pitch;
+	public Pitch pitch;
 	//public NotationV2 notation; 
 	public int duration; 
 	public int type;
 	public int charIndex;
 	
-	Note(PitchV2 pitch, int charIndex){
+	Note(Pitch pitch, int charIndex){
 		this.pitch = pitch;
 		this.charIndex = charIndex;
 	}

@@ -25,10 +25,6 @@ public class Pitch {
 	
 	@Override
 	public String toString() {
-		return "Step: " + step + ", Alter: " + alter + ", Octave: " + octave;
-	}
-	
-	public String toMXL() {
 		String mxl = "<pitch>\n";
 		
 		mxl += "<step>" + step +"</step>\n";
