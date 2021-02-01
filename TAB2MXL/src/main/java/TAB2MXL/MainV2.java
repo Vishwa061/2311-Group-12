@@ -130,12 +130,10 @@ public class MainV2 {
 	}
 	
 	public void makeNotes() {
-		GuitarString[] strings = new GuitarString[6];
 		ArrayList<Measure> measureElements = new ArrayList<Measure>();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			Measure measure = new Measure(i + 1);
 			for(int j = 0; j < 6; j++) {
-				strings[j] = new GuitarString(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase());
 				String currentLine = allMeasures.get(i).get(j);
 					for(int k = 0; k < currentLine.length(); k++) {
 						if (currentLine.charAt(k) != '-') {
@@ -145,9 +143,8 @@ public class MainV2 {
 //							String guitarTune = guitarTuning.get(j).toString();
 //							System.out.println(guitarTune);
 //							System.out.println("Measure Number: " + (i + 1));
-							Pitch pitch = strings[j].createPitch(fret);
 //							PitchV2 pitch2 = new PitchV2(guitarTuning.get(j).toString(), fret);
-							Note note = new Note(pitch, k);
+							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
 							measure.addNote(note);
 //							System.out.println(pitch.getStep());
 //							System.out.println(note.getStep());
