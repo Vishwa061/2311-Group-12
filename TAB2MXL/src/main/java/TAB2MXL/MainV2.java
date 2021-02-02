@@ -9,30 +9,18 @@ import java.util.Scanner;
 public class MainV2 {
 
 	public static void main(String[] args) {
-//		MainV2 test = new MainV2("src/TabLocal/StairwayHeaven.txt");
-//		test.setTuning(test.tabArray);
-//		test.makeMeasures(test.tabArray);
-//		test.makeNotes();
-		
+
 		MainV2 test2 = new MainV2("src/main/java/TAB2MXL/StairwayHeaven.txt");
 		test2.setTuning(test2.tabArray);
 		test2.makeMeasures(test2.tabArray);
 		test2.makeNotes();
-//		System.out.println(allMeasures.size());
-//		for (int i = 0; i < allMeasures.size(); i++) {
-//			for(int j = 0; j < 6; j++) {
-//				System.out.println(allMeasures.get(i).get(j));
-//			}
-//			System.out.println();
-//		}
-		
+
 	}
 
 	public List<String> tabArray = new ArrayList<String>();
 	public File inputTabFile;
 	public String outputXMLFile;
 	static List<ArrayList<String>> allMeasures = new ArrayList<ArrayList<String>>();
-	//static ArrayList<MeasureSolo> allMeasuresNotes = new ArrayList<MeasureSolo>();
 	static List<Character> guitarTuning = new ArrayList<Character>();
 
 	MainV2(String inputFile) {
@@ -70,7 +58,6 @@ public class MainV2 {
 		for (int i = 0; i < 6; i++) {
 			char tuneVal = this.tabArray.get(i).charAt(0);
 			guitarTuning.add(tuneVal);
-			//System.out.println(tuneVal);
 		}
 
 		for (int i = 0; i < this.tabArray.size(); i++) {
@@ -92,7 +79,6 @@ public class MainV2 {
 			int index2 = currentElement.indexOf('|', index1 + 1);
 			String lineSegment = currentElement.substring(index1 + 1, index2);
 			Measure.add(lineSegment);
-//			System.out.println(lineSegment);
 			String replaceLine = currentElement.substring(index2);
 			this.tabArray.set(j, replaceLine);
 		}
@@ -116,7 +102,6 @@ public class MainV2 {
 			int index2 = currentElement.indexOf('|', index1 + 1);
 			String lineSegment = currentElement.substring(index1 + 1, index2);
 			Measure.add(lineSegment);
-//			System.out.println(lineSegment);
 			String replaceLine = currentElement.substring(index2);
 			this.tabArray.set(j, replaceLine);
 		}
@@ -128,39 +113,70 @@ public class MainV2 {
 		if (this.tabArray.size() > startingIndex + 6)
 			makeMeasures(this.tabArray, startingIndex + 6);
 	}
-	
+
 	public void makeNotes() {
 		ArrayList<Measure> measureElements = new ArrayList<Measure>();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			Measure measure = new Measure(i + 1);
-			for(int j = 0; j < 6; j++) {
+			for (int j = 0; j < 6; j++) {
 				String currentLine = allMeasures.get(i).get(j);
-					for(int k = 0; k < currentLine.length(); k++) {
-						if (currentLine.charAt(k) != '-') {
-							String temp = currentLine.substring(k, k+1);
+				String temp;
+				for (int k = 0; k < currentLine.length(); k++) {
+					int noteCounter = 0;
+					if (currentLine.charAt(k) != '-') {
+						if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
+								|| currentLine.charAt(k + 1) == '2' || currentLine.charAt(k + 1) == '3'
+								|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
+								|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
+								|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
+							temp = currentLine.substring(k, k + 2);
 							int fret = Integer.valueOf(temp);
-//							System.out.println(fret);
-//							String guitarTune = guitarTuning.get(j).toString();
-//							System.out.println(guitarTune);
-//							System.out.println("Measure Number: " + (i + 1));
-//							PitchV2 pitch2 = new PitchV2(guitarTuning.get(j).toString(), fret);
 							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
 							measure.addNote(note);
-//							System.out.println(pitch.getStep());
-//							System.out.println(note.getStep());
-//							System.out.println(note);
-							
+							k++;
 						}
-							//allMeasuresNotes.get(i).notesArray.add(note);
+						if (currentLine.charAt(k + 1) == 'p' || currentLine.charAt(k + 1) == 'h'
+								|| currentLine.charAt(k + 1) == 's' || currentLine.charAt(k + 1) == '/') {
+
+							if (currentLine.charAt(k + 1) == 'p')
+								measure.getNote(noteCounter).slurStart = true;
+
+							if (currentLine.charAt(k + 1) == 'h')
+								measure.getNote(noteCounter).tieStart = true;
+
+							if (currentLine.charAt(k + 1) == 's' || currentLine.charAt(k + 1) == '/')
+								measure.getNote(noteCounter).slideStart = true;
+
+							k++;
+						} else {
+							temp = currentLine.substring(k, k + 1);
+							int fret = Integer.valueOf(temp);
+							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
+							measure.addNote(note);
+							noteCounter++;
+							if (measure.getNote(noteCounter - 1).slurStart || measure.getNote(noteCounter - 1).tieStart
+									|| measure.getNote(noteCounter - 1).slideStart) {
+								if (measure.getNote(noteCounter - 1).slurStart)
+									measure.getNote(noteCounter).slurStop = true;
+
+								if (measure.getNote(noteCounter - 1).tieStart)
+									measure.getNote(noteCounter).tieStop = true;
+
+								if (measure.getNote(noteCounter - 1).slideStart)
+									measure.getNote(noteCounter).slideStop = true;
+							}
+
+						}
 					}
+
+				}
 			}
 			measureElements.add(measure);
+
 		}
-		
 		// print to see all measures
 		for (Measure m : measureElements) {
 			System.out.println(m);
 		}
 	}
 }
-

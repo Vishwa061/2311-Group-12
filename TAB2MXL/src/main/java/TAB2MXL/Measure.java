@@ -36,4 +36,8 @@ public class Measure {
 		
 		return mxl;
 	}
+	
+	public Note getNote(int index) {
+		return notes.get(index);
+	}
 }
