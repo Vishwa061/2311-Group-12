@@ -35,10 +35,44 @@ public class Note {
 
 	@Override
 	public String toString() {
-		String toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+		
+		String toMXL = "";
+		
+		if(slurStart || tieStart || slideStart || slurStop || tieStop || slideStop) {
+			if(slurStart)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+			if(tieStart)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<tie type=\"start\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+			if(slideStart)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slide type=\"start\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+			if(slurStop)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"stop\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+			if(tieStop)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<tie type=\"stop\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+			if(slideStop)
+				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slide type=\"stop\"/>\n" 
+						+ "\t\t</notations>\n" + "\t</note>";
+		}
+
+		
+		else {
+			toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
 				+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t</note>";
+		}
 
 		return toMXL;
+		
 	}
 
 	public Pitch getPitch() {

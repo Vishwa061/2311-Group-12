@@ -124,30 +124,34 @@ public class MainV2 {
 				for (int k = 0; k < currentLine.length(); k++) {
 					int noteCounter = 0;
 					if (currentLine.charAt(k) != '-') {
-						if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
-								|| currentLine.charAt(k + 1) == '2' || currentLine.charAt(k + 1) == '3'
-								|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
-								|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
-								|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
-							temp = currentLine.substring(k, k + 2);
-							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
-							measure.addNote(note);
-							k++;
+						if(currentLine.charAt(k+1) != '-') {
+							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
+									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
+									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
+									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
+									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
+								temp = currentLine.substring(k, k + 2);
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
+								measure.addNote(note);
+								k++;
+								
+							}
 						}
-						if (currentLine.charAt(k + 1) == 'p' || currentLine.charAt(k + 1) == 'h'
-								|| currentLine.charAt(k + 1) == 's' || currentLine.charAt(k + 1) == '/') {
+						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h'
+								|| currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/') {
 
-							if (currentLine.charAt(k + 1) == 'p')
+							if (currentLine.charAt(k) == 'p')
 								measure.getNote(noteCounter).slurStart = true;
 
-							if (currentLine.charAt(k + 1) == 'h')
+							if (currentLine.charAt(k) == 'h')
 								measure.getNote(noteCounter).tieStart = true;
 
-							if (currentLine.charAt(k + 1) == 's' || currentLine.charAt(k + 1) == '/')
+							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/')
 								measure.getNote(noteCounter).slideStart = true;
 
-							k++;
+							break;
+							
 						} else {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
