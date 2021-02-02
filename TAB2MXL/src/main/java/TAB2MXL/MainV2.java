@@ -124,22 +124,9 @@ public class MainV2 {
 				for (int k = 0; k < currentLine.length(); k++) {
 					int noteCounter = 0;
 					if (currentLine.charAt(k) != '-') {
-						if(currentLine.charAt(k+1) != '-') {
-							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
-									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
-									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
-									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
-									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
-								temp = currentLine.substring(k, k + 2);
-								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
-								measure.addNote(note);
-								k++;
-								
-							}
-						}
-						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h'
-								|| currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/') {
+
+						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h' || currentLine.charAt(k) == 's'
+								|| currentLine.charAt(k) == '/') {
 
 							if (currentLine.charAt(k) == 'p')
 								measure.getNote(noteCounter).slurStart = true;
@@ -150,9 +137,42 @@ public class MainV2 {
 							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/')
 								measure.getNote(noteCounter).slideStart = true;
 
-							break;
-							
-						} else {
+							continue;
+
+						}
+
+						if (currentLine.charAt(k + 1) != '-') {
+							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
+									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
+									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
+									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
+									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
+								temp = currentLine.substring(k, k + 2);
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret,
+										k);
+								measure.addNote(note);
+								noteCounter++;
+								k++;
+
+								if (measure.getNote(noteCounter - 1).slurStart
+										|| measure.getNote(noteCounter - 1).tieStart
+										|| measure.getNote(noteCounter - 1).slideStart) {
+									if (measure.getNote(noteCounter - 1).slurStart)
+										measure.getNote(noteCounter).slurStop = true;
+
+									if (measure.getNote(noteCounter - 1).tieStart)
+										measure.getNote(noteCounter).tieStop = true;
+
+									if (measure.getNote(noteCounter - 1).slideStart)
+										measure.getNote(noteCounter).slideStop = true;
+								}
+
+								continue;
+							}
+						}
+
+						else {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
@@ -175,6 +195,7 @@ public class MainV2 {
 
 				}
 			}
+
 			measureElements.add(measure);
 
 		}
