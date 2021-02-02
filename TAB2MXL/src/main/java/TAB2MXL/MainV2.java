@@ -16,7 +16,7 @@ public class MainV2 {
 		test2.makeNotes();
 
 	}
-
+	public ArrayList<Measure> measureElements = new ArrayList<Measure>();
 	public List<String> tabArray = new ArrayList<String>();
 	public File inputTabFile;
 	public String outputXMLFile;
@@ -115,7 +115,6 @@ public class MainV2 {
 	}
 
 	public void makeNotes() {
-		ArrayList<Measure> measureElements = new ArrayList<Measure>();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			Measure measure = new Measure(i + 1);
 			int noteCounter = 0;

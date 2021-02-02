@@ -133,7 +133,7 @@ public class Note implements Comparable<Note> {
 	
 	@Override
 	public int compareTo(Note object1) {
-		return (object1.charIndex - this.charIndex);
+		return (this.charIndex - object1.charIndex);
 	}
 	
 

@@ -51,6 +51,10 @@ public class Measure {
 		Collections.sort(notes);
 		
 		}
+	
+	public ArrayList<Note> getNotes() {
+		return notes;
+	}
 		
 	
 	
