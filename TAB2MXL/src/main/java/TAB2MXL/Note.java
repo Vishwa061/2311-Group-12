@@ -3,7 +3,7 @@ package TAB2MXL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Note {
+public class Note implements Comparable<Note> {
 	private static final String[] ALL_NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 	private static final Map<String, Integer> ALL_NOTES_MAP = initAllNotesMap();
 	private static final Map<Integer, Integer> GUITAR_OCTAVES = initGuitarOctaves();
@@ -130,5 +130,11 @@ public class Note {
 
 		return allNotesMap;
 	}
+	
+	@Override
+	public int compareTo(Note object1) {
+		return (object1.charIndex - this.charIndex);
+	}
+	
 
 }

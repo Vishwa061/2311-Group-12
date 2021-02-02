@@ -1,6 +1,7 @@
 package TAB2MXL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.lang.Comparable;
 
 public class Measure {
@@ -45,6 +46,18 @@ public class Measure {
 	public int size() {
 		return notes.size();
 	}
+	
+	public void sortArray() {
+		Collections.sort(notes);
+		
+		}
+		
+	
+	
+	
+	
+	
+	
 //	public int compareTo() {
 //		for (int i = 1; i < notes.length(); i++) {
 //			if(notes.get(i).charIndex < notes.get(i-1).charIndex)
