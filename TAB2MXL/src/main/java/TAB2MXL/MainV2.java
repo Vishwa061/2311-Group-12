@@ -118,24 +118,25 @@ public class MainV2 {
 		ArrayList<Measure> measureElements = new ArrayList<Measure>();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			Measure measure = new Measure(i + 1);
+			int noteCounter = 0;
 			for (int j = 0; j < 6; j++) {
 				String currentLine = allMeasures.get(i).get(j);
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
-					int noteCounter = 0;
+
 					if (currentLine.charAt(k) != '-') {
 
 						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h' || currentLine.charAt(k) == 's'
 								|| currentLine.charAt(k) == '/') {
 
 							if (currentLine.charAt(k) == 'p')
-								measure.getNote(noteCounter).slurStart = true;
+								measure.getNote(noteCounter - 1).slurStart = true;
 
 							if (currentLine.charAt(k) == 'h')
-								measure.getNote(noteCounter).tieStart = true;
+								measure.getNote(noteCounter - 1).tieStart = true;
 
 							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/')
-								measure.getNote(noteCounter).slideStart = true;
+								measure.getNote(noteCounter - 1).slideStart = true;
 
 							continue;
 
@@ -155,39 +156,38 @@ public class MainV2 {
 								noteCounter++;
 								k++;
 
-								if (measure.getNote(noteCounter - 1).slurStart
-										|| measure.getNote(noteCounter - 1).tieStart
-										|| measure.getNote(noteCounter - 1).slideStart) {
-									if (measure.getNote(noteCounter - 1).slurStart)
-										measure.getNote(noteCounter).slurStop = true;
+								if (measure.size() > 1) {
+									if (measure.getNote(noteCounter - 2).slurStart)
+										note.slurStop = true;
 
-									if (measure.getNote(noteCounter - 1).tieStart)
-										measure.getNote(noteCounter).tieStop = true;
+									if (measure.getNote(noteCounter - 2).tieStart)
+										note.tieStop = true;
 
-									if (measure.getNote(noteCounter - 1).slideStart)
-										measure.getNote(noteCounter).slideStop = true;
+									if (measure.getNote(noteCounter - 2).slideStart)
+										note.slideStop = true;
 								}
 
 								continue;
 							}
 						}
 
-						else {
+						if (currentLine.charAt(k + 1) == '-' || currentLine.charAt(k + 1) == 'p'
+								|| currentLine.charAt(k + 1) == 'h' || currentLine.charAt(k + 1) == 's'
+								|| currentLine.charAt(k + 1) == '/') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
 							measure.addNote(note);
 							noteCounter++;
-							if (measure.getNote(noteCounter - 1).slurStart || measure.getNote(noteCounter - 1).tieStart
-									|| measure.getNote(noteCounter - 1).slideStart) {
-								if (measure.getNote(noteCounter - 1).slurStart)
-									measure.getNote(noteCounter).slurStop = true;
+							if (measure.size() > 1) {
+								if (measure.getNote(noteCounter - 2).slurStart)
+									note.slurStop = true;
 
 								if (measure.getNote(noteCounter - 1).tieStart)
-									measure.getNote(noteCounter).tieStop = true;
+									note.tieStop = true;
 
 								if (measure.getNote(noteCounter - 1).slideStart)
-									measure.getNote(noteCounter).slideStop = true;
+									note.slideStop = true;
 							}
 
 						}
@@ -195,7 +195,7 @@ public class MainV2 {
 
 				}
 			}
-
+			noteCounter = 0;
 			measureElements.add(measure);
 
 		}
