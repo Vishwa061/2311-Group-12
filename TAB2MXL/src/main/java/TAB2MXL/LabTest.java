@@ -6,8 +6,9 @@ public class LabTest { // USE THIS CLASS FOR LAB TESTS
 		System.out.println("");
 		System.out.println("Sara made a change");
 		//lab 3
-//hhhh	
+		//hhhh	
 		// test again
+		//make a change feature 
 	}
 
 }
