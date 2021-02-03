@@ -25,10 +25,16 @@ private final String PATH = "src/test/resources/";
 			m.sortArray();
 			ArrayList<Note> Notes = m.getNotes() ;
 			
-			for(int i =0; i < Notes.size()-1; i++) {
-				System.out.println(Notes.get(i).charIndex);
-				assertTrue(Notes.get(i).charIndex <= (Notes.get(i+1).charIndex));
+			for(Note n:Notes) {
+				System.out.println(n.charIndex);
+			for(int i =1; i < Notes.size(); i++) {
+				//System.out.println(Notes.get(i).charIndex);
+				assertTrue(Notes.get(i-1).charIndex <= (Notes.get(i).charIndex));
 				
+				
+			}
+			
+
 			}
 			System.out.println();
 			
