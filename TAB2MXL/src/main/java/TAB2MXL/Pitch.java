@@ -34,4 +34,10 @@ public class Pitch {
 		mxl += "\t\t</pitch>\n";
 		return mxl;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Pitch p = (Pitch) obj;
+		return p.alter == alter && p.step.equals(step) && p.octave == octave; 
+	}
 }
