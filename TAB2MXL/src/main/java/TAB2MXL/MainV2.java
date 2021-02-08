@@ -3,6 +3,7 @@ package TAB2MXL;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -202,5 +203,41 @@ public class MainV2 {
 		for (Measure m : measureElements) {
 			System.out.println(m);
 		}
+		
+		
+		
+		
 	}
+	
+	public ArrayList<Integer> countBars() {
+		ArrayList<Integer> countArray = new ArrayList<>();
+		for (int i = 0; i < tabArray.size();i++) {
+			if (tabArray.get(i).contains("---") ) {
+				ArrayList<Integer> indices = new ArrayList<Integer>();
+				int index = 0;
+				while((index = tabArray.get(i).indexOf('|', index+1))>0) {
+				 indices.add(index);	
+				}
+				for (int j = 0; j < indices.size()-1;j++) {
+					String lineBefore = "";
+					lineBefore = tabArray.get(i-1);
+					int lastIndex = indices.get(j+1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|'): indices.get(j+1);
+					lineBefore = lineBefore.substring(indices.get(j),lastIndex+1);
+					int count = 0;
+					for(String s: lineBefore.split("\\s+")) {
+						if (s.equals("|")) {
+							count++;
+						}
+						
+					}
+					countArray.add(count);
+				}
+				
+				break;
+			}
+		}
+		return countArray;
+	}
+	
+	
 }
