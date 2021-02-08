@@ -2,6 +2,7 @@ package TAB2MXL;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TestTabReader {
 		expected.add("A |---------0---0-0-0-0-0-----------0---0-0-0-0-0---|");
 		expected.add("E |-------------------------------------------------|");
 		
-		List<String> actual = reader.getTabArray();
+		List<String> actual = reader.readFile(new File(PATH + "test_tabs_reading.txt"));
 		
 		assertEquals(expected, actual);
 	}
