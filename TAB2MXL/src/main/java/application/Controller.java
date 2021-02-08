@@ -43,33 +43,6 @@ public class Controller {
     
     @FXML
     private File file;
-
-    public static final String xmlFilePath = "C:\\Users\\xmlfile.musicxml";
-
-	private Desktop dt = Desktop.getDesktop(); //User Desktop 
-	BufferedReader input;
-	StreamResult output;
-	TransformerHandler th;
-	File fi;
-
-	private Window primaryStage;
-
-	private FileChooser fc;
-	
-	
-	private boolean accept(File filename) { //Helper Method to determine if a file is a textfile
-		if(filename.getName().endsWith(".txt")) { 
-			return true;
-		}
-		else {
-			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
-			errorAlert.setHeaderText("Input not valid"); 
-			errorAlert.setContentText("Provide text file"); //Shows this stage and waits for it to be hidden (closed) before returning to the caller.
-			errorAlert.showAndWait();
-			return false;
-		}
-	}
-	
 	
 	
     @FXML
@@ -81,8 +54,7 @@ public class Controller {
     @FXML
     void submitClick() {
     	FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Tab File");
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow());
 		
