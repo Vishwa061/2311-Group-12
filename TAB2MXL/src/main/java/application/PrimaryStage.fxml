@@ -15,12 +15,16 @@
             <Font name="Monospaced Regular" size="11.0" />
          </font>
       </TextArea>
-      <Button fx:id="submit" alignment="CENTER" cache="true" cacheHint="SPEED" contentDisplay="CENTER" layoutX="218.0" layoutY="255.0" mnemonicParsing="false" onAction="#submitClick" prefHeight="41.0" prefWidth="164.0" text="Select File" textOverrun="WORD_ELLIPSIS">
+      <Button fx:id="submit" alignment="CENTER" cache="true" cacheHint="SPEED" contentDisplay="CENTER" layoutX="96.0" layoutY="256.0" mnemonicParsing="false" onAction="#submitClick" prefHeight="41.0" prefWidth="131.0" text="Select File" textOverrun="WORD_ELLIPSIS">
          <font>
             <Font name="Century" size="19.0" />
          </font>
       </Button>
       <Button fx:id="convert" layoutX="161.0" layoutY="318.0" mnemonicParsing="false" onAction="#ConvertClicked" prefHeight="38.0" prefWidth="279.0" text="Convert">
+         <font>
+            <Font name="Century" size="19.0" />
+         </font></Button>
+          <Button fx:id="save" layoutX="416.0" layoutY="257.0" mnemonicParsing="false" onAction="#SaveClicked" prefHeight="38.0" prefWidth="98.0" text="Save">
          <font>
             <Font name="Century" size="19.0" />
          </font></Button>
