@@ -8,10 +8,12 @@ public class LabTest { // USE THIS CLASS FOR LAB TESTS
 		//lab 3
 		//hhhh	
 		// test again
+
 		//make a change feature
 		// change
 		//sara made a change
 		//made a change
+>>>>>>> refs/remotes/origin/develop
 	}
 
 }
