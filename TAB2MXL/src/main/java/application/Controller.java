@@ -45,22 +45,28 @@ public class Controller {
     private File file;
 	
 	
+    /*
+     * Goal: Get the input file and give the output 
+     */
     @FXML
     void ConvertClicked() {
     	System.out.println("UGH");
     }
     
-	
+	/*
+	 * Find the selected on  their computer 
+	 */
     @FXML
-    void submitClick() {
+    void submitClick() { //
     	FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow());
-		
-		
     }
     
+    /* 
+     * Drag File, user can drag file to upload 
+     */
     @FXML
     void dragFile() {
     	System.out.println("UGH");
