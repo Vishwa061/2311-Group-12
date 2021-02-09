@@ -32,5 +32,15 @@ public class TestTabReader {
 		//System.out.println(reader.parseTab());
 		System.out.println(reader.splitMeasure());
 	}
+	
+	@Test
+	public void test2() {
+		TabReader test2 = new TabReader(PATH + "countBar.txt");
+		//test2.countBars();
+	System.out.println(test2.countBars());
+		
+		
+		
+	}
 
 }
