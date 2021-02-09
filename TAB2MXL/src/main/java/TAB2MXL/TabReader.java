@@ -213,7 +213,9 @@ public class TabReader {
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		for(int i =0; i<6; i++) {
+		int numberOfLines = Integer.valueOf(line);
+		if (tabArray.contains("---")) {
+		for(int i =0; i<numberOfLines; i++) {
 			line = tabArray.get(i);
 			String[] lineArray = line.split("\\|");
 			for(int j=1; j<lineArray.length;j++) {
@@ -233,6 +235,7 @@ public class TabReader {
 				splitMeasure.add(s);
 			}
 			split.add(splitMeasure);
+		}
 		}
 		return split;
 	}
