@@ -16,12 +16,9 @@ private final String PATH = "src/test/resources/";
 	
 	@Test
 	public void test1() {
-		MainV2 test2 = new MainV2("src/main/java/TAB2MXL/StairwayHeaven.txt");
-		test2.setTuning(test2.tabArray);
-		test2.makeMeasures(test2.tabArray);
-		test2.makeNotes();
+		TabReader test2 = new TabReader("src/main/java/TAB2MXL/StairwayHeaven.txt");
 		
-		for (Measure m : test2.measureElements) {
+		for (Measure m : test2.getMeasures()) {
 			m.sortArray();
 			ArrayList<Note> Notes = m.getNotes() ;
 			
