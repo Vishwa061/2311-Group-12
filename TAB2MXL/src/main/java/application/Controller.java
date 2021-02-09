@@ -156,16 +156,7 @@ public class Controller {
     /*
      * Drag and drop file methods below listed 
      */
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
-    
-<<<<<<< HEAD
-    /* 
-     * Drag File, user can drag file to upload 
-     */
-    @FXML
-=======
-	@FXML
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
+
     void dragFile() {
     	textInput.setOnDragOver(e -> { //e -> dictates action needed 
 			Dragboard db = e.getDragboard(); 
