@@ -214,8 +214,7 @@ public class TabReader {
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int numberOfLines = Integer.valueOf(line);
-		if (tabArray.contains("---")) {
-		for(int i =0; i<numberOfLines; i++) {
+		for(int i =0; i<6; i++) {
 			line = tabArray.get(i);
 			String[] lineArray = line.split("\\|");
 			for(int j=1; j<lineArray.length;j++) {
@@ -236,7 +235,7 @@ public class TabReader {
 			}
 			split.add(splitMeasure);
 		}
-		}
+		
 		return split;
 	}
 	
@@ -269,6 +268,43 @@ public class TabReader {
  		}
  		return countArray;
  	}
+	
+	public List<ArrayList<String>> splitMeasure2(){
+		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
+		HashMap<Integer, String> measure = new HashMap<Integer, String>();
+		String line = "";
+		int numberOfLines = Integer.valueOf(line);
+		for (int i = 0; i < 6; i++) {
+			if (tabArray.contains("----")) {
+				line = tabArray.get(i);
+				//numberOfLines = tabArray.get(i);
+				String[] lineArray = line.split("\\|");
+				for(int j=1; j<numberOfLines;j++) {
+					if (measure.containsKey(j)) {
+						measure.put(j,measure.get(j)+ lineArray[j]+"\n");
+					}
+					else {
+						measure.put(j,lineArray[j]+"\n");
+					}
+				}
+			}
+		}
+		for(int i=1; i <= measure.size();i++) {
+			String string = measure.get(i);
+			ArrayList<String> splitMeasure= new ArrayList<String>();
+			for(String s : string.split("\n")) {
+				splitMeasure.add(s);
+			}
+			split.add(splitMeasure);
+		}
+		
+		return split;
+	}
+
 
 
 }
+
+
+
+
