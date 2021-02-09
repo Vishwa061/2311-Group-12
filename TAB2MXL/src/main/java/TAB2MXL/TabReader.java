@@ -18,18 +18,15 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader("src/main/resources/StairwayHeaven.txt");
-
-		// print to see all measures
-		for (Measure m : reader.getMeasures()) {
-			System.out.println(m);
-		}
+		
+		System.out.println(reader.toMXL());
 	}
 
 	public TabReader(String inputFile) {
 		inputTabFile = new File(inputFile);
 		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "  <work>\n" + "    <work-title>Good Copy</work-title>\n"
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Good Copy</work-title>\n"
 				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
 				+ "      <part-name>Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
 				+ "  <part id=\"P1\">";
@@ -37,6 +34,7 @@ public class TabReader {
 		instrument = "Classical Guitar";
 
 		guitarTuning = getTuning();
+		Measure.setAttributes(new Attributes(guitarTuning));
 		allMeasures = splitMeasure();
 		measureElements = makeNotes();
 	}
@@ -71,6 +69,7 @@ public class TabReader {
 			String line = tabArray.get(i);
 			if (line.contains("-") && line.indexOf('|') > 0) {
 				guitarTuning.add(line.substring(0, line.indexOf('|')));
+				i++;
 			}
 		}
 
@@ -304,11 +303,16 @@ public class TabReader {
 		
 		return split;
 	}
-
-
-
+	
+	public String toMXL() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(outputXMLFile).append("\n");
+		
+		for (Measure m : getMeasures()) {
+			builder.append(m.toString()).append("\n");
+		}
+		
+		builder.append("</part>\n</score-partwise>");
+		return builder.toString();
+	}
 }
-
-
-
-
