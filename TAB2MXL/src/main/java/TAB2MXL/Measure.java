@@ -9,6 +9,7 @@ public class Measure {
 	private int measureNumber;
 	public static Attributes a;
 	
+	
 	public Measure(int measureNumber) {
 		notes = new ArrayList<Note>();
 		this.measureNumber = measureNumber;
@@ -55,7 +56,8 @@ public class Measure {
 	public ArrayList<Note> getNotes() {
 		return notes;
 	}
-		
+	
+	
 	
 	
 	
