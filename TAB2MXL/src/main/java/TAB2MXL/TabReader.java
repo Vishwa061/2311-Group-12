@@ -35,8 +35,9 @@ public class TabReader {
 		tabArray = readFile(inputTabFile);
 
 		setTuning(tabArray);
-		makeMeasures(tabArray);
+		allMeasures = splitMeasure();
 		makeNotes();
+		
 	}
 
 	public ArrayList<Measure> getMeasures() {
@@ -68,12 +69,12 @@ public class TabReader {
 			guitarTuning.add(tuneVal);
 		}
 
-		for (int i = 0; i < this.tabArray.size(); i++) {
+		//for (int i = 0; i < this.tabArray.size(); i++) {
 
-			String trimmedLine = this.tabArray.get(i).substring(1, this.tabArray.get(i).length());
-			this.tabArray.set(i, trimmedLine);
+			//String trimmedLine = this.tabArray.get(i).substring(1, this.tabArray.get(i).length());
+			//this.tabArray.set(i, trimmedLine);
 
-		}
+		//}
 	}
 
 	public void makeMeasures(List<String> tabArray) {
@@ -208,8 +209,8 @@ public class TabReader {
 		}
 	}
 
-	public ArrayList<String> splitMeasure(){
-		ArrayList<String> split = new ArrayList<String>();
+	public List<ArrayList<String>> splitMeasure(){
+		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		for(int i =0; i<6; i++) {
@@ -224,10 +225,47 @@ public class TabReader {
 				}
 			}
 		}
+		
 		for(int i=1; i <= measure.size();i++) {
-			split.add(measure.get(i));
+			String string = measure.get(i);
+			ArrayList<String> splitMeasure= new ArrayList<String>();
+			for(String s : string.split("\n")) {
+				splitMeasure.add(s);
+			}
+			split.add(splitMeasure);
 		}
 		return split;
 	}
+	
+	public ArrayList<Integer> countBars() {
+ 		ArrayList<Integer> countArray = new ArrayList<>();
+ 		for (int i = 0; i < tabArray.size();i++) {
+ 			if (tabArray.get(i).contains("---") ) {
+ 				ArrayList<Integer> indices = new ArrayList<Integer>();
+ 				int index = 0;
+ 				while((index = tabArray.get(i).indexOf('|', index+1))>0) {
+ 				 indices.add(index);	
+ 				}
+ 				for (int j = 0; j < indices.size()-1;j++) {
+ 					String lineBefore = "";
+ 					lineBefore = tabArray.get(i-1);
+ 					int lastIndex = indices.get(j+1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|'): indices.get(j+1);
+ 					lineBefore = lineBefore.substring(indices.get(j),lastIndex+1);
+ 					int count = 0;
+ 					for(String s: lineBefore.split("\\s+")) {
+ 						if (s.equals("|")) {
+ 							count++;
+ 						}
+
+ 					}
+ 					countArray.add(count);
+ 				}
+
+ 				break;
+ 			}
+ 		}
+ 		return countArray;
+ 	}
+
 
 }
