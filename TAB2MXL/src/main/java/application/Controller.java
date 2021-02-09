@@ -93,9 +93,6 @@ public class Controller {
 		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
 		fileChooser.getExtensionFilters().add(extFilter);
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow()); 	
-		/*
-		 * Verifies not an empty file is attached 
-		 */
 		if(!(file.length() == 0)) {
             System.out.println("get the text file on text area");
         }
