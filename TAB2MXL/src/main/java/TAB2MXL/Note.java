@@ -29,7 +29,7 @@ public class Note implements Comparable<Note> {
 	 * @param charIndex
 	 */
 	Note(int stringNumber, String stringTuning, int fret, int charIndex) {
-		this.pitch = createPitch(stringNumber, stringTuning, fret);
+		this.pitch = createPitch(stringNumber, stringTuning.toUpperCase(), fret);
 		this.charIndex = charIndex;
 	}
 
