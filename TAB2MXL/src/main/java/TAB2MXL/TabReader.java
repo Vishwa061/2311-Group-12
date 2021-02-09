@@ -16,7 +16,7 @@ public class TabReader {
 	private List<Character> guitarTuning = new ArrayList<Character>();
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader("src/main/java/TAB2MXL/StairwayHeaven.txt");
+		TabReader reader = new TabReader("src/main/resources/StairwayHeaven.txt");
 
 		// print to see all measures
 		for (Measure m : reader.getMeasures()) {
