@@ -96,6 +96,9 @@ public class Controller {
 
 		if(!(file.length() == 0)) {
             System.out.println("get the text file on text area");
+           
+            TabReader reader = new TabReader(file.getPath());
+    		System.out.println(reader.toMXL());
         }
 		else {
 			ErrorOutput(file);
@@ -147,7 +150,7 @@ public class Controller {
     /*
      * Drag and drop file methods below listed 
      */
-    
+    private 
 	@FXML
     void dragFile() {
     	textInput.setOnDragOver(e -> { //e -> dictates action needed 
