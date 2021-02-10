@@ -68,8 +68,9 @@ public class TabReader {
 			String line = tabArray.get(i);
 			if (line.contains("-") && line.indexOf('|') > 0) {
 				guitarTuning.add(line.substring(0, line.indexOf('|')));
-				i++;
+				
 			}
+			i++;
 		}
 
 		return guitarTuning;
@@ -211,40 +212,11 @@ public class TabReader {
 		return measureElements;
 	}
 
-	public List<ArrayList<String>> splitMeasure(){
-		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
-		HashMap<Integer, String> measure = new HashMap<Integer, String>();
-		String line = "";
-//		int numberOfLines = Integer.valueOf(line);
-		for(int i =0; i<6; i++) {
-			line = tabArray.get(i);
-			String[] lineArray = line.split("\\|");
-			for(int j=1; j<lineArray.length;j++) {
-				if (measure.containsKey(j)) {
-					measure.put(j,measure.get(j)+ lineArray[j]+"\n");
-				}
-				else {
-					measure.put(j,lineArray[j]+"\n");
-				}
-			}
-		}
-		
-		for(int i=1; i <= measure.size();i++) {
-			String string = measure.get(i);
-			ArrayList<String> splitMeasure= new ArrayList<String>();
-			for(String s : string.split("\n")) {
-				splitMeasure.add(s);
-			}
-			split.add(splitMeasure);
-		}
-		
-		return split;
-	}
 	
 	public ArrayList<Integer> countBars() {
  		ArrayList<Integer> countArray = new ArrayList<>();
  		for (int i = 0; i < tabArray.size();i++) {
- 			if (tabArray.get(i).contains("---") ) {
+ 			if (tabArray.get(i).contains("-") ) {
  				ArrayList<Integer> indices = new ArrayList<Integer>();
  				int index = 0;
  				while((index = tabArray.get(i).indexOf('|', index+1))>0) {
@@ -271,17 +243,17 @@ public class TabReader {
  		return countArray;
  	}
 	
-	public List<ArrayList<String>> splitMeasure2(){
+	public List<ArrayList<String>> splitMeasure(){
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		int numberOfLines = Integer.valueOf(line);
-		for (int i = 0; i < 6; i++) {
-			if (tabArray.contains("----")) {
-				line = tabArray.get(i);
-				//numberOfLines = tabArray.get(i);
+		int k=0;
+		int i =0;
+		while (k < tabArray.size() &&  i < 6 ) {
+			if (tabArray.get(k).contains("-")) {
+				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
-				for(int j=1; j<numberOfLines;j++) {
+				for(int j=1; j<lineArray.length;j++) {
 					if (measure.containsKey(j)) {
 						measure.put(j,measure.get(j)+ lineArray[j]+"\n");
 					}
@@ -289,10 +261,14 @@ public class TabReader {
 						measure.put(j,lineArray[j]+"\n");
 					}
 				}
+				i++;
+				
+				}
+			k++;
 			}
-		}
-		for(int i=1; i <= measure.size();i++) {
-			String string = measure.get(i);
+			
+		for(int j=1; j <= measure.size();j++) {
+			String string = measure.get(j);
 			ArrayList<String> splitMeasure= new ArrayList<String>();
 			for(String s : string.split("\n")) {
 				splitMeasure.add(s);
