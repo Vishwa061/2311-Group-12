@@ -3,6 +3,7 @@ package TAB2MXL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ private final String PATH = "src/test/resources/";
 	
 	@Test
 	public void test1() {
-		TabReader test2 = new TabReader("src/main/java/TAB2MXL/StairwayHeaven.txt");
+		TabReader test2 = new TabReader(new File("src/main/java/TAB2MXL/StairwayHeaven.txt"));
 		
 		for (Measure m : test2.getMeasures()) {
 			m.sortArray();

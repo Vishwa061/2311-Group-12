@@ -11,7 +11,7 @@ public class TestTabReader {
 	
 	@Test
 	public void testReadFile() {
-		TabReader reader = new TabReader(PATH + "test_tabs_reading.txt");
+		TabReader reader = new TabReader(new File(PATH + "test_tabs_reading.txt"));
 		
 		List<String> expected = new ArrayList<String>();
 		expected.add("e |-------------0-0-0-0-0-0-----0-------0-0-0-0-0---|");
@@ -28,14 +28,14 @@ public class TestTabReader {
 	
 	@Test
 	public void test1() {
-		TabReader reader = new TabReader(PATH + "test1.txt");
+		TabReader reader = new TabReader(new File(PATH + "test1.txt"));
 		//System.out.println(reader.parseTab());
 		System.out.println(reader.splitMeasure());
 	}
 	
 	@Test
 	public void test2() {
-		TabReader test2 = new TabReader(PATH + "countBar.txt");
+		TabReader test2 = new TabReader(new File(PATH + "countBar.txt"));
 		//test2.countBars();
 	System.out.println(test2.countBars());
 		
