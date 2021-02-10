@@ -8,39 +8,38 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TabReader {
-	private ArrayList<Measure> measureElements = new ArrayList<Measure>();
+	private List<Measure> measureElements = new ArrayList<Measure>();
 	private List<String> tabArray = new ArrayList<String>();
 	private File inputTabFile;
 	private String outputXMLFile;
 	private List<ArrayList<String>> allMeasures = new ArrayList<ArrayList<String>>();
-	private List<Character> guitarTuning = new ArrayList<Character>();
+	private List<String> guitarTuning = new ArrayList<String>();
+	private String instrument;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader("src/main/resources/StairwayHeaven.txt");
-
-		// print to see all measures
-		for (Measure m : reader.getMeasures()) {
-			System.out.println(m);
-		}
+		
+		System.out.println(reader.toMXL());
 	}
 
 	public TabReader(String inputFile) {
 		inputTabFile = new File(inputFile);
-		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\r\n"
-				+ "<score-partwise version=\"3.1\">\r\n" + "  <work>\r\n" + "    <work-title>Good Copy</work-title>\r\n"
-				+ "    </work>\r\n" + "  <part-list>\r\n" + "    <score-part id=\"P1\">\r\n"
-				+ "      <part-name>Guitar</part-name>\r\n" + "      </score-part>\r\n" + "    </part-list>\r\n"
+		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Good Copy</work-title>\n"
+				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
+				+ "      <part-name>Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
 				+ "  <part id=\"P1\">";
 		tabArray = readFile(inputTabFile);
+		instrument = "Classical Guitar";
 
-		setTuning(tabArray);
+		guitarTuning = getTuning();
+		Measure.setAttributes(new Attributes(guitarTuning));
 		allMeasures = splitMeasure();
-		makeNotes();
-		
+		measureElements = makeNotes();
 	}
 
-	public ArrayList<Measure> getMeasures() {
+	public List<Measure> getMeasures() {
 		return this.measureElements;
 	}
 
@@ -62,19 +61,19 @@ public class TabReader {
 		return tabArray;
 	}
 
-	public void setTuning(List<String> tabArray) {
-
-		for (int i = 0; i < 6; i++) {
-			char tuneVal = this.tabArray.get(i).charAt(0);
-			guitarTuning.add(tuneVal);
+	public List<String> getTuning() {
+		List<String> guitarTuning = new ArrayList<String>();
+		int numStrings = 6;
+		int i = 0;
+		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
+			String line = tabArray.get(i);
+			if (line.contains("-") && line.indexOf('|') > 0) {
+				guitarTuning.add(line.substring(0, line.indexOf('|')));
+				i++;
+			}
 		}
 
-		//for (int i = 0; i < this.tabArray.size(); i++) {
-
-			//String trimmedLine = this.tabArray.get(i).substring(1, this.tabArray.get(i).length());
-			//this.tabArray.set(i, trimmedLine);
-
-		//}
+		return guitarTuning;
 	}
 
 	public void makeMeasures(List<String> tabArray) {
@@ -123,7 +122,9 @@ public class TabReader {
 			makeMeasures(this.tabArray, startingIndex + 6);
 	}
 
-	public void makeNotes() {
+	public List<Measure> makeNotes() {
+		List<Measure> measureElements = new ArrayList<Measure>();
+		
 		for (int i = 0; i < allMeasures.size(); i++) {
 			Measure measure = new Measure(i + 1);
 			int noteCounter = 0;
@@ -158,7 +159,7 @@ public class TabReader {
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
 								temp = currentLine.substring(k, k + 2);
 								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret,
+								Note note = new Note(j + 1, guitarTuning.get(j), fret,
 										k);
 								measure.addNote(note);
 								noteCounter++;
@@ -184,7 +185,7 @@ public class TabReader {
 								|| currentLine.charAt(k + 1) == '/') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, Character.toString(guitarTuning.get(j)).toUpperCase(), fret, k);
+							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
@@ -207,13 +208,15 @@ public class TabReader {
 			measureElements.add(measure);
 
 		}
+		
+		return measureElements;
 	}
 
 	public List<ArrayList<String>> splitMeasure(){
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		int numberOfLines = Integer.valueOf(line);
+//		int numberOfLines = Integer.valueOf(line);
 		for(int i =0; i<6; i++) {
 			line = tabArray.get(i);
 			String[] lineArray = line.split("\\|");
@@ -300,11 +303,16 @@ public class TabReader {
 		
 		return split;
 	}
-
-
-
+	
+	public String toMXL() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(outputXMLFile).append("\n");
+		
+		for (Measure m : getMeasures()) {
+			builder.append(m.toString()).append("\n");
+		}
+		
+		builder.append("</part>\n</score-partwise>");
+		return builder.toString();
+	}
 }
-
-
-
-
