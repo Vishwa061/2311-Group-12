@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -67,7 +68,7 @@ public class Controller {
     @FXML
     void ConvertClicked() throws IOException {
     	if(!textInput.getText().isEmpty() && convert.getText().equals("Convert")) {
-    		textInput.setText(stringParse(textInput.getText()));
+    		
 		}
 		else  {
 			FileChooser fileChooser = new FileChooser();
@@ -79,13 +80,9 @@ public class Controller {
 		}
     }
     
-	
-    public static String stringParse(String text) {
-		// TODO Auto-generated method stub
-    	return "This is a test yaaa";
-	}
-
-
+	/*
+	 * After Select File is clicked 
+	 */
 	@FXML
     void submitClick() {
     	FileChooser fileChooser = new FileChooser(); //enables the user to select one or more files via a file explorer from the user's local computer
@@ -95,15 +92,21 @@ public class Controller {
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow()); 	
 
 		if(!(file.length() == 0)) {
-            TabReader reader = new TabReader(file);
-    		System.out.println(reader.toMXL());
+			 OutputConvertFile(file);
         }
 		else {
 			ErrorOutput(file);
 		}
 	}
 	
-
+	private void OutputConvertFile(File file) {
+		 TabReader reader = new TabReader(file);
+	    	System.out.println(reader.toMXL());
+	    	textInput.appendText(reader.toMXL());
+	    	
+	}
+	
+	
 	private void ErrorOutput(File file) {
 		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
 		errorAlert.setHeaderText("Input not valid, cannot be empty"); 
@@ -118,31 +121,41 @@ public class Controller {
 	 */
 	
 	public void SaveClicked() {
-	            FileChooser fileChooser = new FileChooser();
-	            //Set extension filter
-	            FileChooser.ExtensionFilter extFilter = 
-	                new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-	            fileChooser.getExtensionFilters().add(extFilter);
-	            //Show save file dialog
-	            File file = fileChooser.showSaveDialog(stage);
-	            if(file != null){
-	                SaveFile(textInput.getText(), file);
-	            }
+		  try { FileChooser fileChooser = new FileChooser();
+          //Set extension filter
+          FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
+          fileChooser.getExtensionFilters().add(extFilter);
+          //Show save file dialog
+          File file = fileChooser.showSaveDialog(stage);
+          if(file != null){
+          	FileWriter myWriter = new FileWriter(file);
+          	myWriter.write(textInput.getText());
+				myWriter.close();
+          	SaveFile(textInput.getText(), file);
+          }
+         }
+          catch (IOException ex) {
+          	
+         
+          Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+          }}
 	      
-	}
+	
 
     private void SaveFile(String text, File file2) {
 		// TODO Auto-generated method stub
-    	 try {
+    	 
+    	try {
+    		String texts = textInput.getText();
              FileWriter fileWriter;
-              
              fileWriter = new FileWriter(file);
-             fileWriter.write(text);
+             fileWriter.write(texts);
              fileWriter.close();
          } catch (IOException ex) {
              Logger.getLogger(Controller.class
                  .getName()).log(Level.SEVERE, null, ex);
          }
+         
 	}
 
     /*
@@ -162,7 +175,7 @@ public class Controller {
 					}
 					
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}
