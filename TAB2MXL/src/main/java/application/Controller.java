@@ -64,13 +64,10 @@ public class Controller {
    StreamResult output;
 	
 	
-    /*
-     * Goal: Get the input file and give the output 
-     */
     @FXML
     void ConvertClicked() throws IOException {
     	if(!textInput.getText().isEmpty() && convert.getText().equals("Convert")) {
-    		
+    		textInput.setText(stringParse(textInput.getText()));
 		}
 		else  {
 			FileChooser fileChooser = new FileChooser();
@@ -82,7 +79,6 @@ public class Controller {
 		}
     }
     
-
 	
     public static String stringParse(String text) {
 		// TODO Auto-generated method stub
@@ -93,16 +89,10 @@ public class Controller {
 	@FXML
     void submitClick() {
     	FileChooser fileChooser = new FileChooser(); //enables the user to select one or more files via a file explorer from the user's local computer
-
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
 		fileChooser.getExtensionFilters().add(extFilter);
-
-		file = fileChooser.showOpenDialog(submit.getScene().getWindow());
-    	
-		/*
-		 * Verifies not an empty file is attached 
-		 */
+		file = fileChooser.showOpenDialog(submit.getScene().getWindow()); 	
 		if(!(file.length() == 0)) {
             System.out.println("get the text file on text area");
         }
@@ -156,7 +146,8 @@ public class Controller {
     /*
      * Drag and drop file methods below listed 
      */
-
+    
+	@FXML
     void dragFile() {
     	textInput.setOnDragOver(e -> { //e -> dictates action needed 
 			Dragboard db = e.getDragboard(); 
