@@ -82,7 +82,7 @@ public class Controller {
 	
     public static String stringParse(String text) {
 		// TODO Auto-generated method stub
-    	return "This is a test.";
+    	return "This is a test yaaa";
 	}
 
 
