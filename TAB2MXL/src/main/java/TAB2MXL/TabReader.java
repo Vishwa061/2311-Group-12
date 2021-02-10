@@ -2,6 +2,8 @@ package TAB2MXL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,27 +12,24 @@ import java.util.Scanner;
 public class TabReader {
 	private List<Measure> measureElements = new ArrayList<Measure>();
 	private List<String> tabArray = new ArrayList<String>();
-	private File inputTabFile;
 	private String outputXMLFile;
 	private List<ArrayList<String>> allMeasures = new ArrayList<ArrayList<String>>();
 	private List<String> guitarTuning = new ArrayList<String>();
 	private String instrument;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader("src/main/resources/StairwayHeaven.txt");
-		
+		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
 	}
 
-	public TabReader(String inputFile) {
-		inputTabFile = new File(inputFile);
+	public TabReader(File inputFile) {
 		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Good Copy</work-title>\n"
 				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
 				+ "      <part-name>Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
 				+ "  <part id=\"P1\">";
-		tabArray = readFile(inputTabFile);
+		tabArray = readFile(inputFile);
 		instrument = "Classical Guitar";
 
 		guitarTuning = getTuning();

@@ -95,9 +95,7 @@ public class Controller {
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow()); 	
 
 		if(!(file.length() == 0)) {
-            System.out.println("get the text file on text area");
-           
-            TabReader reader = new TabReader(file.getPath());
+            TabReader reader = new TabReader(file);
     		System.out.println(reader.toMXL());
         }
 		else {
