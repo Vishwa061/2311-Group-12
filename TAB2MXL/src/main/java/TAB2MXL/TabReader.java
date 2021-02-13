@@ -2,8 +2,6 @@ package TAB2MXL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +21,20 @@ public class TabReader {
 	}
 
 	public TabReader(File inputFile) {
+		tabArray = readFile(inputFile);
+		instrument = getInstrument();
 		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Good Copy</work-title>\n"
-				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
-				+ "      <part-name>Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
-				+ "  <part id=\"P1\">";
-		tabArray = readFile(inputFile);
-		instrument = "Classical Guitar";
+				+ "<score-partwise version=\"3.1\">\n"
+				+ "<work>\n"
+				+ "\t<work-title>Good Copy</work-title>\n"
+				+ "</work>\n"
+				+ "<part-list>\n"
+				+ "\t<score-part id=\"P1\">\n"
+				+ "\t\t<part-name>" + instrument + "</part-name>\n"
+				+ "\t</score-part>\n"
+				+ "</part-list>\n"
+				+ "<part id=\"P1\">";
 
 		guitarTuning = getTuning();
 		Measure.setAttributes(new Attributes(guitarTuning));
@@ -277,6 +281,38 @@ public class TabReader {
 		}
 		
 		return split;
+	}
+	
+	/**
+	 * Detects and returns the instrument used in the tabs
+	 * @return the instrument name
+	 */
+	public String getInstrument() {
+		boolean isDrums = true;
+		for (String t : getTuning()) {
+			if (Note.ALL_NOTES_MAP.containsKey(t)) {
+				isDrums = false;
+				break;
+			}
+		}
+		if (isDrums) {
+			return "Drumset";
+		}
+		
+		int lines = 0;
+		boolean startCount = false;
+		for (int i = 0; i < tabArray.size(); i++) {
+			if (tabArray.get(i).contains("-")) {
+				lines++;
+				startCount = true;
+			}
+			
+			if (startCount && !tabArray.get(i).contains("-")) {
+				break;
+			}
+		}
+		
+		return lines == 4 ? "Bass" : "Classical Guitar";
 	}
 	
 	public String toMXL() {
