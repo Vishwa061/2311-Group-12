@@ -25,9 +25,9 @@ public class TabReader {
 	public TabReader(File inputFile) {
 		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Good Copy</work-title>\n"
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Prototype Version 1.0</work-title>\n"
 				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
-				+ "      <part-name>Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
+				+ "      <part-name>Classical Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
 				+ "  <part id=\"P1\">";
 		tabArray = readFile(inputFile);
 		instrument = "Classical Guitar";
@@ -159,8 +159,7 @@ public class TabReader {
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
 								temp = currentLine.substring(k, k + 2);
 								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, guitarTuning.get(j), fret,
-										k);
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k, (6-j));
 								measure.addNote(note);
 								noteCounter++;
 								k++;
@@ -185,7 +184,7 @@ public class TabReader {
 								|| currentLine.charAt(k + 1) == '/') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
+							Note note = new Note(j + 1, guitarTuning.get(j), fret, k, (6-j));
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
@@ -205,6 +204,7 @@ public class TabReader {
 				}
 			}
 			noteCounter = 0;
+			measure.sortArray();
 			measureElements.add(measure);
 
 		}

@@ -17,6 +17,8 @@ public class Note implements Comparable<Note> {
 	public boolean tieStop;
 	public boolean slideStart;
 	public boolean slideStop;
+	public int stringNo;
+	public int fret;
 
 	/**
 	 * Creates a Single Note
@@ -28,9 +30,11 @@ public class Note implements Comparable<Note> {
 	 * @param fret
 	 * @param charIndex
 	 */
-	Note(int stringNumber, String stringTuning, int fret, int charIndex) {
+	Note(int stringNumber, String stringTuning, int fret, int charIndex, int stringNo) {
 		this.pitch = createPitch(stringNumber, stringTuning.toUpperCase(), fret);
 		this.charIndex = charIndex;
+		this.stringNo = stringNo;
+		this.fret = fret;
 	}
 
 	@Override
@@ -68,7 +72,8 @@ public class Note implements Comparable<Note> {
 		
 		else {
 			toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-				+ "\t\t<type> method not complete </type>\n" + "\t</note>";
+				+ "\t\t<type> method not complete </type>\n" + "\t\t<notations>\n" +"\t\t\t<technical>\n" + "\t\t\t\t<string>" + this.stringNo + "</string>\n" 
+					+ "\t\t\t\t<fret>" + this.fret + "</fret>\n" + "<\t\t\t</technical>\n" + "\t\t</notations>\n" + "\t</note>";
 		}
 
 		return toMXL;
