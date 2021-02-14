@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TabReader {
-	private List<Measure> measureElements = new ArrayList<Measure>();
-	private List<String> tabArray = new ArrayList<String>();
-	private String outputXMLFile;
-	private List<ArrayList<String>> allMeasures = new ArrayList<ArrayList<String>>();
-	private List<String> guitarTuning = new ArrayList<String>();
+	private List<String> tabArray;
+	private List<String> guitarTuning;
+	private List<Measure> measureElements;
+	private List<ArrayList<String>> allMeasures;
 	private String instrument;
+	private String headingMXL;
+	private String title;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
@@ -21,13 +22,19 @@ public class TabReader {
 	}
 
 	public TabReader(File inputFile) {
+		tabArray = new ArrayList<String>();
+		guitarTuning = new ArrayList<String>();
+		measureElements = new ArrayList<Measure>();
+		allMeasures = new ArrayList<ArrayList<String>>();
+		
 		tabArray = readFile(inputFile);
 		instrument = getInstrument();
-		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		title = getTitle();
+		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n"
 				+ "<work>\n"
-				+ "\t<work-title>Good Copy</work-title>\n"
+				+ "\t<work-title>" + title + "</work-title>\n"
 				+ "</work>\n"
 				+ "<part-list>\n"
 				+ "\t<score-part id=\"P1\">\n"
@@ -40,6 +47,16 @@ public class TabReader {
 		Measure.setAttributes(new Attributes(guitarTuning));
 		allMeasures = splitMeasure();
 		measureElements = makeNotes();
+	}
+	
+	/**
+	 * Checks if a given line has tabs
+	 * 
+	 * @param line - a line from tabArray
+	 * @return true iff the line contains 2 vertical bars and at least one dash
+	 */
+	public boolean lineHasTabs(String line) {
+		return line.contains("-") && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
 	public List<Measure> getMeasures() {
@@ -70,14 +87,17 @@ public class TabReader {
 		int i = 0;
 		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
 			String line = tabArray.get(i);
-			if (line.contains("-") && line.indexOf('|') > 0) {
+			if (lineHasTabs(line)) {
 				guitarTuning.add(line.substring(0, line.indexOf('|')));
-				
 			}
 			i++;
 		}
 
 		return guitarTuning;
+	}
+	
+	public String getTitle() {
+		return lineHasTabs(tabArray.get(0)) ? "Title" : tabArray.get(0);
 	}
 
 	public void makeMeasures(List<String> tabArray) {
@@ -216,7 +236,6 @@ public class TabReader {
 		return measureElements;
 	}
 
-	
 	public ArrayList<Integer> countBars() {
  		ArrayList<Integer> countArray = new ArrayList<>();
  		for (int i = 0; i < tabArray.size();i++) {
@@ -300,14 +319,14 @@ public class TabReader {
 		}
 		
 		int lines = 0;
-		boolean startCount = false;
+		boolean isCountStarted = false;
 		for (int i = 0; i < tabArray.size(); i++) {
-			if (tabArray.get(i).contains("-")) {
+			if (lineHasTabs(tabArray.get(i))) {
 				lines++;
-				startCount = true;
+				isCountStarted = true;
 			}
 			
-			if (startCount && !tabArray.get(i).contains("-")) {
+			if (isCountStarted && !lineHasTabs(tabArray.get(i))) {
 				break;
 			}
 		}
@@ -317,10 +336,10 @@ public class TabReader {
 	
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(outputXMLFile).append("\n");
+		builder.append(headingMXL).append("\n");
 		
 		for (Measure m : getMeasures()) {
-			builder.append(m.toString()).append("\n");
+			builder.append(m).append("\n");
 		}
 		
 		builder.append("</part>\n</score-partwise>");
