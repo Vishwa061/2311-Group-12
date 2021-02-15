@@ -1,10 +1,10 @@
 package TAB2MXL;
-import static org.junit.Assert.*;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 public class TestTabReader {
 	private final String PATH = "src/test/resources/";
