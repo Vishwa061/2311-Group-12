@@ -17,7 +17,7 @@ private final String PATH = "src/test/resources/";
 	
 	@Test
 	public void test1() {
-		TabReader test2 = new TabReader(new File("src/main/java/TAB2MXL/StairwayHeaven.txt"));
+		TabReader test2 = new TabReader(new File(PATH + "StairwayHeaven.txt"));
 		
 		for (Measure m : test2.getMeasures()) {
 			m.sortArray();
