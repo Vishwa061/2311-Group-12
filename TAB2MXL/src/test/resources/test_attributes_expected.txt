@@ -1,5 +1,5 @@
 	<attributes>
-		<divisions>1</divisions>
+		<divisions>120</divisions>
 		<key>
 			<fifths>0</fifths>
 		</key>

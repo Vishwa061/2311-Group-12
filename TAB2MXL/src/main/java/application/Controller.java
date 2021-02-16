@@ -19,7 +19,6 @@ import javax.swing.Action;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
 
-import TAB2MXL.ReadFile;
 import TAB2MXL.TabReader;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

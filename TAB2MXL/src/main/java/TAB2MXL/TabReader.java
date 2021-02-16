@@ -2,20 +2,19 @@ package TAB2MXL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
 public class TabReader {
-	private List<Measure> measureElements = new ArrayList<Measure>();
-	private List<String> tabArray = new ArrayList<String>();
-	private String outputXMLFile;
-	private List<ArrayList<String>> allMeasures = new ArrayList<ArrayList<String>>();
-	private List<String> guitarTuning = new ArrayList<String>();
+	private List<String> tabArray;
+	private List<String> guitarTuning;
+	private List<Measure> measureElements;
+	private List<ArrayList<String>> allMeasures;
 	private String instrument;
+	private String headingMXL;
+	private String title;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
@@ -23,19 +22,41 @@ public class TabReader {
 	}
 
 	public TabReader(File inputFile) {
-		outputXMLFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "    <work-title>Prototype Version 1.0</work-title>\n"
-				+ "    </work>\n" + "  <part-list>\n" + "    <score-part id=\"P1\">\n"
-				+ "      <part-name>Classical Guitar</part-name>\n" + "      </score-part>\n" + "    </part-list>\n"
-				+ "  <part id=\"P1\">";
+		tabArray = new ArrayList<String>();
+		guitarTuning = new ArrayList<String>();
+		measureElements = new ArrayList<Measure>();
+		allMeasures = new ArrayList<ArrayList<String>>();
+		
 		tabArray = readFile(inputFile);
-		instrument = "Classical Guitar";
+		instrument = getInstrument();
+		title = getTitle();
+		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
+				+ "<score-partwise version=\"3.1\">\n"
+				+ "<work>\n"
+				+ "\t<work-title>" + title + "</work-title>\n"
+				+ "</work>\n"
+				+ "<part-list>\n"
+				+ "\t<score-part id=\"P1\">\n"
+				+ "\t\t<part-name>" + instrument + "</part-name>\n"
+				+ "\t</score-part>\n"
+				+ "</part-list>\n"
+				+ "<part id=\"P1\">";
 
 		guitarTuning = getTuning();
 		Measure.setAttributes(new Attributes(guitarTuning));
 		allMeasures = splitMeasure();
 		measureElements = makeNotes();
+	}
+	
+	/**
+	 * Checks if a given line has tabs
+	 * 
+	 * @param line - a line from tabArray
+	 * @return true iff the line contains 2 vertical bars and at least one dash
+	 */
+	public boolean lineHasTabs(String line) {
+		return line.contains("-") && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
 	public List<Measure> getMeasures() {
@@ -66,9 +87,8 @@ public class TabReader {
 		int i = 0;
 		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
 			String line = tabArray.get(i);
-			if (line.contains("-") && line.indexOf('|') > 0) {
+			if (lineHasTabs(line)) {
 				guitarTuning.add(line.substring(0, line.indexOf('|')));
-				
 			}
 			i++;
 		}
@@ -76,6 +96,11 @@ public class TabReader {
 		return guitarTuning;
 	}
 	
+
+	public String getTitle() {
+		return lineHasTabs(tabArray.get(0)) ? "Title" : tabArray.get(0);
+	}
+
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
 		
@@ -169,7 +194,6 @@ public class TabReader {
 		return measureElements;
 	}
 
-	
 	public ArrayList<Integer> countBars() {
  		ArrayList<Integer> countArray = new ArrayList<>();
  		for (int i = 0; i < tabArray.size();i++) {
@@ -256,15 +280,46 @@ public class TabReader {
 				noteArr.get(i).duration = (noteArr.get(i+1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
 			}
 		}
+	}
+
+	/**
+	 * Detects and returns the instrument used in the tabs
+	 * @return the instrument name
+	 */
+	public String getInstrument() {
+		boolean isDrums = true;
+		for (String t : getTuning()) {
+			if (Note.ALL_NOTES_MAP.containsKey(t)) {
+				isDrums = false;
+				break;
+			}
+		}
+		if (isDrums) {
+			return "Drumset";
+		}
 		
+		int lines = 0;
+		boolean isCountStarted = false;
+		for (int i = 0; i < tabArray.size(); i++) {
+			if (lineHasTabs(tabArray.get(i))) {
+				lines++;
+				isCountStarted = true;
+			}
+			
+			if (isCountStarted && !lineHasTabs(tabArray.get(i))) {
+				break;
+			}
+		}
+		
+		return lines == 4 ? "Bass" : "Classical Guitar";
 	}
 	
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(outputXMLFile).append("\n");
+		builder.append(headingMXL).append("\n");
 		
 		for (Measure m : getMeasures()) {
-			builder.append(m.toString()).append("\n");
+			builder.append(m).append("\n");
 		}
 		
 		builder.append("</part>\n</score-partwise>");

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Note implements Comparable<Note> {
 	private static final String[] ALL_NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-	private static final Map<String, Integer> ALL_NOTES_MAP = initAllNotesMap();
+	public static final Map<String, Integer> ALL_NOTES_MAP = initAllNotesMap();
 	private static final Map<Integer, Integer> GUITAR_OCTAVES = initGuitarOctaves();
 	public Pitch pitch;
 	public int duration;
@@ -31,7 +31,7 @@ public class Note implements Comparable<Note> {
 	 * @param charIndex
 	 */
 	Note(int stringNumber, String stringTuning, int fret, int charIndex) {
-		this.pitch = createPitch(stringNumber, stringTuning.toUpperCase(), fret);
+		this.pitch = createPitch(stringNumber, stringTuning.toUpperCase().replaceAll("\\s", ""), fret);
 		this.charIndex = charIndex;
 		this.stringNo = stringNumber;
 		this.fret = fret;
