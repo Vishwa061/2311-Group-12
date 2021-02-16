@@ -39,45 +39,32 @@ public class Note implements Comparable<Note> {
 
 	@Override
 	public String toString() {
-		
+
 		String toMXL = "";
-		
-		if(slurStart || tieStart || slideStart || slurStop || tieStop || slideStop) {
-			if(slurStart)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
-			if(tieStart)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<tie type=\"start\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
-			if(slideStart)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slide type=\"start\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
-			if(slurStop)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"stop\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
-			if(tieStop)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<tie type=\"stop\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
-			if(slideStop)
-				toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
-						+ "\t\t<type> method not complete </type>\n" + "\t\t<staff>1</staff>\n" + "\t\t<notations>\n" + "\t\t\t<slide type=\"stop\"/>\n" 
-						+ "\t\t</notations>\n" + "\t</note>";
+
+		toMXL = "\t<note>\n" + this.pitch + "\t\t<duration>" + this.duration + "</duration>\n"
+				+ "\t\t<type> method not complete </type>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
+
+		if (slurStart || tieStart || slideStart || slurStop || tieStop || slideStop) {
+			if (slurStart)
+				toMXL += "\t\t\t\t<slur type=\"start\"/>\n";
+			if (tieStart)
+				toMXL += "\t\t\t\t<tie type=\"start\"/>\n";
+			if (slideStart)
+				toMXL += "\t\t\t\t<slide type=\"start\"/>\n";
+			if (slurStop)
+				toMXL += "\t\t\t\t<slur type=\"stop\"/>\n";
+			if (tieStop)
+				toMXL += "\t\t\t\t<tie type=\"stop\"/>\n";
+			if (slideStop)
+				toMXL += "\t\t\t<slide type=\"stop\"/>\n";
 		}
 
-		
-		else {
-			toMXL = "\t<note>\n" + this.pitch + "\t\t<duration>" + this.duration +  "</duration>\n"
-				+ "\t\t<type> method not complete </type>\n" + "\t\t<notations>\n" +"\t\t\t<technical>\n" + "\t\t\t\t<string>" + this.stringNo + "</string>\n" 
-					+ "\t\t\t\t<fret>" + this.fret + "</fret>\n" + "\t\t\t</technical>\n" + "\t\t</notations>\n" + "\t</note>";
-		}
+		toMXL += "\t\t\t\t<string>" + this.stringNo + "</string>\n" + "\t\t\t\t<fret>" + this.fret + "</fret>\n"
+				+ "\t\t\t</technical>\n" + "\t\t</notations>\n" + "\t</note>";
 
 		return toMXL;
-		
+
 	}
 
 	public Pitch getPitch() {
@@ -135,11 +122,10 @@ public class Note implements Comparable<Note> {
 
 		return allNotesMap;
 	}
-	
+
 	@Override
 	public int compareTo(Note object1) {
 		return (this.charIndex - object1.charIndex);
 	}
-	
 
 }
