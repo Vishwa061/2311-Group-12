@@ -32,10 +32,10 @@ public class Attributes {
 			int index = (guitarTuning.size() - i);
 			mxl += "\n\t\t\t<staff-tuning line=\"" + i + "\">"
 					+ "\n\t\t\t\t<tuning-step>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0, 0).getPitch().getStep() 
+					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getStep() 
 					+ "</tuning-step>"
 					+ "\n\t\t\t\t<tuning-octave>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0, 0).getPitch().getOctave() 
+					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getOctave() 
 					+ "</tuning-octave>"
 					+ "\n\t\t\t</staff-tuning>";
 		}

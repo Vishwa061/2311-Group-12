@@ -20,12 +20,6 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
-//		for (int i = 0; i < reader.allMeasures.size(); i++) {
-//			for(int j = 0; j < reader.allMeasures.get(i).size(); j++) {
-//				System.out.println(reader.allMeasures.get(i).get(j));
-//			}
-//		}
-		
 	}
 
 	public TabReader(File inputFile) {
@@ -81,53 +75,7 @@ public class TabReader {
 
 		return guitarTuning;
 	}
-
-	public void makeMeasures(List<String> tabArray) {
-		ArrayList<String> Measure = new ArrayList<String>();
-		int startingIndex = 6;
-
-		for (int j = 0; j < 6; j++) {
-			String currentElement = this.tabArray.get(j);
-
-			int index1 = currentElement.indexOf('|');
-			int index2 = currentElement.indexOf('|', index1 + 1);
-			String lineSegment = currentElement.substring(index1 + 1, index2);
-			Measure.add(lineSegment);
-			String replaceLine = currentElement.substring(index2);
-			this.tabArray.set(j, replaceLine);
-		}
-		allMeasures.add(Measure);
-		if (this.tabArray.get(0).indexOf('|', 1) != -1) {
-			makeMeasures(this.tabArray);
-		}
-
-		if (this.tabArray.size() > startingIndex)
-			makeMeasures(this.tabArray, startingIndex);
-
-	}
-
-	public void makeMeasures(List<String> tabArray, int startingIndex) {
-		ArrayList<String> Measure = new ArrayList<String>();
-
-		for (int j = startingIndex; j < startingIndex + 6; j++) {
-			String currentElement = this.tabArray.get(j);
-
-			int index1 = currentElement.indexOf('|');
-			int index2 = currentElement.indexOf('|', index1 + 1);
-			String lineSegment = currentElement.substring(index1 + 1, index2);
-			Measure.add(lineSegment);
-			String replaceLine = currentElement.substring(index2);
-			this.tabArray.set(j, replaceLine);
-		}
-		allMeasures.add(Measure);
-		if (this.tabArray.get(0).indexOf('|', 1) != -1) {
-			makeMeasures(this.tabArray);
-		}
-
-		if (this.tabArray.size() > startingIndex + 6)
-			makeMeasures(this.tabArray, startingIndex + 6);
-	}
-
+	
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
 		
@@ -166,7 +114,7 @@ public class TabReader {
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
 								temp = currentLine.substring(k, k + 2);
 								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, guitarTuning.get(j), fret, k, (6-j));
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 								measure.addNote(note);
 								noteCounter++;
 								k++;
@@ -191,7 +139,7 @@ public class TabReader {
 								|| currentLine.charAt(k + 1) == '/') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k, j);
+							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {

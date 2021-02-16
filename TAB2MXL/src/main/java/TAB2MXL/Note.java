@@ -30,10 +30,10 @@ public class Note implements Comparable<Note> {
 	 * @param fret
 	 * @param charIndex
 	 */
-	Note(int stringNumber, String stringTuning, int fret, int charIndex, int stringNo) {
+	Note(int stringNumber, String stringTuning, int fret, int charIndex) {
 		this.pitch = createPitch(stringNumber, stringTuning.toUpperCase(), fret);
 		this.charIndex = charIndex;
-		this.stringNo = stringNo;
+		this.stringNo = stringNumber;
 		this.fret = fret;
 	}
 
