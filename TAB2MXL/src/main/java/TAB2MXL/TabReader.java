@@ -20,6 +20,12 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
+//		for (int i = 0; i < reader.allMeasures.size(); i++) {
+//			for(int j = 0; j < reader.allMeasures.get(i).size(); j++) {
+//				System.out.println(reader.allMeasures.get(i).get(j));
+//			}
+//		}
+		
 	}
 
 	public TabReader(File inputFile) {
@@ -130,6 +136,7 @@ public class TabReader {
 			int noteCounter = 0;
 			for (int j = 0; j < 6; j++) {
 				String currentLine = allMeasures.get(i).get(j);
+				measure.setIndexTotal(currentLine.length());
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
 
@@ -184,7 +191,7 @@ public class TabReader {
 								|| currentLine.charAt(k + 1) == '/') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k, (6-j));
+							Note note = new Note(j + 1, guitarTuning.get(j), fret, k, j);
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
@@ -205,10 +212,12 @@ public class TabReader {
 			}
 			noteCounter = 0;
 			measure.sortArray();
+			measure.durationVal = setDuration(measure);
+			noteDuration(measure);
 			measureElements.add(measure);
+			
 
 		}
-		
 		return measureElements;
 	}
 
@@ -277,6 +286,29 @@ public class TabReader {
 		}
 		
 		return split;
+	}
+	
+	public int setDuration(Measure measure) {
+		int indexTotal = measure.getIndexTotal();
+		int firstIndex = measure.getNotes().get(0).charIndex;
+		int totalChar = indexTotal - firstIndex;
+		int eachBeatVal = totalChar/4;
+		int eachCharVal = 120/eachBeatVal;
+		
+		return eachCharVal;
+	}
+	
+	public void noteDuration(Measure measure) {
+		List<Note> noteArr = measure.getNotes();
+		for (int i = 0; i < noteArr.size(); i++) {
+			if(i == (noteArr.size()-1)) {
+				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
+			}
+			else {
+				noteArr.get(i).duration = (noteArr.get(i+1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
+			}
+		}
+		
 	}
 	
 	public String toMXL() {

@@ -7,6 +7,8 @@ public class Measure {
 	private ArrayList<Note> notes;
 	private int measureNumber;
 	public static Attributes a;
+	private int indexTotal;
+	public int durationVal;
 
 
 	public Measure(int measureNumber) {
@@ -54,5 +56,13 @@ public class Measure {
 
 	public ArrayList<Note> getNotes() {
 		return notes;
+	}
+	
+	public int getIndexTotal() {
+		return indexTotal;
+	}
+	
+	public void setIndexTotal(int indexTotal) {
+		this.indexTotal = indexTotal;
 	}
 }

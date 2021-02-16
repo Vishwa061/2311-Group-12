@@ -71,9 +71,9 @@ public class Note implements Comparable<Note> {
 
 		
 		else {
-			toMXL = "\t<note>\n" + this.pitch + "\t\t<duration> method not complete </duration>\n"
+			toMXL = "\t<note>\n" + this.pitch + "\t\t<duration>" + this.duration +  "</duration>\n"
 				+ "\t\t<type> method not complete </type>\n" + "\t\t<notations>\n" +"\t\t\t<technical>\n" + "\t\t\t\t<string>" + this.stringNo + "</string>\n" 
-					+ "\t\t\t\t<fret>" + this.fret + "</fret>\n" + "<\t\t\t</technical>\n" + "\t\t</notations>\n" + "\t</note>";
+					+ "\t\t\t\t<fret>" + this.fret + "</fret>\n" + "\t\t\t</technical>\n" + "\t\t</notations>\n" + "\t</note>";
 		}
 
 		return toMXL;
