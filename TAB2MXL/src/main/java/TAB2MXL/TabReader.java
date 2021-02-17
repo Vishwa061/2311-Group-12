@@ -146,10 +146,10 @@ public class TabReader {
 								if (measure.size() > 1) {
 									if (measure.getNote(noteCounter - 2).slurStart) {
 										note.slurStop = true;
-										if(measure.getNote(noteCounter - 2).pullStart){
+										if (measure.getNote(noteCounter - 2).pullStart) {
 											note.pullStop = true;
 										}
-										if(measure.getNote(noteCounter - 2).hammerStart){
+										if (measure.getNote(noteCounter - 2).hammerStart) {
 											note.hammerStop = true;
 										}
 									}
@@ -173,10 +173,10 @@ public class TabReader {
 							if (measure.size() > 1) {
 								if (measure.getNote(noteCounter - 2).slurStart) {
 									note.slurStop = true;
-									if(measure.getNote(noteCounter - 2).pullStart){
+									if (measure.getNote(noteCounter - 2).pullStart) {
 										note.pullStop = true;
 									}
-									if(measure.getNote(noteCounter - 2).hammerStart){
+									if (measure.getNote(noteCounter - 2).hammerStart) {
 										note.hammerStop = true;
 									}
 								}
@@ -226,17 +226,17 @@ public class TabReader {
 					countArray.add(count);
 				}
 
- 				break;
- 			}
- 		}
- 		return countArray;
- 	}
-	
-	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length){
+				break;
+			}
+		}
+		return countArray;
+	}
+
+	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		int k=0;
+		int k = 0;
 
 		while (k < length) {
 			if (lineHasTabs(tabArray.get(k))) {
@@ -249,8 +249,8 @@ public class TabReader {
 						measure.put(j, lineArray[j] + "\n");
 					}
 				}
-				
-				}
+
+			}
 			k++;
 		}
 
@@ -297,14 +297,14 @@ public class TabReader {
 
 		return measures;
 	}
-	
+
 	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
 		int eachBeatVal = totalChar / 4;
 		int eachCharVal = 120 / eachBeatVal;
-		
+
 		measure.durationVal = eachCharVal;
 
 	}
@@ -315,13 +315,15 @@ public class TabReader {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
 			} else {
-				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
+						* measure.durationVal;
 			}
 			if (noteArr.get(i).duration == 0) {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
-					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
+							* measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
 				}
@@ -335,7 +337,7 @@ public class TabReader {
 		int beatType = 4;
 		int noteType = 0;
 		for (int i = 0; i < noteArr.size(); i++) {
-			
+
 			int noteDur = noteArr.get(i).duration;
 
 			if (noteDur < 120 && 120 % noteDur != 0) {
@@ -343,7 +345,7 @@ public class TabReader {
 				noteDur = thirds * 2;
 				noteArr.get(i).dot = true;
 			}
-			
+
 			if (noteDur > 120 && noteDur % 120 != 0) {
 				int thirds = noteDur / 3;
 				noteDur = thirds * 2;
