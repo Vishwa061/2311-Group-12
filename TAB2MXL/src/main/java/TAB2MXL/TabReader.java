@@ -301,9 +301,16 @@ public class TabReader {
 		int beatType = 4;
 		int noteType = 0;
 		for (int i = 0; i < noteArr.size(); i++) {
+			
 			int noteDur = noteArr.get(i).duration;
 
-			if (120 % noteDur != 0) {
+			if (noteDur < 120 && 120 % noteDur != 0) {
+				int thirds = noteDur / 3;
+				noteDur = thirds * 2;
+				noteArr.get(i).dot = true;
+			}
+			
+			if (noteDur > 120 && noteDur % 120 != 0) {
 				int thirds = noteDur / 3;
 				noteDur = thirds * 2;
 				noteArr.get(i).dot = true;

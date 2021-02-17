@@ -51,7 +51,14 @@ public class Note implements Comparable<Note> {
 		}
 
 		toMXL += this.pitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type
-				+ "</type>\n" + "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
+				+ "</type>\n";
+		
+		if (dot) {
+			toMXL += "<dot/>\n";
+		}
+				
+		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
+		
 		if (hammerStart || hammerStop || pullStart || pullStop) {
 			if(hammerStart) {
 				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";
@@ -65,7 +72,6 @@ public class Note implements Comparable<Note> {
 			if(pullStop) {
 				toMXL += "\t\t\t\t<pull-off type=\"stop\"/>\n";
 			}
-			
 		}
 
 		toMXL += "\t\t\t\t<string>" + this.stringNo + "</string>\n" + "\t\t\t\t<fret>" + this.fret + "</fret>\n"
