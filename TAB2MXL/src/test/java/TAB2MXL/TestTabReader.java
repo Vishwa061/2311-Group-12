@@ -47,18 +47,22 @@ public class TestTabReader {
 		expMeasure2.add("-------------------------");
 		expected.add(expMeasure2);
 		
-		List<ArrayList<String>> actual = reader.splitMeasure();
+		List<String> tabArray = reader.readFile(new File(PATH + "TestSplitMeasure.txt"));
+		List<ArrayList<String>> actual = reader.splitMeasure(tabArray, tabArray.size());
 		assertEquals(expected, actual);
 	}
 	
 	@Test
 	void testCountBars() {
 		TabReader test2 = new TabReader(new File(PATH + "countBar.txt"));
-		//test2.countBars();
-	System.out.println(test2.countBars());
-		
-		
-		
+		System.out.println(test2.countBars());
+		// TODO
+	}
+	
+	@Test
+	void testCompileMeasures() {
+		TabReader reader = new TabReader(new File(PATH + "CompileMeasures_Input.txt"));
+		// TODO
 	}
 	
 	@Test
