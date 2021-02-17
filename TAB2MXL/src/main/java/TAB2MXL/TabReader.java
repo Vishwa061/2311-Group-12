@@ -15,6 +15,7 @@ public class TabReader {
 	private String instrument;
 	private String headingMXL;
 	private String title;
+	private File file;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
@@ -22,6 +23,7 @@ public class TabReader {
 	}
 
 	public TabReader(File inputFile) {
+		file = inputFile;
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
@@ -38,7 +40,7 @@ public class TabReader {
 
 		guitarTuning = getTuning();
 		Measure.setAttributes(new Attributes(guitarTuning));
-		allMeasures = splitMeasure();
+		allMeasures = compileMeasures();
 		measureElements = makeNotes();
 	}
 
@@ -46,10 +48,10 @@ public class TabReader {
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and at least one dash
+	 * @return true iff the line contains 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
-		return line.contains("-") && line.lastIndexOf('|') > line.indexOf('|');
+		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
 	public List<Measure> getMeasures() {
@@ -90,17 +92,18 @@ public class TabReader {
 	}
 
 	public String getTitle() {
-		return lineHasTabs(tabArray.get(0)) ? "Title" : tabArray.get(0);
+		return file.getName().split("\\.")[0];
 	}
 
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
 
 		for (int i = 0; i < allMeasures.size(); i++) {
+			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			Measure measure = new Measure(i + 1);
 			int noteCounter = 0;
-			for (int j = 0; j < 6; j++) {
-				String currentLine = allMeasures.get(i).get(j);
+			for (int j = 0; j < measuresAsStrings.size(); j++) {
+				String currentLine = measuresAsStrings.get(j);
 				measure.setIndexTotal(currentLine.length());
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
@@ -223,20 +226,20 @@ public class TabReader {
 					countArray.add(count);
 				}
 
-				break;
-			}
-		}
-		return countArray;
-	}
-
-	public List<ArrayList<String>> splitMeasure() {
+ 				break;
+ 			}
+ 		}
+ 		return countArray;
+ 	}
+	
+	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length){
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		int k = 0;
-		int i = 0;
-		while (k < tabArray.size() && i < 6) {
-			if (tabArray.get(k).contains("-")) {
+		int k=0;
+
+		while (k < length) {
+			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
 				for (int j = 1; j < lineArray.length; j++) {
@@ -246,9 +249,8 @@ public class TabReader {
 						measure.put(j, lineArray[j] + "\n");
 					}
 				}
-				i++;
-
-			}
+				
+				}
 			k++;
 		}
 
@@ -264,6 +266,38 @@ public class TabReader {
 		return split;
 	}
 
+	public List<ArrayList<String>> compileMeasures() {
+		List<ArrayList<String>> measures = new ArrayList<ArrayList<String>>();
+		final int tabArraySize = tabArray.size();
+		int i = 0;
+
+		while (i < tabArraySize) {
+			List<String> tabs = new ArrayList<String>();
+			boolean tabsFound = false;
+
+			while (i < tabArraySize) {
+				String line = tabArray.get(i);
+
+				if (lineHasTabs(line)) {
+					tabsFound = true;
+					tabs.add(line);
+				}
+
+				if (tabsFound && !lineHasTabs(line)) {
+					break;
+				}
+
+				i++;
+			}
+
+			if (!tabs.isEmpty()) {
+				measures.addAll(splitMeasure(tabs, tabs.size()));
+			}
+		}
+
+		return measures;
+	}
+	
 	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
