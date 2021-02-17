@@ -3,6 +3,7 @@ package TAB2MXL;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -22,14 +23,24 @@ public class TabReader {
 		System.out.println(reader.toMXL());
 	}
 
+	public TabReader(List<String> fileAsStrings) {
+		tabArray = fileAsStrings;
+	}
+	
+	public TabReader(String fileAsString) {
+		tabArray = Arrays.asList(fileAsString.split("\\n"));
+	}
+	
 	public TabReader(File inputFile) {
+		tabArray = readFile(inputFile);
 		file = inputFile;
-		tabArray = new ArrayList<String>();
+	}
+	
+	private void convertTabs() {
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
-
-		tabArray = readFile(inputFile);
+		
 		instrument = getInstrument();
 		title = getTitle();
 		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -48,7 +59,7 @@ public class TabReader {
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and 2 dashes
+	 * @return true iff the line contains at least 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
 		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
@@ -416,6 +427,7 @@ public class TabReader {
 	}
 
 	public String toMXL() {
+		convertTabs();
 		StringBuilder builder = new StringBuilder();
 		builder.append(headingMXL).append("\n");
 
