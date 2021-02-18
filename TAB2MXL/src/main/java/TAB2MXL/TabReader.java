@@ -22,10 +22,6 @@ public class TabReader {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
 	}
-
-	public TabReader(List<String> fileAsStrings) {
-		tabArray = fileAsStrings;
-	}
 	
 	public TabReader(String fileAsString) {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
