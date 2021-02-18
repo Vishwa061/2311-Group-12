@@ -18,7 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
+		TabReader reader = new TabReader(new File("src/main/resources/Capricho.txt"));
 		System.out.println(reader.toMXL());
 	}
 
@@ -132,7 +132,7 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) != '-') {
 							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
-									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
+									|| currentLine.charAt(k + 1) == '2' || currentLine.charAt(k + 1) == '3'
 									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
 									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
@@ -300,10 +300,17 @@ public class TabReader {
 
 	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
+		System.out.println(indexTotal);
 		int firstIndex = measure.getNotes().get(0).charIndex;
+		System.out.println(firstIndex);
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar / 4;
-		int eachCharVal = 120 / eachBeatVal;
+		System.out.println(totalChar);
+		double eachBeatVal = (double) totalChar / 4;
+		System.out.println(eachBeatVal);
+		eachBeatVal = Math.ceil(eachBeatVal);
+		System.out.println(eachBeatVal);
+		int eachCharVal = 120 / (int) eachBeatVal;
+		System.out.println(eachCharVal);
 
 		measure.durationVal = eachCharVal;
 
@@ -315,15 +322,13 @@ public class TabReader {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
 			} else {
-				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
-						* measure.durationVal;
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
 			}
 			if (noteArr.get(i).duration == 0) {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
-					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
-							* measure.durationVal;
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
 				}
