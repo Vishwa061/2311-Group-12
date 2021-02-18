@@ -10,7 +10,7 @@ public class TestTabReader {
 	private final String PATH = "src/test/resources/";
 	
 	@Test
-	public void testReadFile() {
+	void testReadFile() {
 		TabReader reader = new TabReader(new File(PATH + "test_tabs_reading.txt"));
 		
 		List<String> expected = new ArrayList<String>();
@@ -27,7 +27,7 @@ public class TestTabReader {
 	}
 	
 	@Test
-	public void testSplitMeasure() {
+	void testSplitMeasure() {
 		TabReader reader = new TabReader(new File(PATH + "TestSplitMeasure.txt"));
 		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
 		ArrayList<String> expMeasure1 = new ArrayList<String>();
@@ -47,18 +47,57 @@ public class TestTabReader {
 		expMeasure2.add("-------------------------");
 		expected.add(expMeasure2);
 		
-		List<ArrayList<String>> actual = reader.splitMeasure();
+		List<String> tabArray = reader.readFile(new File(PATH + "TestSplitMeasure.txt"));
+		List<ArrayList<String>> actual = reader.splitMeasure(tabArray, tabArray.size());
 		assertEquals(expected, actual);
 	}
 	
 	@Test
-	public void test2() {
+	void testCountBars() {
 		TabReader test2 = new TabReader(new File(PATH + "countBar.txt"));
-		//test2.countBars();
-	System.out.println(test2.countBars());
-		
-		
-		
+		System.out.println(test2.countBars());
+		// TODO
+	}
+	
+	@Test
+	void testCompileMeasures() {
+		TabReader reader = new TabReader(new File(PATH + "CompileMeasures_Input.txt"));
+		// TODO
+	}
+	
+	@Test
+	void testLineHasTabs() {
+		// TODO
+	}
+	
+	@Test
+	void testGetMeasures() {
+		// TODO
+	}
+	
+	@Test
+	void testGetTuning() {
+		// TODO
+	}
+	
+	@Test
+	void testGetTitle() {
+		// TODO
+	}
+	
+	@Test
+	void testMakeNotes() {
+		// TODO
+	}
+	
+	@Test
+	void testGetInstrument() {
+		// TODO
+	}
+	
+	@Test
+	void testToMXL() {
+		// TODO
 	}
 
 }
