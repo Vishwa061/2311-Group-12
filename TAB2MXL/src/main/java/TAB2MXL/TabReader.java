@@ -15,6 +15,7 @@ public class TabReader {
 	private String instrument;
 	private String headingMXL;
 	private String title;
+	private File file;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
@@ -22,41 +23,35 @@ public class TabReader {
 	}
 
 	public TabReader(File inputFile) {
+		file = inputFile;
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
-		
+
 		tabArray = readFile(inputFile);
 		instrument = getInstrument();
 		title = getTitle();
 		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n"
-				+ "<work>\n"
-				+ "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n"
-				+ "<part-list>\n"
-				+ "\t<score-part id=\"P1\">\n"
-				+ "\t\t<part-name>" + instrument + "</part-name>\n"
-				+ "\t</score-part>\n"
-				+ "</part-list>\n"
-				+ "<part id=\"P1\">";
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
+				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">";
 
 		guitarTuning = getTuning();
 		Measure.setAttributes(new Attributes(guitarTuning));
-		allMeasures = splitMeasure();
+		allMeasures = compileMeasures();
 		measureElements = makeNotes();
 	}
-	
+
 	/**
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and at least one dash
+	 * @return true iff the line contains 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
-		return line.contains("-") && line.lastIndexOf('|') > line.indexOf('|');
+		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
 	public List<Measure> getMeasures() {
@@ -95,20 +90,20 @@ public class TabReader {
 
 		return guitarTuning;
 	}
-	
 
 	public String getTitle() {
-		return lineHasTabs(tabArray.get(0)) ? "Title" : tabArray.get(0);
+		return file.getName().split("\\.")[0];
 	}
 
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
-		
+
 		for (int i = 0; i < allMeasures.size(); i++) {
+			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			Measure measure = new Measure(i + 1);
 			int noteCounter = 0;
-			for (int j = 0; j < 6; j++) {
-				String currentLine = allMeasures.get(i).get(j);
+			for (int j = 0; j < measuresAsStrings.size(); j++) {
+				String currentLine = measuresAsStrings.get(j);
 				measure.setIndexTotal(currentLine.length());
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
@@ -118,11 +113,15 @@ public class TabReader {
 						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h' || currentLine.charAt(k) == 's'
 								|| currentLine.charAt(k) == '/') {
 
-							if (currentLine.charAt(k) == 'p')
+							if (currentLine.charAt(k) == 'p') {
 								measure.getNote(noteCounter - 1).slurStart = true;
+								measure.getNote(noteCounter - 1).pullStart = true;
+							}
 
-							if (currentLine.charAt(k) == 'h')
-								measure.getNote(noteCounter - 1).tieStart = true;
+							if (currentLine.charAt(k) == 'h') {
+								measure.getNote(noteCounter - 1).slurStart = true;
+								measure.getNote(noteCounter - 1).hammerStart = true;
+							}
 
 							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/')
 								measure.getNote(noteCounter - 1).slideStart = true;
@@ -145,11 +144,15 @@ public class TabReader {
 								k++;
 
 								if (measure.size() > 1) {
-									if (measure.getNote(noteCounter - 2).slurStart)
+									if (measure.getNote(noteCounter - 2).slurStart) {
 										note.slurStop = true;
-
-									if (measure.getNote(noteCounter - 2).tieStart)
-										note.tieStop = true;
+										if (measure.getNote(noteCounter - 2).pullStart) {
+											note.pullStop = true;
+										}
+										if (measure.getNote(noteCounter - 2).hammerStart) {
+											note.hammerStop = true;
+										}
+									}
 
 									if (measure.getNote(noteCounter - 2).slideStart)
 										note.slideStop = true;
@@ -168,11 +171,15 @@ public class TabReader {
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
-								if (measure.getNote(noteCounter - 2).slurStart)
+								if (measure.getNote(noteCounter - 2).slurStart) {
 									note.slurStop = true;
-
-								if (measure.getNote(noteCounter - 1).tieStart)
-									note.tieStop = true;
+									if (measure.getNote(noteCounter - 2).pullStart) {
+										note.pullStop = true;
+									}
+									if (measure.getNote(noteCounter - 2).hammerStart) {
+										note.hammerStop = true;
+									}
+								}
 
 								if (measure.getNote(noteCounter - 1).slideStart)
 									note.slideStop = true;
@@ -185,106 +192,200 @@ public class TabReader {
 			}
 			noteCounter = 0;
 			measure.sortArray();
-			measure.durationVal = setDuration(measure);
+			setDuration(measure);
 			noteDuration(measure);
+			noteType(measure);
 			measureElements.add(measure);
-			
 
 		}
 		return measureElements;
 	}
 
 	public ArrayList<Integer> countBars() {
- 		ArrayList<Integer> countArray = new ArrayList<>();
- 		for (int i = 0; i < tabArray.size();i++) {
- 			if (tabArray.get(i).contains("-") ) {
- 				ArrayList<Integer> indices = new ArrayList<Integer>();
- 				int index = 0;
- 				while((index = tabArray.get(i).indexOf('|', index+1))>0) {
- 				 indices.add(index);	
- 				}
- 				for (int j = 0; j < indices.size()-1;j++) {
- 					String lineBefore = "";
- 					lineBefore = tabArray.get(i-1);
- 					int lastIndex = indices.get(j+1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|'): indices.get(j+1);
- 					lineBefore = lineBefore.substring(indices.get(j),lastIndex+1);
- 					int count = 0;
- 					for(String s: lineBefore.split("\\s+")) {
- 						if (s.equals("|")) {
- 							count++;
- 						}
+		ArrayList<Integer> countArray = new ArrayList<>();
+		for (int i = 0; i < tabArray.size(); i++) {
+			if (tabArray.get(i).contains("-")) {
+				ArrayList<Integer> indices = new ArrayList<Integer>();
+				int index = 0;
+				while ((index = tabArray.get(i).indexOf('|', index + 1)) > 0) {
+					indices.add(index);
+				}
+				for (int j = 0; j < indices.size() - 1; j++) {
+					String lineBefore = "";
+					lineBefore = tabArray.get(i - 1);
+					int lastIndex = indices.get(j + 1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|')
+							: indices.get(j + 1);
+					lineBefore = lineBefore.substring(indices.get(j), lastIndex + 1);
+					int count = 0;
+					for (String s : lineBefore.split("\\s+")) {
+						if (s.equals("|")) {
+							count++;
+						}
 
- 					}
- 					countArray.add(count);
- 				}
+					}
+					countArray.add(count);
+				}
 
- 				break;
- 			}
- 		}
- 		return countArray;
- 	}
-	
-	
-	public List<ArrayList<String>> splitMeasure(){
+
+				break;
+			}
+		}
+		return countArray;
+	}
+
+	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
-		int k=0;
-		int i =0;
-		while (k < tabArray.size() &&  i < 6 ) {
-			if (tabArray.get(k).contains("-")) {
+		int k = 0;
+
+		while (k < length) {
+			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
-				for(int j=1; j<lineArray.length;j++) {
+				for (int j = 1; j < lineArray.length; j++) {
 					if (measure.containsKey(j)) {
-						measure.put(j,measure.get(j)+ lineArray[j]+"\n");
-					}
-					else {
-						measure.put(j,lineArray[j]+"\n");
+						measure.put(j, measure.get(j) + lineArray[j] + "\n");
+					} else {
+						measure.put(j, lineArray[j] + "\n");
 					}
 				}
-				i++;
-				
-				}
-			k++;
+
 			}
-			
-		for(int j=1; j <= measure.size();j++) {
+			k++;
+		}
+
+		for (int j = 1; j <= measure.size(); j++) {
 			String string = measure.get(j);
-			ArrayList<String> splitMeasure= new ArrayList<String>();
-			for(String s : string.split("\n")) {
+			ArrayList<String> splitMeasure = new ArrayList<String>();
+			for (String s : string.split("\n")) {
 				splitMeasure.add(s);
 			}
 			split.add(splitMeasure);
 		}
-		
+
 		return split;
 	}
-	
-	public int setDuration(Measure measure) {
+
+	public List<ArrayList<String>> compileMeasures() {
+		List<ArrayList<String>> measures = new ArrayList<ArrayList<String>>();
+		final int tabArraySize = tabArray.size();
+		int i = 0;
+
+		while (i < tabArraySize) {
+			List<String> tabs = new ArrayList<String>();
+			boolean tabsFound = false;
+
+			while (i < tabArraySize) {
+				String line = tabArray.get(i);
+
+				if (lineHasTabs(line)) {
+					tabsFound = true;
+					tabs.add(line);
+				}
+
+				if (tabsFound && !lineHasTabs(line)) {
+					break;
+				}
+
+				i++;
+			}
+
+			if (!tabs.isEmpty()) {
+				measures.addAll(splitMeasure(tabs, tabs.size()));
+			}
+		}
+
+		return measures;
+	}
+
+	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar/4;
-		int eachCharVal = 120/eachBeatVal;
-		
-		return eachCharVal;
+		int eachBeatVal = totalChar / 4;
+		int eachCharVal = 120 / eachBeatVal;
+
+		measure.durationVal = eachCharVal;
+
 	}
-	
+
 	public void noteDuration(Measure measure) {
 		List<Note> noteArr = measure.getNotes();
 		for (int i = 0; i < noteArr.size(); i++) {
-			if(i == (noteArr.size()-1)) {
+			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
+			} else {
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
+						* measure.durationVal;
 			}
-			else {
-				noteArr.get(i).duration = (noteArr.get(i+1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
+			if (noteArr.get(i).duration == 0) {
+				int newDuration = 0;
+				int indexForward = i + 1;
+				while (newDuration == 0) {
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
+							* measure.durationVal;
+					noteArr.get(indexForward).chord = true;
+					indexForward++;
+				}
+				noteArr.get(i).duration = newDuration;
 			}
 		}
 	}
 
+	public void noteType(Measure measure) {
+		List<Note> noteArr = measure.getNotes();
+		int beatType = 4;
+		int noteType = 0;
+		for (int i = 0; i < noteArr.size(); i++) {
+
+			int noteDur = noteArr.get(i).duration;
+
+			if (noteDur < 120 && 120 % noteDur != 0) {
+				int thirds = noteDur / 3;
+				noteDur = thirds * 2;
+				noteArr.get(i).dot = true;
+			}
+
+			if (noteDur > 120 && noteDur % 120 != 0) {
+				int thirds = noteDur / 3;
+				noteDur = thirds * 2;
+				noteArr.get(i).dot = true;
+			}
+
+			if (120 % noteDur == 0 && noteDur <= 120) {
+				int fractionBeat = 120 / noteArr.get(i).duration;
+				noteType = fractionBeat * beatType;
+			}
+			if (120 % noteDur == 0 && noteDur > 120) {
+				int fractionBeat = noteArr.get(i).duration / 120;
+				noteType = beatType / fractionBeat;
+			}
+
+			if (noteType == 1)
+				noteArr.get(i).type = "whole";
+			if (noteType == 2)
+				noteArr.get(i).type = "half";
+			if (noteType == 3) {
+				noteArr.get(i).type = "half";
+				noteArr.get(i).dot = true;
+			}
+			if (noteType == 4)
+				noteArr.get(i).type = "quarter";
+			if (noteType == 8)
+				noteArr.get(i).type = "eighth";
+			if (noteType == 16)
+				noteArr.get(i).type = "16th";
+			if (noteType == 32)
+				noteArr.get(i).type = "32nd";
+
+		}
+
+	}
+
 	/**
 	 * Detects and returns the instrument used in the tabs
+	 * 
 	 * @return the instrument name
 	 */
 	public String getInstrument() {
@@ -298,7 +399,7 @@ public class TabReader {
 		if (isDrums) {
 			return "Drumset";
 		}
-		
+
 		int lines = 0;
 		boolean isCountStarted = false;
 		for (int i = 0; i < tabArray.size(); i++) {
@@ -306,23 +407,23 @@ public class TabReader {
 				lines++;
 				isCountStarted = true;
 			}
-			
+
 			if (isCountStarted && !lineHasTabs(tabArray.get(i))) {
 				break;
 			}
 		}
-		
+
 		return lines == 4 ? "Bass" : "Classical Guitar";
 	}
-	
+
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(headingMXL).append("\n");
-		
+
 		for (Measure m : getMeasures()) {
 			builder.append(m).append("\n");
 		}
-		
+
 		builder.append("</part>\n</score-partwise>");
 		return builder.toString();
 	}
