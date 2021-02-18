@@ -224,6 +224,7 @@ public class TabReader {
  		return countArray;
  	}
 	
+	
 	public List<ArrayList<String>> splitMeasure(){
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
