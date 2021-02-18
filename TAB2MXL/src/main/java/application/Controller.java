@@ -55,7 +55,7 @@ public class Controller {
     private File file;
     
     @FXML 
-    private Button Save;
+    private Button save;
 
    TabReader outputXMLFile;
 
@@ -63,11 +63,21 @@ public class Controller {
    BufferedReader input;
    StreamResult output;
 	
-	
+
+   
+   /*
+    * Convert Button Clicked 
+    */
+   
     @FXML
     void ConvertClicked() throws IOException {
-    	if(!textInput.getText().isEmpty() && convert.getText().equals("Convert")) {
-    		
+    	// checks if the convert icon is clicked and that the file is not empty
+    	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
+    		System.out.println("yas");
+    		//reads the file provided thr
+    		TabReader reader = new TabReader(file);
+ 	    	System.out.println(reader.toMXL());
+ 	    	textInput.appendText(reader.toMXL());
 		}
 		else  {
 			FileChooser fileChooser = new FileChooser();
@@ -91,24 +101,32 @@ public class Controller {
 		file = fileChooser.showOpenDialog(submit.getScene().getWindow()); 	
 
 		if(!(file.length() == 0)) {
-			 OutputConvertFile(file);
+			textInput.clear();
+			checkTrue(file);
         }
 		else {
 			ErrorOutput(file);
 		}
 	}
 	
-	private void OutputConvertFile(File file) {
+	private boolean checkTrue(File file) {
+		if(!(file.length() == 0)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/*private void OutputConvertFile(File file) {
 		 TabReader reader = new TabReader(file);
 	    	System.out.println(reader.toMXL());
 	    	textInput.appendText(reader.toMXL());
 	    	
 	}
-	
+	*/
 	
 	private void ErrorOutput(File file) {
 		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
-		errorAlert.setHeaderText("Input not valid, cannot be empty"); 
+		errorAlert.setHeaderText("Input file is not valid. Please ensure your input file is not empty"); 
 		errorAlert.setContentText("Provide text file"); //Shows this stage and waits for it to be hidden (closed) before returning to the caller.
 		errorAlert.showAndWait();
 	}
@@ -120,28 +138,30 @@ public class Controller {
 	 */
 	
 	public void SaveClicked() {
-		  try { FileChooser fileChooser = new FileChooser();
-          //Set extension filter
+		  try { 
+		  FileChooser fileChooser = new FileChooser();
           FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
           fileChooser.getExtensionFilters().add(extFilter);
-          //Show save file dialog
           File file = fileChooser.showSaveDialog(stage);
           if(file != null){
           	FileWriter myWriter = new FileWriter(file);
           	myWriter.write(textInput.getText());
 				myWriter.close();
-          	SaveFile(textInput.getText(), file);
+          //	SaveFile(textInput.getText(), file);
+				
+				
+				Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
+				errorAlert.setHeaderText("File is saved. Happy making music!"); 
+				errorAlert.showAndWait();
           }
          }
           catch (IOException ex) {
-          	
-         
           Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
           }}
 	      
 	
 
-    private void SaveFile(String text, File file2) {
+  /*  private void SaveFile(String text, File file2) {
 		// TODO Auto-generated method stub
     	 
     	try {
@@ -155,11 +175,10 @@ public class Controller {
                  .getName()).log(Level.SEVERE, null, ex);
          }
          
-	}
+	} */
 
     /*
      * Drag and drop file methods below listed 
-     * again
      */
     private 
 	@FXML
