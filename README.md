@@ -6,3 +6,4 @@ This is a project to be completed for EECS 2311
 
 1. User can upload their guitar file. The program will convert from guitar text file to MUSICXML file. 
 2. User can upload their drum file. The program will convert from drum text file to MUSICXML file. 
+3. Please go to the Release and download the TAB2MXL zip file as well as the user manual.
