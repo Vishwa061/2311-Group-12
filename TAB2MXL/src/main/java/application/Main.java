@@ -17,7 +17,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/PrimaryStage.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 			primaryStage.setTitle("TAB2XML");
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
