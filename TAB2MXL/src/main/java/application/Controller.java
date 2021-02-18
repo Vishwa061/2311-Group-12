@@ -159,6 +159,7 @@ public class Controller {
 
     /*
      * Drag and drop file methods below listed 
+     * again
      */
     private 
 	@FXML
