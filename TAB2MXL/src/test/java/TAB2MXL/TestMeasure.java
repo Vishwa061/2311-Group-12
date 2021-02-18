@@ -1,49 +1,63 @@
 package TAB2MXL;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class TestMeasure {
-	
-private final String PATH = "src/test/resources/";
-	
+	private final String PATH = "src/test/resources/";
 
-	
 	@Test
-	public void test1() {
-		TabReader test2 = new TabReader("src/main/java/TAB2MXL/StairwayHeaven.txt");
-		
+	void testSortArray() {
+		TabReader test2 = new TabReader(new File(PATH + "StairwayHeaven.txt"));
+
 		for (Measure m : test2.getMeasures()) {
 			m.sortArray();
 			ArrayList<Note> Notes = m.getNotes() ;
-			
-			for(Note n:Notes) {
-				System.out.println(n.charIndex);
+
+			//			for(Note n:Notes) {
+			//				System.out.println(n.charIndex);
 			for(int i =1; i < Notes.size(); i++) {
 				//System.out.println(Notes.get(i).charIndex);
 				assertTrue(Notes.get(i-1).charIndex <= (Notes.get(i).charIndex));
-				
-				
 			}
-			
-
-			}
-			System.out.println();
-			
+			//			}
+			//			System.out.println();
 		}
-		
-		
+	}
+
+	@Test
+	void testSetAttributes() {
+		// TODO
+	}
+
+	@Test
+	void testAddNote() {
+		// TODO
+	}
+
+	@Test
+	void testToString() {
+		// TODO
+	}
+
+	@Test
+	void testGetNote() {
+		// TODO
+	}
+
+	@Test
+	void testSize() {
+		// TODO
+	}
+
+	@Test
+	void testGetNotes() {
+		// TODO
 	}
 
 }
-
-	
-	
-	
-
-

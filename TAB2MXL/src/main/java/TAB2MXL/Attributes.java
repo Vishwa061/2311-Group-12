@@ -13,10 +13,14 @@ public class Attributes {
 	@Override
 	public String toString() {
 		String mxl = "\t<attributes>"
-				+ "\n\t\t<divisions>1</divisions>"
+				+ "\n\t\t<divisions>120</divisions>"
 				+ "\n\t\t<key>"
 				+ "\n\t\t\t<fifths>0</fifths>"
 				+ "\n\t\t</key>"
+				+ "\n\t\t<time>"
+				+ "\n\t\t\t<beats>4</beats>"
+				+ "\n\t\t\t<beat-type>4</beat-type>"
+				+ "\n\t\t</time>"
 				+ "\n\t\t<clef>"
 				+ "\n\t\t\t<sign>TAB</sign>"
 				+ "\n\t\t\t<line>5</line>"
