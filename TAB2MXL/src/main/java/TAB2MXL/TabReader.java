@@ -14,41 +14,65 @@ public class TabReader {
 	private List<Measure> measureElements;
 	private List<ArrayList<String>> allMeasures;
 	private String instrument;
-	private String headingMXL;
 	private String title;
 	private File file;
 
+	// shows intended usage
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
-		System.out.println(reader.toMXL());
+		TabReader reader = new TabReader();
+		File file = new File("src/main/resources/StairwayHeaven.txt");
+		reader.setInput(file);
+		
+		String exitCode = reader.convertTabs();
+		if (exitCode.equals("done")) {
+			System.out.println(reader.toMXL()); // calls reader.toMXL() to get output
+		}
+		else {
+			// handle errors using exitCode
+			// ...
+		}
+		
 	}
 	
-	public TabReader(String fileAsString) {
+	public TabReader() {
+		guitarTuning = new ArrayList<String>();
+		measureElements = new ArrayList<Measure>();
+		allMeasures = new ArrayList<ArrayList<String>>();
+	}
+	
+	public void setInput(String fileAsString) {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 	}
 	
-	public TabReader(File inputFile) {
+	public void setInput(File inputFile) {
 		tabArray = readFile(inputFile);
 		file = inputFile;
 	}
 	
-	private void convertTabs() {
-		guitarTuning = new ArrayList<String>();
-		measureElements = new ArrayList<Measure>();
-		allMeasures = new ArrayList<ArrayList<String>>();
-		
-		instrument = getInstrument();
-		title = getTitle();
-		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
-				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">";
+	/**
+	 * Converts the text-tab to MXL data and populates fields
+	 * 
+	 * @return a string representing the exit code </br>
+	 * Exit codes: </br>
+	 * done - the tabs were successfully converted </br>
+	 * empty - no tabs found </br>
+	 * instrument - the instrument was not found </br>
+	 * tuning - the tuning was not found </br>
+	 * measure - the measure format was incorrect </br>
+	 */
+	public String convertTabs() {
+		try {
+			instrument = getInstrument();
+			title = getTitle();
+			guitarTuning = getTuning();
+			Measure.setAttributes(new Attributes(guitarTuning));
+			allMeasures = compileMeasures();
+			measureElements = makeNotes();
+		} catch (Exception e) {
+			// TODO create error catching
+		}
 
-		guitarTuning = getTuning();
-		Measure.setAttributes(new Attributes(guitarTuning));
-		allMeasures = compileMeasures();
-		measureElements = makeNotes();
+		return "done";
 	}
 
 	/**
@@ -423,9 +447,13 @@ public class TabReader {
 	}
 
 	public String toMXL() {
-		convertTabs();
 		StringBuilder builder = new StringBuilder();
-		builder.append(headingMXL).append("\n");
+		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
+				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">\n";
+		builder.append(headingMXL);
 
 		for (Measure m : getMeasures()) {
 			builder.append(m).append("\n");
