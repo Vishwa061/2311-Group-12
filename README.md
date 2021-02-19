@@ -8,4 +8,4 @@ This is a project to be completed for EECS 2311
 2. User can upload their drum file. The program will convert from drum text file to MUSICXML file. 
 
 # Installation
-Please go to the Release and download the TAB2MXL zip file as well as the user manual.
+Go to Latest Release and download the TAB2MXL zip file as well as the user manual.
