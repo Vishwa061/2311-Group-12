@@ -54,7 +54,7 @@ public class Note implements Comparable<Note> {
 				+ "</type>\n";
 		
 		if (dot) {
-			toMXL += "<dot/>\n";
+			toMXL += "\t\t<dot/>\n";
 		}
 				
 		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";

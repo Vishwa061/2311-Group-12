@@ -328,6 +328,10 @@ public class TabReader {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
+					if (indexForward == noteArr.size()-1) {
+						newDuration = (measure.getIndexTotal() - noteArr.get(indexForward).charIndex) * measure.durationVal;
+						break;
+					}
 					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
