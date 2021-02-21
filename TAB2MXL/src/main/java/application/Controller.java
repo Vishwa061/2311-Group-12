@@ -169,49 +169,31 @@ public class Controller {
 		return false;
 	}
 	
+
     private String readFile(File file){
 
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-
         try {
-
             bufferedReader = new BufferedReader(new FileReader(file));
-        String text;
-
+            String text;
             while ((text = bufferedReader.readLine()) != null) {
-
                 stringBuffer.append(text);
-
             }
 
         } catch (FileNotFoundException ex) {
-
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-
         } catch (IOException ex) {
 
-            
-
         } finally {
-
             try {
-
                 bufferedReader.close();
-
             } catch (IOException ex) {
-
-           
-
             }
-
         }
 
-         
-
         return stringBuffer.toString();
-
-    }
+}
 
 
 	
