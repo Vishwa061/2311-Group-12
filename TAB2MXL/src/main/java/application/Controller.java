@@ -116,13 +116,7 @@ public class Controller {
 		return false;
 	}
 	
-	/*private void OutputConvertFile(File file) {
-		 TabReader reader = new TabReader(file);
-	    	System.out.println(reader.toMXL());
-	    	textInput.appendText(reader.toMXL());
-	    	
-	}
-	*/
+
 	
 	private void ErrorOutput(File file) {
 		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
