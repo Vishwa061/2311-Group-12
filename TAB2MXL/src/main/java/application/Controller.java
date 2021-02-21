@@ -91,7 +91,7 @@ public class Controller {
     StreamResult output;
     
     @FXML
-    private File file;
+    private File file; //needed
 
     @FXML
     void ConvertClicked(ActionEvent event) {
