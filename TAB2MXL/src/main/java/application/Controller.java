@@ -92,30 +92,8 @@ public class Controller {
     
     @FXML
     private File file;
-<<<<<<< HEAD
-=======
-    
-    @FXML 
-    private Button save;
->>>>>>> refs/heads/develop
 
-<<<<<<< HEAD
-=======
-   TabReader outputXMLFile;
-
-   private Window stage;
-   BufferedReader input;
-   StreamResult output;
-	
-
-   
-   /*
-    * Convert Button Clicked 
-    */
-   
->>>>>>> refs/heads/develop
     @FXML
-<<<<<<< HEAD
     void ConvertClicked(ActionEvent event) {
     	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
     		System.out.println("yas");
@@ -124,16 +102,6 @@ public class Controller {
  	    	System.out.println(reader.toMXL());
  	    	textInputFileArea.appendText(reader.toMXL());
  	    	
-=======
-    void ConvertClicked() throws IOException {
-    	// checks if the convert icon is clicked and that the file is not empty
-    	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-    		System.out.println("yas");
-    		//reads the file provided thr
-    		TabReader reader = new TabReader(file);
- 	    	System.out.println(reader.toMXL());
- 	    	textInput.appendText(reader.toMXL());
->>>>>>> refs/heads/develop
 		}
 		else  {
 			FileChooser fileChooser = new FileChooser();
@@ -183,12 +151,8 @@ public class Controller {
 		file = fileChooser.showOpenDialog(select.getScene().getWindow()); 	
 		
 		if(!(file.length() == 0)) {
-<<<<<<< HEAD
 			textInputFileArea.clear();
 			textOutputAreaXML.clear();
-=======
-			textInput.clear();
->>>>>>> refs/heads/develop
 			checkTrue(file);
         }
 		else {
@@ -205,7 +169,6 @@ public class Controller {
 		return false;
 	}
 	
-<<<<<<< HEAD
     private String readFile(File file){
 
         StringBuilder stringBuffer = new StringBuilder();
@@ -224,7 +187,7 @@ public class Controller {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(controller2.class.getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
 
@@ -251,46 +214,16 @@ public class Controller {
     }
 
 
-=======
-	private boolean checkTrue(File file) {
-		if(!(file.length() == 0)) {
-			return true;
-		}
-		return false;
-	}
-	
-	/*private void OutputConvertFile(File file) {
-		 TabReader reader = new TabReader(file);
-	    	System.out.println(reader.toMXL());
-	    	textInput.appendText(reader.toMXL());
-	    	
-	}
-	*/
->>>>>>> refs/heads/develop
 	
 	private void ErrorOutput(File file) {
-<<<<<<< HEAD
 		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error alert window 
-=======
-		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
->>>>>>> refs/heads/develop
 		errorAlert.setHeaderText("Input file is not valid. Please ensure your input file is not empty"); 
 		errorAlert.setContentText("Provide text file"); //Shows this stage and waits for it to be hidden (closed) before returning to the caller.
 		errorAlert.showAndWait();
 	}
 	
-//	int a = 0;
-//	InputStream inputStream;
-//	private boolean readFile (File file) {
-//		if (a == 0) {
-			
-//			return true;
-//		}
-//		
-//		return false; 
-//	}
+
 	
-<<<<<<< HEAD
     @FXML
     void initialize() {
         assert textOutputAreaXML != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
@@ -298,55 +231,7 @@ public class Controller {
         assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
         assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
         assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
-=======
-	
-	/*
-	 * SAVE BUTTON: Takes the text area file, and saves it! 
-	 */
-	
-	public void SaveClicked() {
-		  try { 
-		  FileChooser fileChooser = new FileChooser();
-          FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
-          fileChooser.getExtensionFilters().add(extFilter);
-          File file = fileChooser.showSaveDialog(stage);
-          if(file != null){
-          	FileWriter myWriter = new FileWriter(file);
-          	myWriter.write(textInput.getText());
-				myWriter.close();
-          //	SaveFile(textInput.getText(), file);
-				
-				
-				Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
-				errorAlert.setHeaderText("File is saved. Happy making music!"); 
-				errorAlert.showAndWait();
-          }
-         }
-          catch (IOException ex) {
-          Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-          }}
-	      
-	
->>>>>>> refs/heads/develop
 
-<<<<<<< HEAD
     }
 }
-=======
-  /*  private void SaveFile(String text, File file2) {
-		// TODO Auto-generated method stub
-    	 
-    	try {
-    		String texts = textInput.getText();
-             FileWriter fileWriter;
-             fileWriter = new FileWriter(file);
-             fileWriter.write(texts);
-             fileWriter.close();
-         } catch (IOException ex) {
-             Logger.getLogger(Controller.class
-                 .getName()).log(Level.SEVERE, null, ex);
-         }
-         
-	} */
->>>>>>> refs/heads/develop
 
