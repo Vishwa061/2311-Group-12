@@ -187,7 +187,7 @@ public class Controller {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(controller2.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
 
