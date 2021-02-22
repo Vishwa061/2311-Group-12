@@ -138,9 +138,46 @@ public class Controller {
     }
 
     @FXML
-    void dragFile(DragEvent event) {
+    void dragFile() {
+    	textOutputAreaXML.setOnDragOver(e -> { //e -> dictates action needed 
+			Dragboard db = e.getDragboard(); 
+			if(db.hasFiles() && db.getFiles().size() == 1) {
+				
+				try {
+					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
+					if(Files.probeContentType(path).equals("text/plain")) {
+						e.acceptTransferModes(TransferMode.COPY);//copy data 
+					}
+					
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+			}
+			else {
+				e.consume();
+			}
+		});
+    	textOutputAreaXML.setOnDragDropped(e->{
+			Dragboard db = e.getDragboard();
+			boolean success = false;
+			if(db.hasFiles()) {
+				success = true;
+				
+				for(File f : db.getFiles()) {
+					file = f;
+					textInputFileArea.clear();
+					textOutputAreaXML.setText(readFile(file));
+					textOutputAreaXML.clear();
+					checkTrue(file);
+				}
+			}
+			e.setDropCompleted(success);
+			e.consume();
+		});
 
-    }
+	}
+    
 
     @FXML
     void select() {
