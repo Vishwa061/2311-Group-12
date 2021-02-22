@@ -31,7 +31,7 @@ public class TabReader {
 			// handle errors using exitCode
 			// ...
 		}
-		
+
 	}
 	
 	public TabReader() {
@@ -223,10 +223,8 @@ public class TabReader {
 								if (measure.getNote(noteCounter - 1).slideStart)
 									note.slideStop = true;
 							}
-
 						}
 					}
-
 				}
 			}
 			noteCounter = 0;
@@ -339,10 +337,17 @@ public class TabReader {
 
 	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
+		System.out.println(indexTotal);
 		int firstIndex = measure.getNotes().get(0).charIndex;
+		System.out.println(firstIndex);
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar / 4;
-		int eachCharVal = 120 / eachBeatVal;
+		System.out.println(totalChar);
+		double eachBeatVal = (double) totalChar / 4;
+		System.out.println(eachBeatVal);
+		eachBeatVal = Math.ceil(eachBeatVal);
+		System.out.println(eachBeatVal);
+		int eachCharVal = 120 / (int) eachBeatVal;
+		System.out.println(eachCharVal);
 
 		measure.durationVal = eachCharVal;
 
@@ -354,15 +359,13 @@ public class TabReader {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
 			} else {
-				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
-						* measure.durationVal;
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
 			}
 			if (noteArr.get(i).duration == 0) {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
-					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
-							* measure.durationVal;
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
 				}
