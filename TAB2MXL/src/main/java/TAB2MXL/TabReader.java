@@ -77,6 +77,7 @@ public class TabReader {
 			measureElements = makeNotes();
 		} catch (Exception e) {
 			// TODO create error catching
+			System.out.println("SOMETHING WENT WRONG");
 		}
 
 		return new TabError("done", 0);
