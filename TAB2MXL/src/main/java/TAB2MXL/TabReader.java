@@ -17,13 +17,13 @@ public class TabReader {
 	private String title;
 	private File file;
 
-	// shows intended usage
+	// intended usage
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 		File file = new File("src/main/resources/StairwayHeaven.txt");
 		reader.setInput(file);
 		
-		String exitCode = reader.convertTabs();
+		String exitCode = reader.convertTabs().getExitCode();
 		if (exitCode.equals("done")) {
 			System.out.println(reader.toMXL()); // calls reader.toMXL() to get output
 		}
@@ -44,15 +44,22 @@ public class TabReader {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 	}
 	
-	public void setInput(File inputFile) {
+	public String setInput(File inputFile) {
 		tabArray = readFile(inputFile);
 		file = inputFile;
+		
+		StringBuilder builder = new StringBuilder();
+		for (String s : tabArray) {
+			builder.append(s);
+		}
+		
+		return builder.toString();
 	}
 	
 	/**
 	 * Converts the text-tab to MXL data and populates fields
 	 * 
-	 * @return a string representing the exit code </br>
+	 * @return a TabError which contains a string representing the exit code </br>
 	 * Exit codes: </br>
 	 * done - the tabs were successfully converted </br>
 	 * empty - no tabs found </br>
@@ -60,7 +67,7 @@ public class TabReader {
 	 * tuning - the tuning was not found </br>
 	 * measure - the measure format was incorrect </br>
 	 */
-	public String convertTabs() {
+	public TabError convertTabs() {
 		try {
 			instrument = getInstrument();
 			title = getTitle();
@@ -72,7 +79,7 @@ public class TabReader {
 			// TODO create error catching
 		}
 
-		return "done";
+		return new TabError("done", 0);
 	}
 
 	/**
@@ -163,7 +170,7 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) != '-') {
 							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
-									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
+									|| currentLine.charAt(k + 1) == '2' || currentLine.charAt(k + 1) == '3'
 									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
 									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
