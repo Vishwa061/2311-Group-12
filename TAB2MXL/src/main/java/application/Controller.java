@@ -11,6 +11,7 @@ import java.lang.Object;
 import TAB2MXL.TabReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -43,6 +44,8 @@ import TAB2MXL.TabReader;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -54,10 +57,12 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.stage.Stage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.Popup;
 
 public class Controller {
 	@FXML
@@ -80,7 +85,27 @@ public class Controller {
 
 	@FXML
 	private Button save;
+	
+	@FXML
+    private Button helpButton;
+	
+	 @FXML
+	 private Button timeSigButton;
 
+	 @FXML
+	 private Button keyButton;
+
+	 @FXML
+	 private Button titleButton;
+
+	 @FXML
+	  private Button composerButton;
+	
+	 @FXML
+	    private Button closeButton;
+	 
+	 @FXML 
+	 	private TextArea helpTextArea;
 	TabReader outputXMLFile;
 
 	private Window stage;
@@ -247,7 +272,56 @@ public class Controller {
 		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
 		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
+		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+        assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+        assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+        assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+	}
+	
+	
+	@FXML
+    void helpclick() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("HelpWindow.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 600, 340));
+			popup.show();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	void closeHelp(ActionEvent event) {
+		closeButton.getScene().getWindow().hide();;
+	}
+	
+	@FXML
+	void selectComposer(ActionEvent event) {
+		
+	}
+
+	@FXML
+	void selectKey(ActionEvent event) {
 
 	}
+
+	@FXML
+	void selectTimeSig(ActionEvent event) {
+
+	}
+
+	@FXML
+	void selectTitle(ActionEvent event) {
+
+	}
+
+	
 }
 
