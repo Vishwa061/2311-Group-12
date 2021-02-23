@@ -184,10 +184,8 @@ public class TabReader {
 								if (measure.getNote(noteCounter - 1).slideStart)
 									note.slideStop = true;
 							}
-
 						}
 					}
-
 				}
 			}
 			noteCounter = 0;
