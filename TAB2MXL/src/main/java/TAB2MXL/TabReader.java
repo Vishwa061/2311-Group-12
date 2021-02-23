@@ -18,7 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/Capricho.txt"));
+		TabReader reader = new TabReader(new File("src/main/resources/DreamOn.txt"));
 		System.out.println(reader.toMXL());
 	}
 
@@ -299,20 +299,16 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
+		
 		int indexTotal = measure.getIndexTotal();
-		System.out.println(indexTotal);
 		int firstIndex = measure.getNotes().get(0).charIndex;
-		System.out.println(firstIndex);
 		int totalChar = indexTotal - firstIndex;
-		System.out.println(totalChar);
-		double eachBeatVal = (double) totalChar / 4;
-		System.out.println(eachBeatVal);
-		eachBeatVal = Math.ceil(eachBeatVal);
-		System.out.println(eachBeatVal);
-		int eachCharVal = 120 / (int) eachBeatVal;
-		System.out.println(eachCharVal);
+		int eachBeatVal = totalChar / 4;
+		double eachCharVal = 8 / (double) eachBeatVal;
+		eachCharVal = Math.ceil(eachCharVal);
 
-		measure.durationVal = eachCharVal;
+		
+		measure.durationVal = (int) eachCharVal;
 
 	}
 
@@ -343,49 +339,49 @@ public class TabReader {
 
 	public void noteType(Measure measure) {
 		List<Note> noteArr = measure.getNotes();
-		int beatType = 4;
-		int noteType = 0;
 		for (int i = 0; i < noteArr.size(); i++) {
 
 			int noteDur = noteArr.get(i).duration;
-
-			if (noteDur < 120 && 120 % noteDur != 0) {
-				int thirds = noteDur / 3;
-				noteDur = thirds * 2;
-				noteArr.get(i).dot = true;
+			Note note = noteArr.get(i);
+			
+			if (noteDur == 1)
+				note.type = "32nd";
+			if (noteDur == 2){
+				note.type = "16th";
 			}
-
-			if (noteDur > 120 && noteDur % 120 != 0) {
-				int thirds = noteDur / 3;
-				noteDur = thirds * 2;
-				noteArr.get(i).dot = true;
+			if (noteDur == 3){
+				note.type = "16th";
+				note.dot = true;
 			}
-
-			if (120 % noteDur == 0 && noteDur <= 120) {
-				int fractionBeat = 120 / noteArr.get(i).duration;
-				noteType = fractionBeat * beatType;
+			
+			if (noteDur == 4) {
+				note.type = "eighth";
 			}
-			if (120 % noteDur == 0 && noteDur > 120) {
-				int fractionBeat = noteArr.get(i).duration / 120;
-				noteType = beatType / fractionBeat;
+			
+			if (noteDur > 4 && noteDur < 8) {
+				note.type = "eighth";
+				note.dot = true;
 			}
-
-			if (noteType == 1)
-				noteArr.get(i).type = "whole";
-			if (noteType == 2)
-				noteArr.get(i).type = "half";
-			if (noteType == 3) {
-				noteArr.get(i).type = "half";
-				noteArr.get(i).dot = true;
+			
+			if(noteDur == 8)
+				note.type = "quarter";
+			
+			if(noteDur > 8 && noteDur < 16) {
+				note.type = "quarter";
+				note.dot = true;
 			}
-			if (noteType == 4)
-				noteArr.get(i).type = "quarter";
-			if (noteType == 8)
-				noteArr.get(i).type = "eighth";
-			if (noteType == 16)
-				noteArr.get(i).type = "16th";
-			if (noteType == 32)
-				noteArr.get(i).type = "32nd";
+			
+			if(noteDur == 16) {
+				note.type = "half";
+			}
+			
+			if(noteDur > 16 && noteDur <= 24) {
+				note.type = "half";
+				note.dot = true;
+			}
+			
+			if(noteDur > 24)
+				note.type = "whole";
 
 		}
 
