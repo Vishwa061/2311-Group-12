@@ -248,6 +248,6 @@ public class Controller {
 		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
 
-	}
+	}//newifle
 }
 
