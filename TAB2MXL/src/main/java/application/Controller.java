@@ -218,4 +218,79 @@ public class Controller {
 
 	}
 
+
+	@FXML
+	void select() {
+		FileChooser fileChooser = new FileChooser(); //enables the user to select one or more files via a file explorer from the user's local computer
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
+		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
+		fileChooser.getExtensionFilters().add(extFilter);
+		file = fileChooser.showOpenDialog(select.getScene().getWindow()); 	
+
+		if(!(file.length() == 0)) {
+			textInputFileArea.clear();
+			textOutputAreaXML.clear();
+			checkTrue(file);
+		}
+		else {
+			ErrorOutput(file);
+		}
+	}
+
+	private boolean checkTrue(File file) {
+		if(!(file.length() == 0)) {
+			textOutputAreaXML.setText(readFile(file));
+			textOutputAreaXML.setWrapText(true);
+			return true;
+		}
+		return false;
+	}
+
+
+	private String readFile(File file){
+
+		StringBuilder stringBuffer = new StringBuilder();
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new FileReader(file));
+			String text;
+			while ((text = bufferedReader.readLine()) != null) {
+				stringBuffer.append(text);
+			}
+
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException ex) {
+
+		} finally {
+			try {
+				bufferedReader.close();
+			} catch (IOException ex) {
+			}
+		}
+
+		return stringBuffer.toString();
+	}
+
+
+
+	private void ErrorOutput(File file) {
+		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error alert window 
+		errorAlert.setHeaderText("Input file is not valid. Please ensure your input file is not empty"); 
+		errorAlert.setContentText("Provide text file"); //Shows this stage and waits for it to be hidden (closed) before returning to the caller.
+		errorAlert.showAndWait();
+	}
+
+
+
+	@FXML
+	void initialize() {
+		assert textOutputAreaXML != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
+		assert textInputFileArea != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
+		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
+		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
+		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
+
+	}
 }
+
