@@ -517,6 +517,7 @@ public class Controller {
 	@FXML
 	void saveInputTitle(ActionEvent event) {
 
+
 	}
 
 	@FXML
@@ -585,6 +586,6 @@ public class Controller {
     void ContinueToSave() {
 		continueButtonConvert.getScene().getWindow().hide();
     }
-	
+
 }
 
