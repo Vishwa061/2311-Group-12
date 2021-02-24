@@ -18,7 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/DreamOn.txt"));
+		TabReader reader = new TabReader(new File("src/main/resources/Blackbird.txt"));
 		System.out.println(reader.toMXL());
 	}
 
@@ -144,17 +144,17 @@ public class TabReader {
 								k++;
 
 								if (measure.size() > 1) {
-									if (measure.getNote(noteCounter - 2).slurStart) {
+									if (measure.getNotes().get(measure.getNotes().size()-2).slurStart) {
 										note.slurStop = true;
-										if (measure.getNote(noteCounter - 2).pullStart) {
+										if (measure.getNotes().get(measure.getNotes().size()-2).pullStart) {
 											note.pullStop = true;
 										}
-										if (measure.getNote(noteCounter - 2).hammerStart) {
+										if (measure.getNotes().get(measure.getNotes().size()-2).hammerStart) {
 											note.hammerStop = true;
 										}
 									}
 
-									if (measure.getNote(noteCounter - 2).slideStart)
+									if (measure.getNotes().get(measure.getNotes().size()-2).slideStart)
 										note.slideStop = true;
 								}
 
@@ -171,17 +171,17 @@ public class TabReader {
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
-								if (measure.getNote(noteCounter - 2).slurStart) {
+								if (measure.getNotes().get(measure.getNotes().size()-2).slurStart) {
 									note.slurStop = true;
-									if (measure.getNote(noteCounter - 2).pullStart) {
+									if (measure.getNotes().get(measure.getNotes().size()-2).pullStart) {
 										note.pullStop = true;
 									}
-									if (measure.getNote(noteCounter - 2).hammerStart) {
+									if (measure.getNotes().get(measure.getNotes().size()-2).hammerStart) {
 										note.hammerStop = true;
 									}
 								}
 
-								if (measure.getNote(noteCounter - 1).slideStart)
+								if (measure.getNotes().get(measure.getNotes().size()-2).slideStart)
 									note.slideStop = true;
 							}
 
