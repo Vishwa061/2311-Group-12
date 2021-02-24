@@ -18,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.DragEvent;
 import javafx.stage.Window;
 import java.awt.Desktop;
+import java.awt.TextField;
 import java.awt.datatransfer.SystemFlavorMap;
 
 import java.io.BufferedReader;
@@ -50,6 +51,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Dragboard;
@@ -84,28 +87,83 @@ public class Controller {
 	private Button convert;
 
 	@FXML
-	private Button save;
-	
+	private Button save, featureButton, startButton;
+
+	/*
+	 * Below this are help button fxml 
+	 */
 	@FXML
-    private Button helpButton;
+	private Button helpButton;
+
+	@FXML
+	private Button timeSigButton;
+
+	@FXML
+	private Button keyButton;
+
+	@FXML
+	private Button titleButton;
+
+	@FXML
+	private Button composerButton;
+
+	@FXML
+	private Button closeButton;
+
+	@FXML 
+	private TextArea helpTextArea;
+
+	/*
+	 * Below is time sig 
+	 */
+	@FXML
+	private Button cancelButton;
+
+	@FXML
+	private Button SaveTimeSig;
+
+	/*
+	 * Below is fxml for Title 
+	 */
+
+	@FXML
+	private Button cancelButtonTitle;
+
+	@FXML
+	private Button SaveTitle;
+
+	/*
+	 * Below fxml for Composer
+	 */
+
+	@FXML
+	private Button cancelButtonComposer;
+
+	@FXML
+	private Button SaveComposer;
+
+	/*
+	 * below for keys 
+	 */
+
+	@FXML
+	private Button cancelKey;
+
+	@FXML
+	private Button saveKey;
 	
-	 @FXML
-	 private Button timeSigButton;
-
-	 @FXML
-	 private Button keyButton;
-
-	 @FXML
-	 private Button titleButton;
-
-	 @FXML
-	  private Button composerButton;
 	
+	/*
+	 * Below for alertFileUploadSuccess
+	 */
+	@FXML
+	    private Button continueButton;
+	
+	/*
+	 * Below for convert success
+	 */
 	 @FXML
-	    private Button closeButton;
-	 
-	 @FXML 
-	 	private TextArea helpTextArea;
+	    private Button continueButtonConvert;	
 	TabReader outputXMLFile;
 
 	private Window stage;
@@ -123,7 +181,8 @@ public class Controller {
 			TabReader reader = new TabReader(file);
 			System.out.println(reader.toMXL());
 			textInputFileArea.appendText(reader.toMXL());
-
+			displaySuccessConvert();
+			save.setVisible(true);
 		}
 		else  {
 			FileChooser fileChooser = new FileChooser();
@@ -218,16 +277,66 @@ public class Controller {
 			ErrorOutput(file);
 		}
 	}
-
+	
+	 static int count = 0;
 	private boolean checkTrue(File file) {
 		if(!(file.length() == 0)) {
+		//	counter(count);
 			textOutputAreaXML.setText(readFile(file));
 			textOutputAreaXML.setWrapText(true);
+			showOtherButtons();
+			
+		if (count == 0) {	
+			displayErrorPage();
+			showOtherButtons();
+			count++;
+		}
 			return true;
+
 		}
 		return false;
 	}
+	
+	private boolean showOtherButtons() {
+		if (count>0) {
+		convert.setVisible(true);
+		featureButton.setVisible(true);
+		return true;
+		}
+		return false;
+	}
+	private void displayErrorPage(){
+				Parent root;
+			try {
+				
+				root = FXMLLoader.load(getClass().getResource("AlertFileUploadSuccess.fxml"));
+			    Stage popup = new Stage();
+				popup.initModality(Modality.APPLICATION_MODAL);
+				popup.setTitle("Help");
+				popup.setScene(new Scene(root, 334, 226));
+				popup.show();
+				count ++;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
 
+	private void displaySuccessConvert() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	private String readFile(File file){
 
@@ -264,9 +373,19 @@ public class Controller {
 	}
 
 
-
-	@FXML
-	void initialize() {
+    @FXML 
+    void startClick(){
+    	timeSigButton.setVisible(false);
+    	keyButton.setVisible(false);
+    	titleButton.setVisible(false);
+    	composerButton.setVisible(false);
+    	convert.setVisible(false);
+    	save.setVisible(false);
+    	featureButton.setVisible(false);
+    }
+    
+/*	@FXML
+    void initialize() {
 		assert textOutputAreaXML != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
 		assert textInputFileArea != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
 		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
@@ -274,54 +393,198 @@ public class Controller {
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
 		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-        assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-        assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-        assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-	}
+		assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+}*/
 	
-	
+
+	/*
+	 * All methods are for help page 
+	 */
+
 	@FXML
-    void helpclick() {
+	void helpclick() {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("HelpWindow.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
+			popup.setTitle("Help");
 			popup.setScene(new Scene(root, 600, 340));
 			popup.show();
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@FXML
-	void closeHelp(ActionEvent event) {
+	void closeHelp() {
 		closeButton.getScene().getWindow().hide();;
 	}
+
+
+	/*
+	 * General Main Page 
+	 */
+	@FXML
+	void selectComposer() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("Composer.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void selectKey() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("Keys.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void selectTimeSig() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("TimeSigniture.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Time Signiture");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	void selectTitle() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("Title.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Tranlation Options");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * All methods below are for the time page 
+	 */
+	@FXML
+	void cancelTimeSig() {
+		cancelButton.getScene().getWindow().hide();;
+	}
+
+	@FXML
+	void saveTimeSigClicked() {
+		SaveTimeSig.getScene().getWindow().hide();;
+	}
+
+	/*
+	 * All methods below for title page 
+	 */
+
+	@FXML
+	void cancelTitle() {
+		cancelButtonTitle.getScene().getWindow().hide();;
+	}
+
+	@FXML
+	void saveInputTitle(ActionEvent event) {
+
+	}
+
+	@FXML
+	void saveTitleClick() {
+		SaveTitle.getScene().getWindow().hide();;
+	}
+
+
+	/*
+	 * All methods below for composer
+	 */
+
+	@FXML
+	void cancelComposer() {
+		cancelButtonComposer.getScene().getWindow().hide();;
+	}
+
+	@FXML
+	void saveComposer() {
+		SaveComposer.getScene().getWindow().hide();;
+	}
+
+	@FXML
+	void saveInputComposer(ActionEvent event) {
+
+	}
+
+	/*
+	 * All methods for keys 
+	 */
 	
 	@FXML
-	void selectComposer(ActionEvent event) {
+	void cancelKey() {
+		cancelKey.getScene().getWindow().hide();;
 		
 	}
 
 	@FXML
-	void selectKey(ActionEvent event) {
-
+	void saveKey() {
+		saveKey.getScene().getWindow().hide();;
 	}
-
+	
+	/*
+	 * Upload File Success Page 
+	 */
+	int a=0;
 	@FXML
-	void selectTimeSig(ActionEvent event) {
-
+	void continuePage() {
+		continueButton.getScene().getWindow().hide();
+		
 	}
-
+	
+	
 	@FXML
-	void selectTitle(ActionEvent event) {
-
+	private void showFeature() {
+		timeSigButton.setVisible(true);
+    	keyButton.setVisible(true);
+        titleButton.setVisible(true);
+    	composerButton.setVisible(true);
 	}
-
+	
+/*
+ * Converted File Success
+ */
+	@FXML
+    void ContinueToSave() {
+		continueButtonConvert.getScene().getWindow().hide();
+    }
 	
 }
 
