@@ -3,6 +3,7 @@ package TAB2MXL;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -13,42 +14,80 @@ public class TabReader {
 	private List<Measure> measureElements;
 	private List<ArrayList<String>> allMeasures;
 	private String instrument;
-	private String headingMXL;
 	private String title;
 	private File file;
 
+	// intended usage
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
-		System.out.println(reader.toMXL());
-	}
+		TabReader reader = new TabReader();
+		File file = new File("src/main/resources/StairwayHeaven.txt");
+		reader.setInput(file);
+		
+		String exitCode = reader.convertTabs().getExitCode();
+		if (exitCode.equals("done")) {
+			System.out.println(reader.toMXL()); // calls reader.toMXL() to get output
+		}
+		else {
+			// handle errors using exitCode
+			// ...
+		}
 
-	public TabReader(File inputFile) {
-		file = inputFile;
-		tabArray = new ArrayList<String>();
+	}
+	
+	public TabReader() {
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
-
+	}
+	
+	public void setInput(String fileAsString) {
+		tabArray = Arrays.asList(fileAsString.split("\\n"));
+	}
+	
+	public String setInput(File inputFile) {
 		tabArray = readFile(inputFile);
-		instrument = getInstrument();
-		title = getTitle();
-		headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
-				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">";
+		file = inputFile;
+		
+		StringBuilder builder = new StringBuilder();
+		for (String s : tabArray) {
+			builder.append(s);
+		}
+		
+		return builder.toString();
+	}
+	
+	/**
+	 * Converts the text-tab to MXL data and populates fields
+	 * 
+	 * @return a TabError which contains a string representing the exit code </br>
+	 * Exit codes: </br>
+	 * done - the tabs were successfully converted </br>
+	 * empty - no tabs found </br>
+	 * instrument - the instrument was not found </br>
+	 * tuning - the tuning was not found </br>
+	 * measure - the measure format was incorrect </br>
+	 */
+	public TabError convertTabs() {
+		try {
+			instrument = getInstrument();
+			title = getTitle();
+			guitarTuning = getTuning();
+			Measure.setAttributes(new Attributes(guitarTuning));
+			allMeasures = compileMeasures();
+			measureElements = makeNotes();
+		} catch (Exception e) {
+			// TODO create error catching
+			System.out.println("SOMETHING WENT WRONG");
+		}
 
-		guitarTuning = getTuning();
-		Measure.setAttributes(new Attributes(guitarTuning));
-		allMeasures = compileMeasures();
-		measureElements = makeNotes();
+		return new TabError("done", 0);
 	}
 
 	/**
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and 2 dashes
+	 * @return true iff the line contains at least 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
 		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
@@ -132,7 +171,7 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) != '-') {
 							if (currentLine.charAt(k + 1) == '0' || currentLine.charAt(k + 1) == '1'
-									|| currentLine.charAt(k) == '2' || currentLine.charAt(k + 1) == '3'
+									|| currentLine.charAt(k + 1) == '2' || currentLine.charAt(k + 1) == '3'
 									|| currentLine.charAt(k + 1) == '4' || currentLine.charAt(k + 1) == '5'
 									|| currentLine.charAt(k + 1) == '6' || currentLine.charAt(k + 1) == '7'
 									|| currentLine.charAt(k + 1) == '8' || currentLine.charAt(k + 1) == '9') {
@@ -184,10 +223,8 @@ public class TabReader {
 								if (measure.getNote(noteCounter - 1).slideStart)
 									note.slideStop = true;
 							}
-
 						}
 					}
-
 				}
 			}
 			noteCounter = 0;
@@ -300,10 +337,17 @@ public class TabReader {
 
 	public void setDuration(Measure measure) {
 		int indexTotal = measure.getIndexTotal();
+		System.out.println(indexTotal);
 		int firstIndex = measure.getNotes().get(0).charIndex;
+		System.out.println(firstIndex);
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar / 4;
-		int eachCharVal = 120 / eachBeatVal;
+		System.out.println(totalChar);
+		double eachBeatVal = (double) totalChar / 4;
+		System.out.println(eachBeatVal);
+		eachBeatVal = Math.ceil(eachBeatVal);
+		System.out.println(eachBeatVal);
+		int eachCharVal = 120 / (int) eachBeatVal;
+		System.out.println(eachCharVal);
 
 		measure.durationVal = eachCharVal;
 
@@ -315,15 +359,13 @@ public class TabReader {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
 			} else {
-				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
-						* measure.durationVal;
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
 			}
 			if (noteArr.get(i).duration == 0) {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
-					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
-							* measure.durationVal;
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
 				}
@@ -417,7 +459,12 @@ public class TabReader {
 
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(headingMXL).append("\n");
+		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
+				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
+				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">\n";
+		builder.append(headingMXL);
 
 		for (Measure m : getMeasures()) {
 			builder.append(m).append("\n");

@@ -13,7 +13,7 @@ public class Main extends Application {
 		launch(args);
 
 	}
-
+//new main
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
@@ -22,6 +22,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();

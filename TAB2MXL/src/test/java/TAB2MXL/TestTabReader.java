@@ -11,7 +11,7 @@ public class TestTabReader {
 	
 	@Test
 	void testReadFile() {
-		TabReader reader = new TabReader(new File(PATH + "test_tabs_reading.txt"));
+		TabReader reader = new TabReader();
 		
 		List<String> expected = new ArrayList<String>();
 		expected.add("e|-------------0-0-0-0-0-0-----0-------0-0-0-0-0---|");
@@ -28,7 +28,7 @@ public class TestTabReader {
 	
 	@Test
 	void testSplitMeasure() {
-		TabReader reader = new TabReader(new File(PATH + "TestSplitMeasure.txt"));
+		TabReader reader = new TabReader();
 		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
 		ArrayList<String> expMeasure1 = new ArrayList<String>();
 		expMeasure1.add("--0-----------------------");
@@ -54,14 +54,18 @@ public class TestTabReader {
 	
 	@Test
 	void testCountBars() {
-		TabReader test2 = new TabReader(new File(PATH + "countBar.txt"));
+		TabReader test2 = new TabReader();
+		test2.setInput(new File(PATH + "countBar.txt"));
+		test2.convertTabs();
 		System.out.println(test2.countBars());
 		// TODO
 	}
 	
 	@Test
 	void testCompileMeasures() {
-		TabReader reader = new TabReader(new File(PATH + "CompileMeasures_Input.txt"));
+		TabReader reader = new TabReader();
+		reader.setInput(new File(PATH + "CompileMeasures_Input.txt"));
+		reader.convertTabs();
 		// TODO
 	}
 	
