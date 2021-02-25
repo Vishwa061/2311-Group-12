@@ -20,10 +20,10 @@ public class Unpitch {
 
 	@Override
 	public String toString() {
-			String mxl = "\t\t<unpitched>\n";
+			String mxl = "\t\t<unpitched>"+"\n";
 			mxl = mxl + "\t\t\t<display-step>"+step+"</display-step>"+"\n";
 			mxl = mxl + "\t\t\t<display-octave>"+octave+"</display-octave>"+"\n";
-			mxl = "\t\t\t<unpitched>\n";
+			mxl = "\t\t\t<unpitched>"+"\n";
 			return mxl;
 		
 	}
