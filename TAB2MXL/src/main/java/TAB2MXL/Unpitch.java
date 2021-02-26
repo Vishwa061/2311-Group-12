@@ -1,5 +1,10 @@
 package TAB2MXL;
 
+/*
+ * This class has been created for the unpitch in drums.
+ * To match the mxl file on the wiki
+ */
+
 public class Unpitch {
 
 	private int octave=0;
@@ -23,7 +28,7 @@ public class Unpitch {
 			String mxl = "\t\t<unpitched>"+"\n";
 			mxl = mxl + "\t\t\t<display-step>"+step+"</display-step>"+"\n";
 			mxl = mxl + "\t\t\t<display-octave>"+octave+"</display-octave>"+"\n";
-			mxl = "\t\t\t<unpitched>"+"\n";
+			mxl = "\t\t\t</unpitched>"+"\n";
 			return mxl;
 		
 	}

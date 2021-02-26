@@ -274,15 +274,20 @@ public class TabReader {
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int k = 0;
+		String str;
 
 		while (k < length) {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
+				
 				for (int j = 1; j < lineArray.length; j++) {
+					
 					if (measure.containsKey(j)) {
 						measure.put(j, measure.get(j) + lineArray[j] + "\n");
-					} else {
+						
+					} 
+					else {
 						measure.put(j, lineArray[j] + "\n");
 					}
 				}
@@ -298,6 +303,7 @@ public class TabReader {
 				splitMeasure.add(s);
 			}
 			split.add(splitMeasure);
+			
 		}
 
 		return split;
@@ -473,4 +479,26 @@ public class TabReader {
 		builder.append("</part>\n</score-partwise>");
 		return builder.toString();
 	}
-}
+	
+	
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
