@@ -1,11 +1,8 @@
 package TAB2MXL;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Note implements Comparable<Note> {
 	public Pitch pitch;
-	public Unpitched unpitched;
+	public Unpitch unpitch;
 	public int duration;
 	public String type;
 	public int charIndex;
@@ -21,63 +18,6 @@ public class Note implements Comparable<Note> {
 	public int fret;
 	public boolean dot;
 	public boolean chord;
-
-	/////////////// DELETE BEFORE PUSHING TO DEVELOP ///////////////
-	class Unpitched {public Unpitched(String step, int octave) {}}
-	////////////////////////////////////////////////////////////////
-	
-	private static final Map<String, Integer> DRUM_STEPS = initDrumOctaves();
-	private static final Map<String, Integer> DRUM_OCTAVES = initDrumOctaves();
-	private static final Map<String, Integer> DRUM_INSTRUMENT_IDS = initDrumOctaves();
-	/////////////////////// MOVE TO UNPITCHED //////////////////////
-	private static Map<String, Integer> initDrumSteps() {
-		Map<String, Integer> drumSteps = new HashMap<String, Integer>();
-		
-		drumSteps.put("B", null);
-		
-		drumSteps.put("S", null);
-		
-		drumSteps.put("ST", null);
-		
-		drumSteps.put("MT", null);
-		
-		drumSteps.put("FT", null);
-		
-		drumSteps.put("H", null);
-		
-		drumSteps.put("HF", null);
-		
-		drumSteps.put("C", null);
-		
-		drumSteps.put("R", null);
-		
-		return drumSteps;
-	}
-	
-	private static Map<String, Integer> initDrumOctaves() {
-		Map<String, Integer> drumOctaves = new HashMap<String, Integer>();
-		
-		drumOctaves.put("B", null);
-		
-		drumOctaves.put("S", null);
-		
-		drumOctaves.put("ST", null);
-		
-		drumOctaves.put("MT", null);
-		
-		drumOctaves.put("FT", null);
-		
-		drumOctaves.put("H", null);
-		
-		drumOctaves.put("HF", null);
-		
-		drumOctaves.put("C", null);
-		
-		drumOctaves.put("R", null);
-		
-		return drumOctaves;
-	}
-	////////////////////////////////////////////////////////////////
 
 	/**
 	 * Creates a guitar note
@@ -99,20 +39,13 @@ public class Note implements Comparable<Note> {
 	/**
 	 * Creates a drum note 
 	 * 
-	 * @param scoreInstrument - (ignore case except t) B/BD, S/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, HF, C/CR/CC, R/RD
-	 * @param drumNote - O, f, d, b, x, X, o
+	 * @param scoreInstrument - (ignore case except t) B/BD, S/SN/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, HF, C/CR/CC, R/RD/RC
+	 * @param drumsetNote - O, f, d, b, x, X, o
 	 * @param charIndex
 	 */
-	public Note(String scoreInstrument, String drumNote, int charIndex) {
-		this.unpitched = createUnpitched(scoreInstrument, drumNote, charIndex);
+	public Note(String scoreInstrument, String drumsetNote, int charIndex) {
+		this.unpitch = new Unpitch(scoreInstrument, drumsetNote);
 		this.charIndex = charIndex;
-	}
-	
-	private Unpitched createUnpitched(String scoreInstrument, String drumNote, int charIndex) {
-		String step = "";
-		int octave = 0;
-		
-		return new Unpitched(step, octave);
 	}
 
 	@Override
@@ -124,7 +57,7 @@ public class Note implements Comparable<Note> {
 			toMXL += "\t\t<chord/>\n";
 		}
 
-		toMXL += TabReader.instrument.equals("Drumset") ? this.unpitched : this.pitch;
+		toMXL += TabReader.instrument.equals("Drumset") ? this.unpitch : this.pitch;
 		
 		toMXL += "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type
 				+ "</type>\n";
@@ -173,8 +106,8 @@ public class Note implements Comparable<Note> {
 		return this.pitch;
 	}
 	
-	public Unpitched getUnpitched() {
-		return this.unpitched;
+	public Unpitch getUnpitch() {
+		return this.unpitch;
 	}
 
 	@Override
