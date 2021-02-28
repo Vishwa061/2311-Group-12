@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
       <Label alignment="CENTER" prefHeight="67.0" prefWidth="334.0" style="-fx-background-color: #DEB9B9;" text="Translation Signiture">
@@ -25,27 +24,26 @@
             <Font name="Century" size="15.0" />
          </font>
       </Label>
-      <MenuButton alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat" textAlignment="CENTER">
+      <MenuButton fx:id="beatOption" alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat" textAlignment="CENTER">
         <items>
-            <RadioMenuItem mnemonicParsing="false" text="2" />
-            <RadioMenuItem mnemonicParsing="false" text="3" />
-            <RadioMenuItem mnemonicParsing="false" text="4" />
-            <RadioMenuItem mnemonicParsing="false" text="6" />
-            <RadioMenuItem mnemonicParsing="false" text="9" />
-            <RadioMenuItem mnemonicParsing="false" text="12" />
+            <RadioMenuItem fx:id="beat1" mnemonicParsing="false" onAction="#beat1Select" text="2" />
+            <RadioMenuItem fx:id="beat2" mnemonicParsing="false" onAction="#beat2Select" text="3" />
+            <RadioMenuItem fx:id="beat3" mnemonicParsing="false" onAction="#beat3Select" text="4" />
+            <RadioMenuItem fx:id="beat4" mnemonicParsing="false" onAction="#beat4Select" text="6" />
+            <RadioMenuItem fx:id="beat5" mnemonicParsing="false" onAction="#beat5Select" text="9" />
+            <RadioMenuItem fx:id="beat6" mnemonicParsing="false" onAction="#beat6Select" text="12" />
         </items>
       </MenuButton>
-      <MenuButton alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Time">
+      <MenuButton fx:id="beatTimeOption" alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Time">
          <items>
-            <RadioMenuItem mnemonicParsing="false" text="1" />
-            <RadioMenuItem mnemonicParsing="false" text="2" />
-            <RadioMenuItem mnemonicParsing="false" text="4" />
-            <RadioMenuItem mnemonicParsing="false" text="8" />
-            <RadioMenuItem mnemonicParsing="false" text="16" />
+            <RadioMenuItem fx:id="beatTime1" mnemonicParsing="false" onAction="#beatTime1" text="1" />
+            <RadioMenuItem fx:id="beatTime2" mnemonicParsing="false" onAction="#beatTime2" text="2" />
+            <RadioMenuItem fx:id="beatTime3" mnemonicParsing="false" onAction="#beatTime3" text="4" />
+            <RadioMenuItem fx:id="beatTime4" mnemonicParsing="false" onAction="#beatTime4" text="8" />
+            <RadioMenuItem fx:id="beatTime5" mnemonicParsing="false" onAction="#beatTime5" text="16" />
          </items>
       </MenuButton>
       <Button fx:id="cancelButton" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" onAction="#cancelTimeSig" prefHeight="25.0" prefWidth="68.0" text="Cancel" />
       <Button fx:id="SaveTimeSig" layoutX="252.0" layoutY="197.0" mnemonicParsing="false" onAction="#saveTimeSigClicked" prefHeight="25.0" prefWidth="68.0" text="Save" />
    </children>
 </Pane>
-

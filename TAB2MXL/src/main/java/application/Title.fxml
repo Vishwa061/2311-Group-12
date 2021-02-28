@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
       <Label alignment="CENTER" prefHeight="67.0" prefWidth="334.0" style="-fx-background-color: #DEB9B9;" text="Title">
@@ -21,6 +20,6 @@
       </Label>
       <Button fx:id="cancelButtonTitle" layoutX="12.0" layoutY="197.0" mnemonicParsing="false" onAction="#cancelTitle" prefHeight="25.0" prefWidth="68.0" text="Cancel" />
       <Button fx:id="SaveTitle" layoutX="252.0" layoutY="197.0" mnemonicParsing="false" onAction="#saveTitleClick" prefHeight="25.0" prefWidth="68.0" text="Save" />
-      <TextField  layoutX="167.0" layoutY="96.0" onAction="#saveInputTitle" />
+      <TextField fx:id="titleTextField" layoutX="167.0" layoutY="96.0"  />
    </children>
 </Pane>

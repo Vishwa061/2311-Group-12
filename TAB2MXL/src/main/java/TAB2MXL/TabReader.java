@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import application.Controller;
+import javafx.fxml.FXMLLoader;
+
 public class TabReader {
 	private List<String> tabArray;
 	private List<String> guitarTuning;
@@ -16,11 +19,19 @@ public class TabReader {
 	private String headingMXL;
 	private String title;
 	private File file;
+	
 
+   
+	
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/Capricho.txt"));
+		
+		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
+		
+		
+		
 	}
+		
 
 	public TabReader(File inputFile) {
 		file = inputFile;
