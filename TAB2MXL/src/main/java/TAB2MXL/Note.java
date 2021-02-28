@@ -1,5 +1,8 @@
 package TAB2MXL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Note implements Comparable<Note> {
 	public Pitch pitch;
 	public Unpitched unpitched;
@@ -21,6 +24,59 @@ public class Note implements Comparable<Note> {
 
 	/////////////// DELETE BEFORE PUSHING TO DEVELOP ///////////////
 	class Unpitched {public Unpitched(String step, int octave) {}}
+	////////////////////////////////////////////////////////////////
+	
+	private static final Map<String, Integer> DRUM_STEPS = initDrumOctaves();
+	private static final Map<String, Integer> DRUM_OCTAVES = initDrumOctaves();
+	private static final Map<String, Integer> DRUM_INSTRUMENT_IDS = initDrumOctaves();
+	/////////////////////// MOVE TO UNPITCHED //////////////////////
+	private static Map<String, Integer> initDrumSteps() {
+		Map<String, Integer> drumSteps = new HashMap<String, Integer>();
+		
+		drumSteps.put("B", null);
+		
+		drumSteps.put("S", null);
+		
+		drumSteps.put("ST", null);
+		
+		drumSteps.put("MT", null);
+		
+		drumSteps.put("FT", null);
+		
+		drumSteps.put("H", null);
+		
+		drumSteps.put("HF", null);
+		
+		drumSteps.put("C", null);
+		
+		drumSteps.put("R", null);
+		
+		return drumSteps;
+	}
+	
+	private static Map<String, Integer> initDrumOctaves() {
+		Map<String, Integer> drumOctaves = new HashMap<String, Integer>();
+		
+		drumOctaves.put("B", null);
+		
+		drumOctaves.put("S", null);
+		
+		drumOctaves.put("ST", null);
+		
+		drumOctaves.put("MT", null);
+		
+		drumOctaves.put("FT", null);
+		
+		drumOctaves.put("H", null);
+		
+		drumOctaves.put("HF", null);
+		
+		drumOctaves.put("C", null);
+		
+		drumOctaves.put("R", null);
+		
+		return drumOctaves;
+	}
 	////////////////////////////////////////////////////////////////
 
 	/**
