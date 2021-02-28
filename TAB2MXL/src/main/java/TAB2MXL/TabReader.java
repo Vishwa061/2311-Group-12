@@ -22,15 +22,9 @@ public class TabReader {
 	
 
 	public static void main(String[] args) {
-		
 		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
 		System.out.println(reader.toMXL());
-		
-		
-	
 	}
-
-		
 
 	public TabReader(File inputFile) {
 		file = inputFile;

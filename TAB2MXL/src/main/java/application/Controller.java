@@ -173,10 +173,10 @@ public class Controller {
 		save.setDisable(false);
 		step4Label.setVisible(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-			System.out.println("yas");
+		//	System.out.println("yas");
 			//reads the file provided thr
 			TabReader reader = new TabReader(file);
-			//System.out.println(reader.toMXL());
+			System.out.println(reader.toMXL());
 			outputBox.appendText(reader.toMXL());
 			displaySuccessConvert();
 			save.setVisible(true);
