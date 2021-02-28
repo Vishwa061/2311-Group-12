@@ -13,7 +13,7 @@ public class TabReader {
 	private List<String> guitarTuning;
 	private List<Measure> measureElements;
 	private List<ArrayList<String>> allMeasures;
-	private String instrument;
+	public static String instrument;
 	private String title;
 	private File file;
 
@@ -438,7 +438,7 @@ public class TabReader {
 	public String getInstrument() {
 		boolean isDrums = true;
 		for (String t : getTuning()) {
-			if (Note.ALL_NOTES_MAP.containsKey(t)) {
+			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
 				isDrums = false;
 				break;
 			}
@@ -468,7 +468,7 @@ public class TabReader {
 		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + instrument
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + TabReader.instrument
 				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">\n";
 		builder.append(headingMXL);
 
