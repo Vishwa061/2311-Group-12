@@ -13,7 +13,9 @@ public class TestMeasure {
 
 	@Test
 	void testSortArray() {
-		TabReader test2 = new TabReader(new File(PATH + "StairwayHeaven.txt"));
+		TabReader test2 = new TabReader();
+		test2.setInput(new File(PATH + "StairwayHeaven.txt"));
+		test2.convertTabs();
 
 		for (Measure m : test2.getMeasures()) {
 			m.sortArray();
