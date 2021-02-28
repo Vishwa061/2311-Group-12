@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import application.Controller;
+import javafx.fxml.FXMLLoader;
+
 public class TabReader {
 	private List<String> tabArray;
 	private List<String> guitarTuning;
@@ -16,25 +19,22 @@ public class TabReader {
 	public static String instrument;
 	private String title;
 	private File file;
-
-	// intended usage
-	public static void main(String[] args) {
-		TabReader reader = new TabReader();
-		File file = new File("src/main/resources/StairwayHeaven.txt");
-		reader.setInput(file);
-		
-		String exitCode = reader.convertTabs().getExitCode();
-		if (exitCode.equals("done")) {
-			System.out.println(reader.toMXL()); // calls reader.toMXL() to get output
-		}
-		else {
-			// handle errors using exitCode
-			// ...
-		}
-
-	}
 	
-	public TabReader() {
+
+	public static void main(String[] args) {
+		
+		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
+		System.out.println(reader.toMXL());
+		
+		
+	
+	}
+
+		
+
+	public TabReader(File inputFile) {
+		file = inputFile;
+		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
