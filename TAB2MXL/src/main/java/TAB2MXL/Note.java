@@ -23,6 +23,11 @@ public class Note implements Comparable<Note> {
 	public int fret;
 	public boolean dot;
 	public boolean chord;
+	public boolean bendStart;
+	public boolean bendStop;
+	public boolean reverseStart;
+	public boolean reverseStop;
+	public int bendAlter;
 
 	/**
 	 * Creates a Single Note
@@ -52,32 +57,41 @@ public class Note implements Comparable<Note> {
 
 		toMXL += this.pitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type
 				+ "</type>\n";
-		
+
 		if (dot) {
 			toMXL += "\t\t<dot/>\n";
 		}
-				
-		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
+
+		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n";
 		
-		if (hammerStart || hammerStop || pullStart || pullStop) {
-			if(hammerStart) {
+		if (bendStart) {
+			toMXL += "\t\t\t<articulations>\n" + "\t\t\t\t<staccato/>\n" + "\t\t\t</articulations>\n";
+		}
+		
+		toMXL += "\t\t\t<technical>\n";
+
+		if (hammerStart || hammerStop || pullStart || pullStop || bendStart) {
+			if (hammerStart) {
 				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";
 			}
-			if(hammerStop) {
+			if (hammerStop) {
 				toMXL += "\t\t\t\t<hammer-on type=\"stop\"/>\n";
 			}
-			if(pullStart) {
+			if (pullStart) {
 				toMXL += "\t\t\t\t<pull-off type=\"start\">P</pull-off>\n";
 			}
-			if(pullStop) {
+			if (pullStop) {
 				toMXL += "\t\t\t\t<pull-off type=\"stop\"/>\n";
+			}
+			if (bendStart) {
+				toMXL += "\t\t\t\t<bend>\n" + "\t\t\t\t\t<bend-alter>" + bendAlter + "</bend-alter>\n" + "\t\t\t\t</bend>\n";
 			}
 		}
 
 		toMXL += "\t\t\t\t<string>" + this.stringNo + "</string>\n" + "\t\t\t\t<fret>" + this.fret + "</fret>\n"
 				+ "\t\t\t</technical>\n";
-		
-		if (slurStart || slideStart || slurStop || slideStop) {
+
+		if (slurStart || slideStart || slurStop || slideStop || bendStart || bendStop || reverseStart || reverseStop) {
 			if (slurStart)
 				toMXL += "\t\t\t<slur type=\"start\"/>\n";
 			if (slideStart)
@@ -87,7 +101,7 @@ public class Note implements Comparable<Note> {
 			if (slideStop)
 				toMXL += "\t\t\t<slide type=\"stop\"/>\n";
 		}
-					
+
 		toMXL += "\t\t</notations>\n" + "\t</note>";
 
 		return toMXL;

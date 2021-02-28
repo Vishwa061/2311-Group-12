@@ -111,7 +111,8 @@ public class TabReader {
 					if (currentLine.charAt(k) != '-') {
 
 						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h' || currentLine.charAt(k) == 's'
-								|| currentLine.charAt(k) == '/') {
+								|| currentLine.charAt(k) == '/' || currentLine.charAt(k) == '\\'
+								|| currentLine.charAt(k) == 'b') {
 
 							if (currentLine.charAt(k) == 'p') {
 								measure.getNote(noteCounter - 1).slurStart = true;
@@ -123,8 +124,11 @@ public class TabReader {
 								measure.getNote(noteCounter - 1).hammerStart = true;
 							}
 
-							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/')
+							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/' || currentLine.charAt(k) == '\\')
 								measure.getNote(noteCounter - 1).slideStart = true;
+
+							if (currentLine.charAt(k) == 'b')
+								measure.getNote(noteCounter - 1).bendStart = true;
 
 							continue;
 
@@ -144,18 +148,24 @@ public class TabReader {
 								k++;
 
 								if (measure.size() > 1) {
-									if (measure.getNotes().get(measure.getNotes().size()-2).slurStart) {
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
 										note.slurStop = true;
-										if (measure.getNotes().get(measure.getNotes().size()-2).pullStart) {
+										if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart) {
 											note.pullStop = true;
 										}
-										if (measure.getNotes().get(measure.getNotes().size()-2).hammerStart) {
+										if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart) {
 											note.hammerStop = true;
 										}
+
 									}
 
-									if (measure.getNotes().get(measure.getNotes().size()-2).slideStart)
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
 										note.slideStop = true;
+
+									if (measure.getNotes().get(measure.getNotes().size() - 2).bendStart) {
+										measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
+												- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
+									}
 								}
 
 								continue;
@@ -164,25 +174,29 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) == '-' || currentLine.charAt(k + 1) == 'p'
 								|| currentLine.charAt(k + 1) == 'h' || currentLine.charAt(k + 1) == 's'
-								|| currentLine.charAt(k + 1) == '/') {
+								|| currentLine.charAt(k + 1) == '/' || currentLine.charAt(k + 1) == '\\') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 							measure.addNote(note);
 							noteCounter++;
 							if (measure.size() > 1) {
-								if (measure.getNotes().get(measure.getNotes().size()-2).slurStart) {
+								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart)
 									note.slurStop = true;
-									if (measure.getNotes().get(measure.getNotes().size()-2).pullStart) {
-										note.pullStop = true;
-									}
-									if (measure.getNotes().get(measure.getNotes().size()-2).hammerStart) {
-										note.hammerStop = true;
-									}
-								}
 
-								if (measure.getNotes().get(measure.getNotes().size()-2).slideStart)
+								if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
+									note.pullStop = true;
+
+								if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
+									note.hammerStop = true;
+
+								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
 									note.slideStop = true;
+
+								if (measure.getNotes().get(measure.getNotes().size() - 2).bendStart) {
+									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
+											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
+								}
 							}
 
 						}
@@ -199,6 +213,7 @@ public class TabReader {
 
 		}
 		return measureElements;
+
 	}
 
 	public ArrayList<Integer> countBars() {
@@ -299,7 +314,7 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
-		
+
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
@@ -307,7 +322,6 @@ public class TabReader {
 		double eachCharVal = 8 / (double) eachBeatVal;
 		eachCharVal = Math.ceil(eachCharVal);
 
-		
 		measure.durationVal = (int) eachCharVal;
 
 	}
@@ -318,17 +332,20 @@ public class TabReader {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
 			} else {
-				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex) * measure.durationVal;
+				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
+						* measure.durationVal;
 			}
 			if (noteArr.get(i).duration == 0) {
 				int newDuration = 0;
 				int indexForward = i + 1;
 				while (newDuration == 0) {
-					if (indexForward == noteArr.size()-1) {
-						newDuration = (measure.getIndexTotal() - noteArr.get(indexForward).charIndex) * measure.durationVal;
+					if (indexForward == noteArr.size() - 1) {
+						newDuration = (measure.getIndexTotal() - noteArr.get(indexForward).charIndex)
+								* measure.durationVal;
 						break;
 					}
-					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex) * measure.durationVal;
+					newDuration = (noteArr.get(indexForward + 1).charIndex - noteArr.get(indexForward).charIndex)
+							* measure.durationVal;
 					noteArr.get(indexForward).chord = true;
 					indexForward++;
 				}
@@ -343,44 +360,44 @@ public class TabReader {
 
 			int noteDur = noteArr.get(i).duration;
 			Note note = noteArr.get(i);
-			
+
 			if (noteDur == 1)
 				note.type = "32nd";
-			if (noteDur == 2){
+			if (noteDur == 2) {
 				note.type = "16th";
 			}
-			if (noteDur == 3){
+			if (noteDur == 3) {
 				note.type = "16th";
 				note.dot = true;
 			}
-			
+
 			if (noteDur == 4) {
 				note.type = "eighth";
 			}
-			
+
 			if (noteDur > 4 && noteDur < 8) {
 				note.type = "eighth";
 				note.dot = true;
 			}
-			
-			if(noteDur == 8)
+
+			if (noteDur == 8)
 				note.type = "quarter";
-			
-			if(noteDur > 8 && noteDur < 16) {
+
+			if (noteDur > 8 && noteDur < 16) {
 				note.type = "quarter";
 				note.dot = true;
 			}
-			
-			if(noteDur == 16) {
+
+			if (noteDur == 16) {
 				note.type = "half";
 			}
-			
-			if(noteDur > 16 && noteDur <= 24) {
+
+			if (noteDur > 16 && noteDur <= 24) {
 				note.type = "half";
 				note.dot = true;
 			}
-			
-			if(noteDur > 24)
+
+			if (noteDur > 24)
 				note.type = "whole";
 
 		}

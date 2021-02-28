@@ -65,4 +65,5 @@ public class Measure {
 	public void setIndexTotal(int indexTotal) {
 		this.indexTotal = indexTotal;
 	}
+	
 }
