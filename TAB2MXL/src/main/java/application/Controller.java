@@ -359,11 +359,11 @@ public class Controller {
 	private void displayErrorPage(){
 		Parent root;
 		try {
-
+			// used the same style for all popup windows 
 			root = FXMLLoader.load(getClass().getResource("AlertFileUploadSuccess.fxml"));
 			Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Help");
+			popup.setTitle("Error");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 			count ++;
@@ -379,7 +379,7 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
+			popup.setTitle("Success");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -517,8 +517,8 @@ public class Controller {
 		try {
 			root = FXMLLoader.load(getClass().getResource("Composer.fxml"));
 			final Stage popup = new Stage();
+			popup.setTitle("Composer");
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -534,7 +534,7 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("Keys.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
+			popup.setTitle("Key");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -567,7 +567,7 @@ public class Controller {
 				root = FXMLLoader.load(getClass().getResource("Title.fxml"));
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
-				popup.setTitle("Tranlation Options");
+				popup.setTitle("Title");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
