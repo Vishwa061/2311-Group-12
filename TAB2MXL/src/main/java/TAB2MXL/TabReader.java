@@ -30,33 +30,33 @@ public class TabReader {
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
 	}
-	
+
 	public void setInput(String fileAsString) {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 	}
-	
+
 	public String setInput(File inputFile) {
 		tabArray = readFile(inputFile);
 		file = inputFile;
-		
+
 		StringBuilder builder = new StringBuilder();
 		for (String s : tabArray) {
 			builder.append(s);
 		}
-		
+
 		return builder.toString();
 	}
-	
+
 	/**
 	 * Converts the text-tab to MXL data and populates fields
 	 * 
 	 * @return a TabError which contains a string representing the exit code </br>
-	 * Exit codes: </br>
-	 * done - the tabs were successfully converted </br>
-	 * empty - no tabs found </br>
-	 * instrument - the instrument was not found </br>
-	 * tuning - the tuning was not found </br>
-	 * measure - the measure format was incorrect </br>
+	 *         Exit codes: </br>
+	 *         done - the tabs were successfully converted </br>
+	 *         empty - no tabs found </br>
+	 *         instrument - the instrument was not found </br>
+	 *         tuning - the tuning was not found </br>
+	 *         measure - the measure format was incorrect </br>
 	 */
 	public TabError convertTabs() {
 		try {
@@ -108,14 +108,19 @@ public class TabReader {
 
 			tabArray.get(i).trim();
 
+			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
+					&& tabArray.get(i).charAt(tabArray.get(i).length() - 2) == '|') {
+				String deleteExtraBar = tabArray.get(i).substring(0, (tabArray.get(i).length() - 1));
+				tabArray.set(i, deleteExtraBar);
+
+			}
+
 			if (tabArray.get(i).indexOf('-') != -1) {
-				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|')+1));
+				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
 			}
 
 		}
-		
-		
 
 		int numLines = temp.size() / 6;
 
@@ -125,16 +130,9 @@ public class TabReader {
 			temp.add(insert, blank);
 
 		}
-		
-//		for (int i = 0; i < temp.size(); i++) {
-////			if (temp.get(i) != tabArray.get(i)) {
-////				
-////			}
-//			System.out.println(temp.get(i));
-//		}
 
 		return temp;
-//		return tabArray;
+
 	}
 
 	public List<String> getTuning() {
@@ -156,7 +154,7 @@ public class TabReader {
 		if (file == null) {
 			return "Title";
 		}
-		
+
 		return file.getName().split("\\.")[0];
 	}
 
@@ -177,7 +175,8 @@ public class TabReader {
 							|| currentLine.charAt(k) == '_' || currentLine.charAt(k) == '('
 							|| currentLine.charAt(k) == ')' || currentLine.charAt(k) == '['
 							|| currentLine.charAt(k) == ']' || currentLine.charAt(k) == 'n'
-							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—' || currentLine.charAt(k) == 'x') {
+							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—'
+							|| currentLine.charAt(k) == 'x') {
 						continue;
 					}
 
@@ -253,7 +252,8 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) == '-' || currentLine.charAt(k + 1) == 'p'
 								|| currentLine.charAt(k + 1) == 'h' || currentLine.charAt(k + 1) == 's'
-								|| currentLine.charAt(k + 1) == '/' || currentLine.charAt(k + 1) == '\\') {
+								|| currentLine.charAt(k + 1) == '/' || currentLine.charAt(k + 1) == '\\'
+								|| currentLine.charAt(k + 1) == ']' || currentLine.charAt(k + 1) == ')') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
@@ -338,14 +338,13 @@ public class TabReader {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
-				
+
 				for (int j = 1; j < lineArray.length; j++) {
-					
+
 					if (measure.containsKey(j)) {
 						measure.put(j, measure.get(j) + lineArray[j] + "\n");
-						
-					} 
-					else {
+
+					} else {
 						measure.put(j, lineArray[j] + "\n");
 					}
 				}
@@ -361,7 +360,7 @@ public class TabReader {
 				splitMeasure.add(s);
 			}
 			split.add(splitMeasure);
-			
+
 		}
 
 		return split;
@@ -417,6 +416,10 @@ public class TabReader {
 		for (int i = 0; i < noteArr.size(); i++) {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
+				if (noteArr.size() > 1 && (noteArr.get(noteArr.size() - 2).charIndex
+						- noteArr.get(noteArr.size() - 1).charIndex == 0)) {
+					noteArr.get(noteArr.size() - 1).chord = true;
+				}
 			} else {
 				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
 						* measure.durationVal;
@@ -529,8 +532,9 @@ public class TabReader {
 		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + TabReader.instrument
-				+ "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n" + "<part id=\"P1\">\n";
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>"
+				+ TabReader.instrument + "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n"
+				+ "<part id=\"P1\">\n";
 		builder.append(headingMXL);
 
 		for (Measure m : getMeasures()) {
