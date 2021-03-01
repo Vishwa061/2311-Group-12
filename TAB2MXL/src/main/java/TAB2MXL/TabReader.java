@@ -79,7 +79,8 @@ public class TabReader {
 			tabArray.get(i).trim();
 
 			if (tabArray.get(i).indexOf('-') != -1) {
-				temp.add(tabArray.get(i));
+				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|')+1));
+				temp.add(addLine);
 			}
 
 		}
