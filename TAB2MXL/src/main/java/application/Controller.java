@@ -72,10 +72,7 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel, step2Label, step3Label, step4Label, startOverLabel ;
-	
-	@FXML 
-	private MenuButton instrumentOption;
+	private Label UploadFileLabel, step2Label, step3Label, step4Label ;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -175,8 +172,6 @@ public class Controller {
 		outputBox.setDisable(false);
 		save.setDisable(false);
 		step4Label.setVisible(true);
-		select.setDisable(true);
-		inputBox.setDisable(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 			TabReader reader = new TabReader();
 			reader.setInput(file);
@@ -223,10 +218,10 @@ public class Controller {
 					FileWriter myWriter = new FileWriter(file);
 					myWriter.write(outputBox.getText());
 					myWriter.close();
+					//	SaveFile(textInput.getText(), file);
 					Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
 					errorAlert.setHeaderText("File is saved. Happy making music!"); 
 					errorAlert.showAndWait();
-					startOverLabel.setVisible(true);
 				}
 			}
 			catch (IOException ex) {
@@ -398,7 +393,6 @@ public class Controller {
 
 	@FXML 
 	void startClick(){
-		instrumentOption.setVisible(false);
 		timeSigButton.setVisible(false);
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
@@ -470,15 +464,7 @@ public class Controller {
 		if (featureButton != null) {
 			featureButton.setDisable(true);
 		}
-		
-		assert instrumentOption != null  : "fx:id=\"instrumentOption\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (instrumentOption != null) {
-			instrumentOption.setDisable(true);
-		}
-		assert startOverLabel != null  : "fx:id=\"startOverLabel\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (startOverLabel != null) {
-		startOverLabel.setVisible(false);
-		}
+
 	}
 
 
@@ -1104,8 +1090,7 @@ public class Controller {
 		titleButton.setVisible(true);
 		composerButton.setDisable(false);
 		composerButton.setVisible(true);
-		instrumentOption.setDisable(false);
-		instrumentOption.setVisible(true);
+
 
 	}
 
