@@ -73,6 +73,9 @@ public class Controller {
 
 	@FXML 
 	private Label UploadFileLabel, step2Label, step3Label, step4Label ;
+	
+	@FXML 
+	private MenuButton instrumentOption;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -397,6 +400,7 @@ public class Controller {
 
 	@FXML 
 	void startClick(){
+		instrumentOption.setVisible(false);
 		timeSigButton.setVisible(false);
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
@@ -467,6 +471,11 @@ public class Controller {
 		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		if (featureButton != null) {
 			featureButton.setDisable(true);
+		}
+		
+		assert instrumentOption != null  : "fx:id=\"instrumentOption\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (instrumentOption != null) {
+			instrumentOption.setDisable(true);
 		}
 
 	}
@@ -1100,7 +1109,8 @@ public class Controller {
 		titleButton.setVisible(true);
 		composerButton.setDisable(false);
 		composerButton.setVisible(true);
-
+		instrumentOption.setDisable(false);
+		instrumentOption.setVisible(true);
 
 	}
 
