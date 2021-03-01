@@ -18,7 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/Creep.txt"));
+		TabReader reader = new TabReader(new File("src/main/resources/Capricho.txt"));
 		System.out.println(reader.toMXL());
 	}
 
@@ -77,23 +77,25 @@ public class TabReader {
 		for (int i = 0; i < tabArray.size(); i++) {
 
 			tabArray.get(i).trim();
+			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
+					&& tabArray.get(i).charAt(tabArray.get(i).length() - 2) == '|') {
+				String deleteExtraBar = tabArray.get(i).substring(0, (tabArray.get(i).length() - 1));
+				tabArray.set(i, deleteExtraBar);
+
+			}
 
 			if (tabArray.get(i).indexOf('-') != -1) {
-				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|')+1));
+				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
 			}
 
 		}
-		
-		
 
 		int numLines = temp.size() / 6;
-
 		for (int i = 1; i < numLines; i++) {
 			int insert = i * 6 + (i - 1);
 			String blank = " ";
 			temp.add(insert, blank);
-
 		}
 
 		return temp;
@@ -135,7 +137,8 @@ public class TabReader {
 							|| currentLine.charAt(k) == '_' || currentLine.charAt(k) == '('
 							|| currentLine.charAt(k) == ')' || currentLine.charAt(k) == '['
 							|| currentLine.charAt(k) == ']' || currentLine.charAt(k) == 'n'
-							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—' || currentLine.charAt(k) == 'x') {
+							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—'
+							|| currentLine.charAt(k) == 'x') {
 						continue;
 					}
 
@@ -211,7 +214,8 @@ public class TabReader {
 
 						if (currentLine.charAt(k + 1) == '-' || currentLine.charAt(k + 1) == 'p'
 								|| currentLine.charAt(k + 1) == 'h' || currentLine.charAt(k + 1) == 's'
-								|| currentLine.charAt(k + 1) == '/' || currentLine.charAt(k + 1) == '\\') {
+								|| currentLine.charAt(k + 1) == '/' || currentLine.charAt(k + 1) == '\\'
+								|| currentLine.charAt(k + 1) == ']' || currentLine.charAt(k + 1) == ')') {
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
@@ -369,6 +373,11 @@ public class TabReader {
 		for (int i = 0; i < noteArr.size(); i++) {
 			if (i == (noteArr.size() - 1)) {
 				noteArr.get(i).duration = (measure.getIndexTotal() - noteArr.get(i).charIndex) * measure.durationVal;
+
+				if (noteArr.size() > 1 && (noteArr.get(noteArr.size() - 2).charIndex
+						- noteArr.get(noteArr.size() - 1).charIndex == 0)) {
+					noteArr.get(noteArr.size() - 1).chord = true;
+				}
 			} else {
 				noteArr.get(i).duration = (noteArr.get(i + 1).charIndex - noteArr.get(i).charIndex)
 						* measure.durationVal;
