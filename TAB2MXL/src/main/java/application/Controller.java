@@ -72,7 +72,7 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel, step2Label, step3Label, step4Label ;
+	private Label UploadFileLabel, step2Label, step3Label, step4Label, startOverLabel ;
 	
 	@FXML 
 	private MenuButton instrumentOption;
@@ -175,6 +175,8 @@ public class Controller {
 		outputBox.setDisable(false);
 		save.setDisable(false);
 		step4Label.setVisible(true);
+		select.setDisable(true);
+		inputBox.setDisable(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 		//	System.out.println("yas");
 			//reads the file provided thr
@@ -222,10 +224,10 @@ public class Controller {
 					FileWriter myWriter = new FileWriter(file);
 					myWriter.write(outputBox.getText());
 					myWriter.close();
-					//	SaveFile(textInput.getText(), file);
 					Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
 					errorAlert.setHeaderText("File is saved. Happy making music!"); 
 					errorAlert.showAndWait();
+					startOverLabel.setVisible(true);
 				}
 			}
 			catch (IOException ex) {
@@ -477,7 +479,10 @@ public class Controller {
 		if (instrumentOption != null) {
 			instrumentOption.setDisable(true);
 		}
-
+		assert startOverLabel != null  : "fx:id=\"startOverLabel\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (startOverLabel != null) {
+		startOverLabel.setVisible(false);
+		}
 	}
 
 

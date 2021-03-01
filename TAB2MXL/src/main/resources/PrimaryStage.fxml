@@ -134,5 +134,10 @@
             <RadioMenuItem mnemonicParsing="false" text="Bass" />
         </items>
       </MenuButton>
+      <Label fx:id="startOverLabel" layoutX="808.0" layoutY="476.0" text="Click start to start over. " textFill="#e51111">
+         <font>
+            <Font name="Century" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
