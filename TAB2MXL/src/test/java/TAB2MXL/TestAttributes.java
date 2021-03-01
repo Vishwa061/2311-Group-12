@@ -7,10 +7,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestAttributes {
 	private final String PATH = "src/test/resources/";
+	
+	@BeforeEach
+	void setup() {
+		TabReader.instrument = "Classical Guitar";
+	}
+	
+	@Test
+	void testAttributes() {
+		try {
+			List<String> guitarTuning = new ArrayList<String>();
+			guitarTuning.add("E");
+			guitarTuning.add("B");
+			guitarTuning.add("G");
+			guitarTuning.add("D");
+			guitarTuning.add("A");
+			guitarTuning.add("E");
+			new Attributes(guitarTuning);
+		} catch(Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 	
 	@Test
 	void testToString() throws IOException {

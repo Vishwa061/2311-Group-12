@@ -122,7 +122,7 @@ public class TabReader {
 		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
 			String line = tabArray.get(i);
 			if (lineHasTabs(line)) {
-				guitarTuning.add(line.substring(0, line.indexOf('|')));
+				guitarTuning.add(line.substring(0, line.indexOf('|')).toUpperCase().replaceAll("\\s", ""));
 			}
 			i++;
 		}
@@ -131,6 +131,10 @@ public class TabReader {
 	}
 
 	public String getTitle() {
+		if (file == null) {
+			return "Title";
+		}
+		
 		return file.getName().split("\\.")[0];
 	}
 
@@ -438,6 +442,7 @@ public class TabReader {
 	public String getInstrument() {
 		boolean isDrums = true;
 		for (String t : getTuning()) {
+			System.out.println("HERE:  " + t);
 			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
 				isDrums = false;
 				break;
