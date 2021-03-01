@@ -2,16 +2,10 @@ package TAB2MXL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestNote {
 
-	@BeforeEach
-	void setup() {
-		TabReader.instrument = "Classical Guitar";
-	}
-	
 	@Test
 	void testCompareTo_Negative() {
 		Note n1 = new Note(1, "C", 0, 4);
@@ -39,8 +33,13 @@ class TestNote {
 	@Test
 	void testGetPitch() {
 		Pitch actual = new Note(1, "E", 0, 0).getPitch();
-		Pitch expected = new Pitch(1, "E", 0);
+		Pitch expected = new Pitch("E", 0, 4);
 		
 		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void testToString() {
+		// TODO
 	}
 }

@@ -61,7 +61,7 @@ public class MyApplication implements ActionListener {
 		submit = new JButton("Choose File");
 		submit.setFont(new Font("Seriel", Font.BOLD, 20));
 		submit.setBounds(179, 200, 224, 46);
-//		submit.setBorder(new RoundBorder(20));
+		submit.setBorder(new RoundBorder(20));
 		submit.setBackground(new Color(0xFFFFFF));
 		submit.addActionListener(this);
 		submit.setFocusable(false);
