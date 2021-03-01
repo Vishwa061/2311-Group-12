@@ -178,12 +178,9 @@ public class Controller {
 		select.setDisable(true);
 		inputBox.setDisable(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-		//	System.out.println("yas");
-			//reads the file provided thr
 			TabReader reader = new TabReader();
 			reader.setInput(file);
 			reader.convertTabs();
-			System.out.println(reader.toMXL());
 			outputBox.appendText(reader.toMXL());
 			displaySuccessConvert();
 			save.setVisible(true);
@@ -193,8 +190,6 @@ public class Controller {
 			fileChooser.setTitle("Save");
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
 			fileChooser.getExtensionFilters().add(extFilter);
-			File savefile = fileChooser.showSaveDialog(convert.getScene().getWindow());
-			System.out.println("Successfully wrote to the file.");
 		}
 
 	}
@@ -612,7 +607,6 @@ public class Controller {
 	}
 	@FXML
 	void beat2Select(ActionEvent event) {
-		beat =2;
 		beat1.setSelected(false);
 		beat2.setSelected(true);
 		beatOption.setText(beat2.getText());
@@ -725,9 +719,6 @@ public class Controller {
 		beatTimeOption.setText(beatTime5.getText());
 	}
 
-
-
-
 	/*
 	 * All methods below for title page 
 	 */
@@ -809,7 +800,6 @@ public class Controller {
 			keySelected = "C Minor";
 		}
 		keySelected = key;
-		//System.out.println(keySelected);
 	}
 
 	@FXML
