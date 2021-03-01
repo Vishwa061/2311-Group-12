@@ -43,9 +43,4 @@ class TestNote {
 		
 		assertEquals(expected, actual);
 	}
-	
-	@Test
-	void testToString() {
-		// TODO
-	}
 }
