@@ -72,7 +72,10 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel, step2Label, step3Label, step4Label ;
+	private Label UploadFileLabel, step2Label, step3Label, step4Label, startOverLabel ;
+	
+	@FXML 
+	private MenuButton instrumentOption;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -169,23 +172,19 @@ public class Controller {
 
 	@FXML
 	void ConvertClicked() {
-		outputBox.setDisable(false);
-		save.setDisable(false);
-		step4Label.setVisible(true);
-		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
+	//	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 			TabReader reader = new TabReader();
 			reader.setInput(file);
 			reader.convertTabs();
 			outputBox.appendText(reader.toMXL());
-			displaySuccessConvert();
 			save.setVisible(true);
-		}
-		else  {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save");
-			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-			fileChooser.getExtensionFilters().add(extFilter);
-		}
+	//	}
+	//	else  {
+	//		FileChooser fileChooser = new FileChooser();
+	//		fileChooser.setTitle("Save");
+	//		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
+	//		fileChooser.getExtensionFilters().add(extFilter);
+	//	}
 
 	}
 
@@ -218,10 +217,10 @@ public class Controller {
 					FileWriter myWriter = new FileWriter(file);
 					myWriter.write(outputBox.getText());
 					myWriter.close();
-					//	SaveFile(textInput.getText(), file);
 					Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
 					errorAlert.setHeaderText("File is saved. Happy making music!"); 
 					errorAlert.showAndWait();
+					startOverLabel.setVisible(true);
 				}
 			}
 			catch (IOException ex) {
@@ -332,7 +331,6 @@ public class Controller {
 			UploadFileLabel.setText("File Uploaded");
 
 			if (count == 0) {	
-				displayErrorPage();
 				showOtherButtons();
 				count++;
 			}
@@ -350,37 +348,6 @@ public class Controller {
 		return false;
 	}
 
-	private void displayErrorPage(){
-		Parent root;
-		try {
-			// used the same style for all popup windows 
-			root = FXMLLoader.load(getClass().getResource("AlertFileUploadSuccess.fxml"));
-			Stage popup = new Stage();
-			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Error");
-			popup.setScene(new Scene(root, 334, 226));
-			popup.show();
-			count ++;
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void displaySuccessConvert() {
-		Parent root;
-		try {
-			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
-			final Stage popup = new Stage();
-			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Success");
-			popup.setScene(new Scene(root, 334, 226));
-			popup.show();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 
 	private void ErrorOutput(File file) {
@@ -392,7 +359,8 @@ public class Controller {
 
 
 	@FXML 
-	void startClick(){
+	void startClick(ActionEvent e){
+		/*instrumentOption.setVisible(false);
 		timeSigButton.setVisible(false);
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
@@ -408,63 +376,45 @@ public class Controller {
 		select.setDisable(false);
 		step2Label.setVisible(true); 
 		step3Label.setVisible(false);  
-		step4Label.setVisible(false); 
+		step4Label.setVisible(false); */
 	}
 
 	//	@FXML
 	public  void initialize() {
 		assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
-		if (inputBox != null) {
-			inputBox.setDisable(true);
-		}		
+				
 
 		assert outputBox != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
-		if (outputBox != null) {
-			outputBox.setDisable(true);
-		}	
-
-		if (select != null) { 
-			select.setDisable(true);
-		}	
+		
 		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
 		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
-		if (convert != null) { 
-			convert.setDisable(true);
-		}
+		
 
 
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
-		if (save != null) { 
-			save.setDisable(true);
-		}
+		
 
 		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 
 		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (timeSigButton != null) {
-			timeSigButton.setDisable(true);
-		}
+		
 
 		assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (keyButton != null) {
-			keyButton.setDisable(true);
-		}	
+			
 
 		assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (titleButton != null) {
-			titleButton.setDisable(true);
-		}
+		
 		assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (composerButton != null) {
-			composerButton.setDisable(true);
-		}
+		
 
 		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (featureButton != null) {
-			featureButton.setDisable(true);
-		}
-
+		
+		
+		assert instrumentOption != null  : "fx:id=\"instrumentOption\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		
+		assert startOverLabel != null  : "fx:id=\"startOverLabel\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		
 	}
 
 
@@ -1082,7 +1032,7 @@ public class Controller {
 
 	@FXML
 	private void showFeature() {
-		timeSigButton.setDisable(false);
+		/*timeSigButton.setDisable(false);
 		timeSigButton.setVisible(true);
 		keyButton.setDisable(false);
 		keyButton.setVisible(true);
@@ -1090,7 +1040,8 @@ public class Controller {
 		titleButton.setVisible(true);
 		composerButton.setDisable(false);
 		composerButton.setVisible(true);
-
+		instrumentOption.setDisable(false);
+		instrumentOption.setVisible(true); */
 
 	}
 
@@ -1103,4 +1054,3 @@ public class Controller {
 	}
 
 }
-
