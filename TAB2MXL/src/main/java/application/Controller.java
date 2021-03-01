@@ -232,15 +232,16 @@ public class Controller {
 			}}
 	}
 
+	int size =1;
 	@FXML
 	void dragFile() {
 		inputBox.setOnDragOver(e -> { //e -> dictates action needed 
-			Dragboard db = e.getDragboard(); 
-			if(db.hasFiles() && db.getFiles().size() == 1) {
+			Dragboard dragBoard = e.getDragboard(); 
+			if(dragBoard.hasFiles() && dragBoard.getFiles().size() == size) {
 
 				try {
-					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if(Files.probeContentType(path).equals("text/plain")) {
+					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
+					if(Files.probeContentType(path).equals("text")) {
 						e.acceptTransferModes(TransferMode.COPY);//copy data 
 					}
 
@@ -263,7 +264,6 @@ public class Controller {
 					file = f;
 					outputBox.clear();
 					inputBox.setText(readFile(file));
-					//inputBox.clear();
 					checkTrue(file);
 					step3Label.setVisible(true);
 					convert.setDisable(false); 
@@ -287,7 +287,7 @@ public class Controller {
 			String text;
 			while ((text = bufferedReader.readLine()) != null) {
 				stringBuffer.append(text);
-				stringBuffer.append("\n");
+				stringBuffer.append("\n"); //makes the input on next line 
 			}
 
 		} catch (FileNotFoundException ex) {
@@ -1092,7 +1092,6 @@ public class Controller {
 	@FXML
 	void continuePage() {
 		continueButton.getScene().getWindow().hide();
-
 	}
 
 
