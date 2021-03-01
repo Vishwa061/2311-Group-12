@@ -178,7 +178,9 @@ public class Controller {
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 		//	System.out.println("yas");
 			//reads the file provided thr
-			TabReader reader = new TabReader(file);
+			TabReader reader = new TabReader();
+			reader.setInput(file);
+			reader.convertTabs();
 			System.out.println(reader.toMXL());
 			outputBox.appendText(reader.toMXL());
 			displaySuccessConvert();

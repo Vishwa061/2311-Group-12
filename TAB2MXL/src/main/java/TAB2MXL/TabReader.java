@@ -22,12 +22,13 @@ public class TabReader {
 	
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
+		TabReader reader = new TabReader();
+		reader.setInput(new File("src/main/resources/StairwayHeaven.txt"));
+		reader.convertTabs();
 		System.out.println(reader.toMXL());
 	}
 
-	public TabReader(File inputFile) {
-		file = inputFile;
+	public TabReader() {
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
@@ -116,7 +117,7 @@ public class TabReader {
 		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
 			String line = tabArray.get(i);
 			if (lineHasTabs(line)) {
-				guitarTuning.add(line.substring(0, line.indexOf('|')));
+				guitarTuning.add(line.substring(0, line.indexOf('|')).toUpperCase().replaceAll("\\s", ""));
 			}
 			i++;
 		}
@@ -125,6 +126,10 @@ public class TabReader {
 	}
 
 	public String getTitle() {
+		if (file == null) {
+			return "Title";
+		}
+		
 		return file.getName().split("\\.")[0];
 	}
 
@@ -432,6 +437,7 @@ public class TabReader {
 	public String getInstrument() {
 		boolean isDrums = true;
 		for (String t : getTuning()) {
+			System.out.println("HERE:  " + t);
 			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
 				isDrums = false;
 				break;
