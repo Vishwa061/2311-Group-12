@@ -200,6 +200,8 @@ public class Controller {
 			Parent root;
 			try {
 				root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
+				//new stage created with modality(events delivered)
+				// all stages created this way
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
 				popup.setTitle("ERROR");
@@ -306,7 +308,7 @@ public class Controller {
 
 	@FXML
 	public void select() {
-		FileChooser fileChooser = new FileChooser(); //enables the user to select one or more files via a file explorer from the user's local computer
+		FileChooser fileChooser = new FileChooser(); 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
 		fileChooser.getExtensionFilters().add(extFilter);
@@ -317,13 +319,10 @@ public class Controller {
 			outputBox.clear();
 			inputBox.clear();
 			inputBox.setText(readFile(file));
-			//readFile(file);
 			checkTrue(file);
 			step3Label.setVisible(true);
 			convert.setDisable(false); 
 			featureButton.setDisable(false);
-			//timeSigButton.setDisable(false); 
-
 		}
 		else {
 			ErrorOutput(file);
@@ -1088,7 +1087,7 @@ public class Controller {
 	/*
 	 * Upload File Success Page 
 	 */
-	int a=0;
+	
 	@FXML
 	void continuePage() {
 		continueButton.getScene().getWindow().hide();
