@@ -58,6 +58,7 @@ public class TestTabReader {
 
 	//	@Test
 	//	void testSplitMeasureDrum() {
+	//		TabReader reader = new TabReader();
 	//		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
 	//		ArrayList<String> expMeasure1 = new ArrayList<String>();
 	//		expMeasure1.add("CC|x---------------|");
@@ -80,7 +81,7 @@ public class TestTabReader {
 	//		List<ArrayList<String>> actual = reader.splitMeasure(tabArray, tabArray.size());
 	//		assertEquals(expected, actual);
 	//	}
-
+	//	
 
 	@Test
 	void testCountBars() {
@@ -182,7 +183,7 @@ public class TestTabReader {
 	@Test
 	void testGetTitle() {
 		assertEquals("Title", reader.getTitle());
-		
+
 		reader.setInput(new File(PATH + "test_tabs_reading.txt"));
 		assertEquals("test_tabs_reading", reader.getTitle());
 	}
@@ -191,7 +192,7 @@ public class TestTabReader {
 	void testGetInstrument() {
 		reader.setInput(new File(PATH + "test_tabs_reading.txt"));
 		assertEquals("Classical Guitar", reader.getInstrument());
-		
+
 		reader.setInput(new File(PATH + "SplitDrum.txt"));
 		assertEquals("Drumset", reader.getInstrument());
 	}
