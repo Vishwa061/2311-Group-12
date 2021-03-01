@@ -2,9 +2,15 @@ package TAB2MXL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestPitch {
+	
+	@BeforeEach
+	void setup() {
+		TabReader.instrument = "Classical Guitar";
+	}
 
 	@Test
 	void testStep_Normal() {
@@ -48,7 +54,7 @@ class TestPitch {
 
 	@Test
 	void testOctave_Sharp() {
-		Pitch p = (new Note(1, "G#", 5, 0).getPitch());
+		Pitch p = new Pitch(1, "G#", 5);
 		int expected = 5;
 
 		assertEquals(expected, p.getOctave());
@@ -56,7 +62,7 @@ class TestPitch {
 
 	@Test
 	void testToString() {
-		Pitch p = new Pitch("C", 1, 5); // G#
+		Pitch p = new Pitch(1, "G#", 5);
 		String expected = "\t\t<pitch>\n"
 				+ "\t\t\t<step>C</step>\n"
 				+ "\t\t\t<alter>1</alter>\n"
@@ -68,9 +74,9 @@ class TestPitch {
 
 	@Test
 	void testEquals() {
-		Pitch p1 = new Pitch("C", 1, 5); // G#
-		Pitch p2 = (new Note(1, "G#", 5, 0).getPitch());
-		Pitch p3 = new Pitch("C", 0, 5); // G
+		Pitch p1 = new Pitch(1, "G#", 5);
+		Pitch p2 = new Pitch(1, "G#", 5);
+		Pitch p3 = new Pitch(1, "G", 5);
 		
 		assertTrue(p1.equals(p2));
 		assertFalse(p2.equals(p3));
