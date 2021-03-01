@@ -18,7 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-		TabReader reader = new TabReader(new File("src/main/resources/StairwayHeaven.txt"));
+		TabReader reader = new TabReader(new File("src/main/resources/Creep.txt"));
 		System.out.println(reader.toMXL());
 	}
 
@@ -73,7 +73,29 @@ public class TabReader {
 			sc.close();
 		}
 
-		return tabArray;
+		ArrayList<String> temp = new ArrayList<String>();
+		for (int i = 0; i < tabArray.size(); i++) {
+
+			tabArray.get(i).trim();
+
+			if (tabArray.get(i).indexOf('-') != -1) {
+				temp.add(tabArray.get(i));
+			}
+
+		}
+		
+		
+
+		int numLines = temp.size() / 6;
+
+		for (int i = 1; i < numLines; i++) {
+			int insert = i * 6 + (i - 1);
+			String blank = " ";
+			temp.add(insert, blank);
+
+		}
+
+		return temp;
 	}
 
 	public List<String> getTuning() {
@@ -108,11 +130,22 @@ public class TabReader {
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
 
+					if (currentLine.charAt(k) == '^' || currentLine.charAt(k) == '~' || currentLine.charAt(k) == '*'
+							|| currentLine.charAt(k) == '_' || currentLine.charAt(k) == '('
+							|| currentLine.charAt(k) == ')' || currentLine.charAt(k) == '['
+							|| currentLine.charAt(k) == ']' || currentLine.charAt(k) == 'n'
+							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—' || currentLine.charAt(k) == 'x') {
+						continue;
+					}
+
 					if (currentLine.charAt(k) != '-') {
 
 						if (currentLine.charAt(k) == 'p' || currentLine.charAt(k) == 'h' || currentLine.charAt(k) == 's'
 								|| currentLine.charAt(k) == '/' || currentLine.charAt(k) == '\\'
 								|| currentLine.charAt(k) == 'b') {
+
+							if (measure.getNotes().isEmpty())
+								continue;
 
 							if (currentLine.charAt(k) == 'p') {
 								measure.getNote(noteCounter - 1).slurStart = true;
@@ -124,7 +157,8 @@ public class TabReader {
 								measure.getNote(noteCounter - 1).hammerStart = true;
 							}
 
-							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/' || currentLine.charAt(k) == '\\')
+							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/'
+									|| currentLine.charAt(k) == '\\')
 								measure.getNote(noteCounter - 1).slideStart = true;
 
 							if (currentLine.charAt(k) == 'b')
@@ -145,6 +179,8 @@ public class TabReader {
 								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 								measure.addNote(note);
 								noteCounter++;
+								if (k + 1 == currentLine.length())
+									break;
 								k++;
 
 								if (measure.size() > 1) {
@@ -209,6 +245,7 @@ public class TabReader {
 			setDuration(measure);
 			noteDuration(measure);
 			noteType(measure);
+
 			measureElements.add(measure);
 
 		}
