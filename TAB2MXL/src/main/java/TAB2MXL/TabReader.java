@@ -18,6 +18,7 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
+
 		TabReader reader = new TabReader();
 		reader.setInput(new File("src/main/resources/StairwayHeaven.txt"));
 		reader.convertTabs();
@@ -107,6 +108,12 @@ public class TabReader {
 		for (int i = 0; i < tabArray.size(); i++) {
 
 			tabArray.get(i).trim();
+			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
+					&& tabArray.get(i).charAt(tabArray.get(i).length() - 2) == '|') {
+				String deleteExtraBar = tabArray.get(i).substring(0, (tabArray.get(i).length() - 1));
+				tabArray.set(i, deleteExtraBar);
+
+			}
 
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
 					&& tabArray.get(i).charAt(tabArray.get(i).length() - 2) == '|') {
@@ -123,12 +130,10 @@ public class TabReader {
 		}
 
 		int numLines = temp.size() / 6;
-
 		for (int i = 1; i < numLines; i++) {
 			int insert = i * 6 + (i - 1);
 			String blank = " ";
 			temp.add(insert, blank);
-
 		}
 
 		return temp;
