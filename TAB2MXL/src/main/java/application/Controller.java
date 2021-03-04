@@ -173,12 +173,9 @@ public class Controller {
 		save.setDisable(false);
 		step4Label.setVisible(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-		//	System.out.println("yas");
-			//reads the file provided thr
 			TabReader reader = new TabReader();
 			reader.setInput(file);
 			reader.convertTabs();
-			System.out.println(reader.toMXL());
 			outputBox.appendText(reader.toMXL());
 			displaySuccessConvert();
 			save.setVisible(true);
@@ -188,8 +185,6 @@ public class Controller {
 			fileChooser.setTitle("Save");
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
 			fileChooser.getExtensionFilters().add(extFilter);
-			File savefile = fileChooser.showSaveDialog(convert.getScene().getWindow());
-			System.out.println("Successfully wrote to the file.");
 		}
 
 	}
@@ -200,6 +195,8 @@ public class Controller {
 			Parent root;
 			try {
 				root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
+				//new stage created with modality(events delivered)
+				// all stages created this way
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
 				popup.setTitle("ERROR");
@@ -232,15 +229,16 @@ public class Controller {
 			}}
 	}
 
+	int size =1;
 	@FXML
 	void dragFile() {
 		inputBox.setOnDragOver(e -> { //e -> dictates action needed 
-			Dragboard db = e.getDragboard(); 
-			if(db.hasFiles() && db.getFiles().size() == 1) {
+			Dragboard dragBoard = e.getDragboard(); 
+			if(dragBoard.hasFiles() && dragBoard.getFiles().size() == size) {
 
 				try {
-					Path path = FileSystems.getDefault().getPath(db.getFiles().get(0).getPath());
-					if(Files.probeContentType(path).equals("text/plain")) {
+					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
+					if(Files.probeContentType(path).equals("text")) {
 						e.acceptTransferModes(TransferMode.COPY);//copy data 
 					}
 
@@ -263,7 +261,6 @@ public class Controller {
 					file = f;
 					outputBox.clear();
 					inputBox.setText(readFile(file));
-					//inputBox.clear();
 					checkTrue(file);
 					step3Label.setVisible(true);
 					convert.setDisable(false); 
@@ -287,7 +284,7 @@ public class Controller {
 			String text;
 			while ((text = bufferedReader.readLine()) != null) {
 				stringBuffer.append(text);
-				stringBuffer.append("\n");
+				stringBuffer.append("\n"); //makes the input on next line 
 			}
 
 		} catch (FileNotFoundException ex) {
@@ -306,7 +303,7 @@ public class Controller {
 
 	@FXML
 	public void select() {
-		FileChooser fileChooser = new FileChooser(); //enables the user to select one or more files via a file explorer from the user's local computer
+		FileChooser fileChooser = new FileChooser(); 
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
 		fileChooser.getExtensionFilters().add(extFilter);
@@ -317,13 +314,10 @@ public class Controller {
 			outputBox.clear();
 			inputBox.clear();
 			inputBox.setText(readFile(file));
-			//readFile(file);
 			checkTrue(file);
 			step3Label.setVisible(true);
 			convert.setDisable(false); 
 			featureButton.setDisable(false);
-			//timeSigButton.setDisable(false); 
-
 		}
 		else {
 			ErrorOutput(file);
@@ -359,11 +353,11 @@ public class Controller {
 	private void displayErrorPage(){
 		Parent root;
 		try {
-
+			// used the same style for all popup windows 
 			root = FXMLLoader.load(getClass().getResource("AlertFileUploadSuccess.fxml"));
 			Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Help");
+			popup.setTitle("Error");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 			count ++;
@@ -379,7 +373,7 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
+			popup.setTitle("Success");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -508,8 +502,8 @@ public class Controller {
 		try {
 			root = FXMLLoader.load(getClass().getResource("Composer.fxml"));
 			final Stage popup = new Stage();
+			popup.setTitle("Composer");
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -525,7 +519,7 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("Keys.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Tranlation Options");
+			popup.setTitle("Key");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -558,7 +552,7 @@ public class Controller {
 				root = FXMLLoader.load(getClass().getResource("Title.fxml"));
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
-				popup.setTitle("Tranlation Options");
+				popup.setTitle("Title");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
@@ -598,7 +592,6 @@ public class Controller {
 	}
 	@FXML
 	void beat2Select(ActionEvent event) {
-		beat =2;
 		beat1.setSelected(false);
 		beat2.setSelected(true);
 		beatOption.setText(beat2.getText());
@@ -711,9 +704,6 @@ public class Controller {
 		beatTimeOption.setText(beatTime5.getText());
 	}
 
-
-
-
 	/*
 	 * All methods below for title page 
 	 */
@@ -795,7 +785,6 @@ public class Controller {
 			keySelected = "C Minor";
 		}
 		keySelected = key;
-		//System.out.println(keySelected);
 	}
 
 	@FXML
@@ -1084,11 +1073,10 @@ public class Controller {
 	/*
 	 * Upload File Success Page 
 	 */
-	int a=0;
+	
 	@FXML
 	void continuePage() {
 		continueButton.getScene().getWindow().hide();
-
 	}
 
 
@@ -1115,3 +1103,4 @@ public class Controller {
 	}
 
 }
+
