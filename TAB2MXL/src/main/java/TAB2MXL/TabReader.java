@@ -18,7 +18,6 @@ public class TabReader {
 	private File file;
 
 	public static void main(String[] args) {
-
 		TabReader reader = new TabReader();
 		reader.setInput(new File("src/main/resources/StairwayHeaven.txt"));
 		reader.convertTabs();
@@ -287,6 +286,10 @@ public class TabReader {
 					}
 
 				}
+			}
+			if (measure.getNotes().isEmpty()) {
+				measureElements.add(measure);
+				continue;
 			}
 			noteCounter = 0;
 			measure.sortArray();
