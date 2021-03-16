@@ -8,7 +8,7 @@ public class Measure {
 	private int measureNumber;
 	public static Attributes a;
 	private int indexTotal;
-	public int durationVal;
+	public double durationVal;
 
 
 	public Measure(int measureNumber) {
