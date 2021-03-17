@@ -45,7 +45,6 @@ public class Unpitch {
 		return instrumentID;
 	}
 
-	// TODO
 	private static Map<String, String> initDrumsetSteps() {
 		Map<String, String> drumSteps = new HashMap<String, String>();
 		
@@ -66,26 +65,25 @@ public class Unpitch {
 		drumSteps.put("T2", "D");
 		drumSteps.put("t", "D");
 		
-		drumSteps.put("FT", null);
-		drumSteps.put("T3", null);
+		drumSteps.put("FT", "A");
+		drumSteps.put("T3", "A");
 		
 		drumSteps.put("H", "G");
 		drumSteps.put("HH", "G");
 		
-		drumSteps.put("HF", null);
+		drumSteps.put("HF", "D");
 		
 		drumSteps.put("C", "A");
 		drumSteps.put("CR", "A");
 		drumSteps.put("CC", "A");
 		
-		drumSteps.put("R", null);
-		drumSteps.put("RD", null);
-		drumSteps.put("RC", null);
+		drumSteps.put("R", "F");
+		drumSteps.put("RD", "F");
+		drumSteps.put("RC", "F");
 		
 		return drumSteps;
 	}
 
-	// TODO
 	private static Map<String, Integer> initDrumsetOctaves() {
 		Map<String, Integer> drumOctaves = new HashMap<String, Integer>();
 		
@@ -106,26 +104,25 @@ public class Unpitch {
 		drumOctaves.put("T2", 5);
 		drumOctaves.put("t", 5);
 		
-		drumOctaves.put("FT", null);
-		drumOctaves.put("T3", null);
+		drumOctaves.put("FT", 4);
+		drumOctaves.put("T3", 4);
 		
 		drumOctaves.put("H", 5);
 		drumOctaves.put("HH", 5);
 		
-		drumOctaves.put("HF", null);
+		drumOctaves.put("HF", 5);
 		
 		drumOctaves.put("C", 5);
 		drumOctaves.put("CR", 5);
 		drumOctaves.put("CC", 5);
 		
-		drumOctaves.put("R", null);
-		drumOctaves.put("RD", null);
-		drumOctaves.put("RC", null);
+		drumOctaves.put("R", 5);
+		drumOctaves.put("RD", 5);
+		drumOctaves.put("RC", 5);
 		
 		return drumOctaves;
 	}
 	
-	// TODO
 	private static Map<String, String> initDrumsetIDS() {
 		Map<String, String> drumsetIDS = new HashMap<String, String>();
 		
@@ -146,21 +143,23 @@ public class Unpitch {
 		drumsetIDS.put("T2", "P1-I46");
 		drumsetIDS.put("t", "P1-I46");
 		
-		drumsetIDS.put("FT", null);
-		drumsetIDS.put("T3", null);
+		// low floor tom
+		drumsetIDS.put("FT", "P1-I42");
+		drumsetIDS.put("T3", "P1-I42");
 		
 		drumsetIDS.put("H", "P1-I43");
 		drumsetIDS.put("HH", "P1-I43");
 		
+		// high hat with foot
 		drumsetIDS.put("HF", null);
 		
 		drumsetIDS.put("C", "P1-I50");
 		drumsetIDS.put("CR", "P1-I50");
 		drumsetIDS.put("CC", "P1-I50");
 		
-		drumsetIDS.put("R", null);
-		drumsetIDS.put("RD", null);
-		drumsetIDS.put("RC", null);
+		drumsetIDS.put("R", "P1-I52");
+		drumsetIDS.put("RD", "P1-I52");
+		drumsetIDS.put("RC", "P1-I52");
 		
 		return drumsetIDS;
 	}

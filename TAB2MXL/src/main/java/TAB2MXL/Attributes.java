@@ -12,6 +12,23 @@ public class Attributes {
 
 	@Override
 	public String toString() {
+		if (TabReader.instrument.equals("Drumset")) {
+			return "\t<attributes>\n"
+					+ "\t\t<divisions>4</divisions>\n"
+					+ "\t\t<key>\n"
+					+ "\t\t\t<fifths>0</fifth>\n"
+					+ "\t\t\t</key>\n"
+					+ "\t\t<time>\n"
+					+ "\t\t\t<beats>4</beats>\n"
+					+ "\t\t\t<beat-type>4</beat-type>\n"
+					+ "\t\t\t</time>\n"
+					+ "\t\t<clef>\n"
+					+ "\t\t\t<sign>percussion</sign>\n"
+					+ "\t\t\t<line>2</line>\n"
+					+ "\t\t\t<clef>\n"
+					+ "\t</attributes>\n";
+		}
+
 		String mxl = "\t<attributes>"
 				+ "\n\t\t<divisions>8</divisions>"
 				+ "\n\t\t<key>"
@@ -32,10 +49,10 @@ public class Attributes {
 			int index = (guitarTuning.size() - i);
 			mxl += "\n\t\t\t<staff-tuning line=\"" + i + "\">"
 					+ "\n\t\t\t\t<tuning-step>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getStep() 
+					+ new Pitch(index + 1, guitarTuning.get(index), 0).getStep() 
 					+ "</tuning-step>"
 					+ "\n\t\t\t\t<tuning-octave>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getOctave() 
+					+ new Pitch(index + 1, guitarTuning.get(index), 0).getOctave() 
 					+ "</tuning-octave>"
 					+ "\n\t\t\t</staff-tuning>";
 		}
