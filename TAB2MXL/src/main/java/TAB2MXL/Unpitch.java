@@ -19,7 +19,7 @@ public class Unpitch {
 	/**
 	 * Creates a drum note
 	 * 
-	 * @param scoreInstrument - (ignore case except t) B/BD, S/SN/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, HF, C/CR/CC, R/RD/RC
+	 * @param scoreInstrument - (ignore case except t) B/BD, S/SN/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, C/CR/CC, R/RD/RC
 	 * @param drumsetNote - O, f, d, b, x, X, o
 	 */
 	public Unpitch(String scoreInstrument, String drumsetNote) {
@@ -71,8 +71,6 @@ public class Unpitch {
 		drumSteps.put("H", "G");
 		drumSteps.put("HH", "G");
 		
-		drumSteps.put("HF", "D");
-		
 		drumSteps.put("C", "A");
 		drumSteps.put("CR", "A");
 		drumSteps.put("CC", "A");
@@ -110,8 +108,6 @@ public class Unpitch {
 		drumOctaves.put("H", 5);
 		drumOctaves.put("HH", 5);
 		
-		drumOctaves.put("HF", 5);
-		
 		drumOctaves.put("C", 5);
 		drumOctaves.put("CR", 5);
 		drumOctaves.put("CC", 5);
@@ -143,15 +139,11 @@ public class Unpitch {
 		drumsetIDS.put("T2", "P1-I46");
 		drumsetIDS.put("t", "P1-I46");
 		
-		// low floor tom
 		drumsetIDS.put("FT", "P1-I42");
 		drumsetIDS.put("T3", "P1-I42");
 		
 		drumsetIDS.put("H", "P1-I43");
 		drumsetIDS.put("HH", "P1-I43");
-		
-		// high hat with foot
-		drumsetIDS.put("HF", null);
 		
 		drumsetIDS.put("C", "P1-I50");
 		drumsetIDS.put("CR", "P1-I50");
