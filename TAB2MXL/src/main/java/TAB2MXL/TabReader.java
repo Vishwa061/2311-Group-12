@@ -16,10 +16,18 @@ public class TabReader {
 	public static String instrument;
 	private String title;
 	private File file;
+	private int numStrings;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-		reader.setInput(new File("src/main/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/basic_bass.txt"));
+		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		reader.convertTabs();
+		System.out.println(reader.toMXL());
+		
+		System.out.println("\n\n\n\n");
+		reader.editMeasure(0, ""); // essentially deletes the zeroth measure
 		reader.convertTabs();
 		System.out.println(reader.toMXL());
 	}
@@ -50,17 +58,12 @@ public class TabReader {
 	/**
 	 * Converts the text-tab to MXL data and populates fields
 	 * 
-	 * @return a TabError which contains a string representing the exit code </br>
-	 *         Exit codes: </br>
-	 *         done - the tabs were successfully converted </br>
-	 *         empty - no tabs found </br>
-	 *         instrument - the instrument was not found </br>
-	 *         tuning - the tuning was not found </br>
-	 *         measure - the measure format was incorrect </br>
+	 * @return a TabError
 	 */
 	public TabError convertTabs() {
 		try {
 			instrument = getInstrument();
+			numStrings = countNumStrings(tabArray);
 			title = getTitle();
 			guitarTuning = getTuning();
 			Measure.setAttributes(new Attributes(guitarTuning));
@@ -69,9 +72,50 @@ public class TabReader {
 		} catch (Exception e) {
 			// TODO create error catching
 			System.out.println("SOMETHING WENT WRONG");
+			e.printStackTrace();
 		}
 
-		return new TabError("done", 0);
+		return new TabError("done", 0, "");
+	}
+	
+	/**
+	 * Saves a given measure
+	 * @param measureNumber - the zero-indexed measure number
+	 * @param measureAsString - the measure in which to replace it
+	 * @return the edited tabs
+	 */
+	public String editMeasure(int measureNumber, String measureAsString) {
+		List<String> temp = Arrays.asList(measureAsString.split("\\n"));
+		
+		// List to ArrayList
+		ArrayList<String> measure = new ArrayList<String>();
+		measure.addAll(temp);
+		
+		allMeasures.remove(measureNumber);
+		if (measureNumber >= allMeasures.size()) { // accounts for when the user edits the last measure
+			allMeasures.add(measure);
+		}
+		allMeasures.add(measureNumber, measure);
+		
+		tabArray.clear();
+		for (int i = 0; i < allMeasures.size(); i++) {
+			ArrayList<String> m = allMeasures.get(i);
+			for (int j = 0; j < m.size(); j++) {
+				if (m.get(j).lastIndexOf('-') > m.get(j).indexOf('-') ) {
+					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|");
+					// System.out.println(guitarTuning.get(j)+"|"+m.get(j)+"|");
+				}
+			}
+			tabArray.add("");
+			// System.out.println("");
+		}
+		
+		String savedTabs = "";
+		for (int i = 0; i < tabArray.size(); i++) {
+			savedTabs += tabArray.get(i);
+		}
+		
+		return savedTabs;
 	}
 
 	/**
@@ -122,10 +166,11 @@ public class TabReader {
 
 		}
 
-		int numLines = temp.size() / 6;
+		numStrings = countNumStrings(tabArray);
+		int numLines = temp.size() / numStrings;
 
 		for (int i = 1; i < numLines; i++) {
-			int insert = i * 6 + (i - 1);
+			int insert = i * numStrings + (i - 1);
 			String blank = " ";
 			temp.add(insert, blank);
 
@@ -137,7 +182,6 @@ public class TabReader {
 
 	public List<String> getTuning() {
 		List<String> guitarTuning = new ArrayList<String>();
-		int numStrings = 6;
 		int i = 0;
 		while (i < tabArray.size() && guitarTuning.size() < numStrings) {
 			String line = tabArray.get(i);
@@ -501,7 +545,6 @@ public class TabReader {
 	public String getInstrument() {
 		boolean isDrums = true;
 		for (String t : getTuning()) {
-			System.out.println("HERE:  " + t);
 			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
 				isDrums = false;
 				break;
@@ -511,6 +554,15 @@ public class TabReader {
 			return "Drumset";
 		}
 
+		int lines = countNumStrings(tabArray);
+		return lines == 4 ? "Bass" : "Classical Guitar";
+	}
+	
+	/**
+	 * Counts the number of guitars strings
+	 * @return an integer representing the number of guitar strings
+	 */
+	public int countNumStrings(List<String> tabArray) {
 		int lines = 0;
 		boolean isCountStarted = false;
 		for (int i = 0; i < tabArray.size(); i++) {
@@ -524,7 +576,7 @@ public class TabReader {
 			}
 		}
 
-		return lines == 4 ? "Bass" : "Classical Guitar";
+		return lines;
 	}
 
 	public String toMXL() {
