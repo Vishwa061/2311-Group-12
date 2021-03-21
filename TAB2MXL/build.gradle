@@ -1,8 +1,9 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.8'
-  id 'jacoco'
   id 'java'
+  id 'jacoco'
+
 }
 
 java {
@@ -29,6 +30,17 @@ test {
     events 'passed', 'skipped', 'failed'
     
   }
+  
+  finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    dependsOn test
 }
 
 javafx {
