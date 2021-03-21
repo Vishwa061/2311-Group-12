@@ -20,7 +20,7 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-		reader.setInput(new File("src/main/resources/TearsInHeaven.txt"));
+		reader.setInput(new File("src/main/resources/Thunderstruck.txt"));
 		reader.convertTabs();
 		System.out.println(reader.toMXL());
 	}
@@ -114,8 +114,10 @@ public class TabReader {
 			if (tabArray.get(i).isEmpty())
 				continue;
 
-			if (tabArray.get(i).indexOf('x') != -1)
-				tabArray.get(i).replaceAll("x", "0");
+			if (tabArray.get(i).indexOf('x') != -1) {
+				String replaceLine = tabArray.get(i).replace('x', '0');
+				tabArray.set(i, replaceLine);
+			}
 
 			for (int j = 0; j < tabArray.get(i).length(); j++) {
 				if (tabArray.get(i).charAt(j) != '-' && tabArray.get(i).charAt(j) != '|'
@@ -133,6 +135,7 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).indexOf('|') != -1) {
 				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
+				System.out.println(addLine);
 			}
 		}
 
@@ -186,6 +189,8 @@ public class TabReader {
 					if (currentLine.charAt(k) != '-') {
 
 						if (k == (currentLine.length() - 1)) {
+							if (techniques.contains(currentLine.charAt(k)))
+								continue;
 							temp = currentLine.substring(k, k + 1);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
@@ -203,12 +208,11 @@ public class TabReader {
 
 								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
 									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend) 
+								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
 									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
 											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * (-4);
+
 							}
 							continue;
 						}
@@ -259,7 +263,7 @@ public class TabReader {
 								}
 								measure.getNote(noteCounter - 1).bend = true;
 							}
-							
+
 							if (currentLine.charAt(k) == 'r') {
 								if (measure.getNotes().isEmpty()) {
 									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
@@ -289,12 +293,11 @@ public class TabReader {
 								}
 								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
 									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend) 
+								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
 									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
 											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * -4;
+
 							}
 
 							if (k + 1 == currentLine.length())
@@ -322,12 +325,11 @@ public class TabReader {
 									note.hammerStop = true;
 								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
 									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend)
+								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
 									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
 											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * -4;
+
 							}
 
 						}
@@ -462,6 +464,8 @@ public class TabReader {
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
 		int eachBeatVal = totalChar / 4;
+		if (eachBeatVal < 1)
+			eachBeatVal = 1;
 		double eachCharVal = 8 / (double) eachBeatVal;
 
 		if (eachCharVal < 1) {

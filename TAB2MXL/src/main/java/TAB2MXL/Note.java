@@ -71,14 +71,14 @@ public class Note implements Comparable<Note> {
 		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
 
 		if (hammerStart || hammerStop || pullStart || pullStop || bend || release) {
-			if (hammerStart) 
-				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";		
 			if (hammerStop) 
-				toMXL += "\t\t\t\t<hammer-on type=\"stop\"/>\n";			
-			if (pullStart) 
-				toMXL += "\t\t\t\t<pull-off type=\"start\">P</pull-off>\n";
+				toMXL += "\t\t\t\t<hammer-on type=\"stop\"/>\n";	
+			if (hammerStart) 
+				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";				
 			if (pullStop) 
 				toMXL += "\t\t\t\t<pull-off type=\"stop\"/>\n";
+			if (pullStart) 
+				toMXL += "\t\t\t\t<pull-off type=\"start\">P</pull-off>\n";
 			if (bend)
 				toMXL += "\t\t\t\t<bend>\n" + "\t\t\t\t\t<bend-alter>" + bendAlter + "</bend-alter>\n"
 						+ "\t\t\t\t</bend>\n";
@@ -91,14 +91,14 @@ public class Note implements Comparable<Note> {
 				+ "\t\t\t</technical>\n";
 
 		if (slurStart || slideStart || slurStop || slideStop) {
-			if (slurStart)
-				toMXL += "\t\t\t<slur type=\"start\"/>\n";
-			if (slideStart)
-				toMXL += "\t\t\t<slide type=\"start\"/>\n";
 			if (slurStop)
 				toMXL += "\t\t\t<slur type=\"stop\"/>\n";
+			if (slurStart)
+				toMXL += "\t\t\t<slur type=\"start\"/>\n";
 			if (slideStop)
 				toMXL += "\t\t\t<slide type=\"stop\"/>\n";
+			if (slideStart)
+				toMXL += "\t\t\t<slide type=\"start\"/>\n";
 		}
 
 		toMXL += "\t\t</notations>\n" + "\t</note>";
