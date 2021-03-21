@@ -53,6 +53,7 @@ class TestAttributes {
 		}
 		sc.close();
 		
+		
 		assertEquals(expected.substring(0, expected.length()-1), a.toString());
 	}
 }

@@ -10,6 +10,9 @@ public class Attributes {
 		this.guitarTuning = guitarTuning;
 	}
 
+
+	
+
 	@Override
 	public String toString() {
 		String mxl = "\t<attributes>"
@@ -45,3 +48,4 @@ public class Attributes {
 		return mxl;
 	}
 }
+
