@@ -21,6 +21,7 @@ public class Note implements Comparable<Note> {
 	public boolean bend;
 	public boolean release;
 	public int bendAlter;
+	public boolean grace;
 
 	/**
 	 * Creates a guitar note
@@ -59,6 +60,10 @@ public class Note implements Comparable<Note> {
 
 		if (chord) {
 			toMXL += "\t\t<chord/>\n";
+		}
+		
+		if (grace) {
+			toMXL += "\t\t<grace/>\n";
 		}
 
 		toMXL += this.pitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type

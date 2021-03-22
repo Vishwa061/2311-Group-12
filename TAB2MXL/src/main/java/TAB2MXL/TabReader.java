@@ -273,6 +273,22 @@ public class TabReader {
 								}
 								measure.getNote(noteCounter - 1).release = true;
 							}
+
+							if (currentLine.charAt(k) == 'g') {
+								if (Character.isDigit(currentLine.charAt(k + 2))) {
+									temp = currentLine.substring(k + 1, k + 3);
+									k = k + 2;
+								} else {
+									temp = currentLine.substring(k + 1, k + 2);
+									k++;
+								}
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
+								note.grace = true;
+								measure.addNote(note);
+								noteCounter++;
+								continue;
+							}
 							continue;
 						}
 
@@ -297,7 +313,6 @@ public class TabReader {
 										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
 									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
 											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-
 							}
 
 							if (k + 1 == currentLine.length())
@@ -346,6 +361,7 @@ public class TabReader {
 
 			noteCounter = 0;
 			measure.sortArray();
+			measure.setGrace();
 			setDuration(measure);
 			noteDuration(measure);
 			noteType(measure);
@@ -376,11 +392,9 @@ public class TabReader {
 						if (s.equals("|")) {
 							count++;
 						}
-
 					}
 					countArray.add(count);
 				}
-
 				break;
 			}
 		}
@@ -408,7 +422,6 @@ public class TabReader {
 						measure.put(j, lineArray[j] + "\n");
 					}
 				}
-
 			}
 			k++;
 		}
@@ -420,7 +433,6 @@ public class TabReader {
 				splitMeasure.add(s);
 			}
 			split.add(splitMeasure);
-
 		}
 
 		return split;
@@ -446,7 +458,6 @@ public class TabReader {
 				if (tabsFound && !lineHasTabs(line)) {
 					break;
 				}
-
 				i++;
 			}
 
@@ -471,9 +482,7 @@ public class TabReader {
 		if (eachCharVal < 1) {
 			eachCharVal = 1;
 		}
-
 		measure.durationVal = eachCharVal;
-
 	}
 
 	public void noteDuration(Measure measure) {
@@ -523,45 +532,33 @@ public class TabReader {
 			if (noteDur == 1)
 				note.type = "32nd";
 
-			if (noteDur == 2) {
+			if (noteDur == 2)
 				note.type = "16th";
-			}
 			if (noteDur == 3) {
 				note.type = "16th";
 				note.dot = true;
 			}
-
-			if (noteDur == 4) {
+			if (noteDur == 4)
 				note.type = "eighth";
-			}
-
 			if (noteDur > 4 && noteDur < 8) {
 				note.type = "eighth";
 				note.dot = true;
 			}
-
 			if (noteDur == 8)
 				note.type = "quarter";
-
 			if (noteDur > 8 && noteDur < 16) {
 				note.type = "quarter";
 				note.dot = true;
 			}
-
-			if (noteDur == 16) {
+			if (noteDur == 16)
 				note.type = "half";
-			}
-
 			if (noteDur > 16 && noteDur <= 24) {
 				note.type = "half";
 				note.dot = true;
 			}
-
 			if (noteDur > 24)
 				note.type = "whole";
-
 		}
-
 	}
 
 	/**

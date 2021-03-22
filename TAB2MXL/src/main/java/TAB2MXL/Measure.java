@@ -66,4 +66,11 @@ public class Measure {
 		this.indexTotal = indexTotal;
 	}
 	
+	public void setGrace() {
+		for(int i = 1; i < notes.size(); i++) {
+			if (notes.get(i).slurStart && notes.get(i).slurStop && notes.get(i-1).grace)
+				notes.get(i).grace = true;
+		}
+	}
+	
 }
