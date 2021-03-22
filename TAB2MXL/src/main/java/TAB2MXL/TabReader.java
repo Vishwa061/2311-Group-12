@@ -17,20 +17,24 @@ public class TabReader {
 	private String title;
 	private File file;
 	private List<Character> techniques;
+	List<Character> drumsetTechniques;
 	private int numStrings;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+//		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 		reader.convertTabs();
 		System.out.println(reader.toMXL());
 		
-		System.out.println("\n\n\n\n");
-		reader.editMeasure(0, ""); // essentially deletes the zeroth measure
-		reader.convertTabs();
-		System.out.println(reader.toMXL());
+//		System.out.println("\n\n\n\n");
+//		String newInput = reader.editMeasure(0, ""); // essentially deletes the zeroth measure
+//		System.out.println(newInput);
+//		reader.setInput(newInput);
+//		reader.convertTabs();
+//		System.out.println(reader.toMXL());
 	}
 
 	public TabReader() {
@@ -40,6 +44,8 @@ public class TabReader {
 		allMeasures = new ArrayList<ArrayList<String>>();
 		techniques = new ArrayList<Character>();
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
+		drumsetTechniques = new ArrayList<Character>();
+		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o'));
 	}
 
 	public void setInput(String fileAsString) {
@@ -71,7 +77,7 @@ public class TabReader {
 			guitarTuning = getTuning();
 			Measure.setAttributes(new Attributes(guitarTuning));
 			allMeasures = compileMeasures();
-			measureElements = makeNotes();
+			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 		} catch (Exception e) {
 			// TODO create error catching
 			System.out.println("SOMETHING WENT WRONG");
@@ -84,7 +90,7 @@ public class TabReader {
 	/**
 	 * Saves a given measure
 	 * @param measureNumber - the zero-indexed measure number
-	 * @param measureAsString - the measure in which to replace it
+	 * @param measureAsString - the edited measure
 	 * @return the edited tabs
 	 */
 	public String editMeasure(int measureNumber, String measureAsString) {
@@ -105,11 +111,11 @@ public class TabReader {
 			ArrayList<String> m = allMeasures.get(i);
 			for (int j = 0; j < m.size(); j++) {
 				if (m.get(j).lastIndexOf('-') > m.get(j).indexOf('-') ) {
-					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|");
+					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|" + "\n"); // THIS ONLY WORKS FOR GUITAR RIGHT NOW
 					// System.out.println(guitarTuning.get(j)+"|"+m.get(j)+"|");
 				}
 			}
-			tabArray.add("");
+			tabArray.add("\n");
 			// System.out.println("");
 		}
 		
@@ -149,7 +155,15 @@ public class TabReader {
 		} finally {
 			sc.close();
 		}
-
+		
+		this.tabArray = tabArray;
+		numStrings = countNumStrings(tabArray);
+		TabReader.instrument = getInstrument();
+		
+		if (TabReader.instrument.equals("Drumset")) {
+			return tabArray;
+		}
+		
 		ArrayList<String> temp = new ArrayList<String>();
 		for (int i = 0; i < tabArray.size(); i++) {
 
@@ -183,7 +197,6 @@ public class TabReader {
 			}
 		}
 
-		numStrings = countNumStrings(tabArray);
 		int numLines = temp.size() / numStrings;
 
 		for (int i = 1; i < numLines; i++) {
@@ -416,6 +429,36 @@ public class TabReader {
 		}
 		return measureElements;
 	}
+	
+	public List<Measure> makeDrumNotes() {
+		List<Measure> measureElements = new ArrayList<Measure>();
+		int amSize = allMeasures.size();
+		
+		for (int i = 0; i < amSize; i++) {
+			ArrayList<String> measuresAsStrings = allMeasures.get(i);
+			Measure measure = new Measure(i + 1);
+			int mSize = measuresAsStrings.size();
+			
+			for (int j = 0; j < mSize; j++) {
+				String currentLine = measuresAsStrings.get(j);
+				int lineLength = currentLine.length();
+				
+				for (int k = 0; k < lineLength; k++) {
+//					System.out.println(currentLine.charAt(k));
+					if (drumsetTechniques.contains(currentLine.charAt(k))) {
+						String scoreInstrument = "B"; // CHANGE THIS LATER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+						Note note = new Note(scoreInstrument, Character.toString(currentLine.charAt(k)), k);
+						measure.addNote(note);
+					}
+				}
+			}
+			
+			measure.sortArray();
+			measureElements.add(measure);
+		}
+		
+		return measureElements;
+	}
 
 	public ArrayList<Integer> countBars() {
 		ArrayList<Integer> countArray = new ArrayList<>();
@@ -629,6 +672,7 @@ public class TabReader {
 	
 	/**
 	 * Counts the number of guitars strings
+	 * @param tabArray - the tab input
 	 * @return an integer representing the number of guitar strings
 	 */
 	public int countNumStrings(List<String> tabArray) {

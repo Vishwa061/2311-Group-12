@@ -65,7 +65,14 @@ public class Note implements Comparable<Note> {
 		if (grace) {
 			toMXL += "\t\t<grace/>\n";
 		}
-
+		
+		if (TabReader.instrument.equals("Drumset")) {
+			toMXL += this.unpitch;
+			
+			toMXL += "\t</note>";
+			return toMXL;
+		}
+		
 		toMXL += this.pitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type
 				+ "</type>\n";
 
