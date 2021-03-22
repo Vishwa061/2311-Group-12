@@ -34,7 +34,10 @@ public class TestMeasure {
 			for(int i =1; i < Notes.size(); i++) {
 				//System.out.println(Notes.get(i).charIndex);
 				assertTrue(Notes.get(i-1).charIndex <= (Notes.get(i).charIndex));
+			
 			}
+			
+			
 		}
 	}
 }
