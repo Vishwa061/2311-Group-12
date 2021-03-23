@@ -17,19 +17,24 @@ public class TabReader {
 	private String title;
 	private File file;
 	private int numStrings;
-
+	
+	private List<ArrayList<String>> scoreInstrument;
+	
+	
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		//reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		//reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		reader.convertTabs();
+		System.out.println(reader.scoreInstrument);
 		System.out.println(reader.toMXL());
 		
-		System.out.println("\n\n\n\n");
-		reader.editMeasure(0, ""); // essentially deletes the zeroth measure
-		reader.convertTabs();
-		System.out.println(reader.toMXL());
+//		System.out.println("\n\n\n\n");
+//		reader.editMeasure(0, ""); // essentially deletes the zeroth measure
+//		reader.convertTabs();
+//		System.out.println(reader.toMXL());
 	}
 
 	public TabReader() {
@@ -37,6 +42,8 @@ public class TabReader {
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
+		
+		scoreInstrument = new ArrayList<ArrayList<String>>();
 	}
 
 	public void setInput(String fileAsString) {
@@ -219,7 +226,7 @@ public class TabReader {
 							|| currentLine.charAt(k) == '_' || currentLine.charAt(k) == '('
 							|| currentLine.charAt(k) == ')' || currentLine.charAt(k) == '['
 							|| currentLine.charAt(k) == ']' || currentLine.charAt(k) == 'n'
-							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == '—'
+							|| currentLine.charAt(k) == 'f' || currentLine.charAt(k) == 'ï¿½'
 							|| currentLine.charAt(k) == 'x') {
 						continue;
 					}
@@ -372,12 +379,51 @@ public class TabReader {
 	}
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
+		
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
+		ArrayList<String> splitDrum = new ArrayList<String>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int k = 0;
 		String str;
+		
+		if(TabReader.instrument.equals("Drumset")) {
+			while (k<length) {
+				line = tabArray.get(k);
+//				String[] lineArray2 = line.split(line != null ? "HH" : "SD");
+//				 lineArray2 = line.split(line != null ? "HT" : "MT");
+//				 lineArray2 = line.split("BD");
+				String[] lineArray2 = line.split("\\|");
+				String Score = lineArray2[0];
+				splitDrum.add(Score);
+				System.out.println(Score);
+				 for (int j = 1; j < lineArray2.length; j++) {
 
+						if (measure.containsKey(j)) {
+							measure.put(j, measure.get(j) + lineArray2[j] + "\n");
+
+						} else {
+							measure.put(j, lineArray2[j] + "\n");
+						}
+					}
+				 k++;
+			}
+			for (int j = 1; j <= measure.size(); j++) {
+				String string = measure.get(j);
+				ArrayList<String> splitMeasure = new ArrayList<String>();
+				for (String s : string.split("\n")) {
+					splitMeasure.add(s);
+				}
+				split.add(splitMeasure);
+				scoreInstrument.add(splitDrum);
+				
+
+			}
+			return split;
+		}
+		
+		
+		
 		while (k < length) {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
@@ -406,6 +452,7 @@ public class TabReader {
 			split.add(splitMeasure);
 
 		}
+		
 
 		return split;
 	}
