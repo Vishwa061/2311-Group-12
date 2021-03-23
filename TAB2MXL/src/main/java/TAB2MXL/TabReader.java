@@ -27,31 +27,19 @@ public class TabReader {
 
 
 	public static void main(String[] args) {
-
 		TabReader reader = new TabReader();
 		//reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
 		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
-
-		
-
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-
 		//reader.setInput(new File("src/test/resources/BadMeasure.txt"));
-
-
-		
 		reader.convertTabs();
 		System.out.println(reader.scoreInstrument);
 		System.out.println(reader.toMXL());
 		
 //		System.out.println("\n\n\n\n");
-
-
-
 //		String newInput = reader.editMeasure(0, ""); // essentially deletes the zeroth measure
 //		System.out.println(newInput);
 //		reader.setInput(newInput);
-
 //		reader.convertTabs();
 //		System.out.println(reader.toMXL());
 	}
