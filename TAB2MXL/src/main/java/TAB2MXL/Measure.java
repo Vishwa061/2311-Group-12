@@ -8,7 +8,7 @@ public class Measure {
 	private int measureNumber;
 	public static Attributes a;
 	private int indexTotal;
-	public int durationVal;
+	public double durationVal;
 
 
 	public Measure(int measureNumber) {
@@ -64,6 +64,13 @@ public class Measure {
 	
 	public void setIndexTotal(int indexTotal) {
 		this.indexTotal = indexTotal;
+	}
+	
+	public void setGrace() {
+		for(int i = 1; i < notes.size(); i++) {
+			if (notes.get(i).slurStart && notes.get(i).slurStop && notes.get(i-1).grace)
+				notes.get(i).grace = true;
+		}
 	}
 	
 }
