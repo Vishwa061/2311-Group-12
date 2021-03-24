@@ -449,18 +449,19 @@ public class TabReader {
 		
 		for (int i = 0; i < amSize; i++) {
 			ArrayList<String> measuresAsStrings = allMeasures.get(i);
+			ArrayList<String> scoreInstruments = scoreInstrument.get(i);
 			Measure measure = new Measure(i + 1);
 			int mSize = measuresAsStrings.size();
 			
 			for (int j = 0; j < mSize; j++) {
 				String currentLine = measuresAsStrings.get(j);
+				String scoreIns = scoreInstruments.get(j);
 				int lineLength = currentLine.length();
 				
 				for (int k = 0; k < lineLength; k++) {
 //					System.out.println(currentLine.charAt(k));
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						String scoreInstrument = "B"; // CHANGE THIS LATER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-						Note note = new Note(scoreInstrument, Character.toString(currentLine.charAt(k)), k);
+						Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
 						measure.addNote(note);
 					}
 				}
@@ -747,11 +748,86 @@ public class TabReader {
 
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
+		String drumsetParts = "\t\t<score-instrument id=\"P1-I36\">\n"
+				+ "\t\t\t<instrument-name>Bass Drum 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I37\">\n"
+				+ "\t\t\t<instrument-name>Bass Drum 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I38\">\n"
+				+ "\t\t\t<instrument-name>Side Stick</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I39\">\r\n"
+				+ "\t\t\t<instrument-name>Snare</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I42\">\n"
+				+ "\t\t\t<instrument-name>Low Floor Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I43\">\n"
+				+ "\t\t\t<instrument-name>Closed Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I44\">\n"
+				+ "\t\t\t<instrument-name>High Floor Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I45\">\n"
+				+ "\t\t\t<instrument-name>Pedal Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I46\">\n"
+				+ "\t\t\t<instrument-name>Low Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I47\">\n"
+				+ "\t\t\t<instrument-name>Open Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I48\">\n"
+				+ "\t\t\t<instrument-name>Low-Mid Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I49\">\n"
+				+ "\t\t\t<instrument-name>Hi-Mid Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I50\">\n"
+				+ "\t\t\t<instrument-name>Crash Cymbal 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I51\">\n"
+				+ "\t\t\t<instrument-name>High Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I52\">\n"
+				+ "\t\t\t<instrument-name>Ride Cymbal 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I53\">\n"
+				+ "\t\t\t<instrument-name>Chinese Cymbal</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I54\">\n"
+				+ "\t\t\t<instrument-name>Ride Bell</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I55\">\n"
+				+ "\t\t\t<instrument-name>Tambourine</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I56\">\n"
+				+ "\t\t\t<instrument-name>Splash Cymbal</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I57\">\n"
+				+ "\t\t\t<instrument-name>Cowbell</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I58\">\n"
+				+ "\t\t\t<instrument-name>Crash Cymbal 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I60\">\n"
+				+ "\t\t\t<instrument-name>Ride Cymbal 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I64\">\n"
+				+ "\t\t\t<instrument-name>Open Hi Conga</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I65\">\n"
+				+ "\t\t\t<instrument-name>Low Conga</instrument-name>\n"
+				+ "\t\t</score-instrument>\n";
+		
 		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
 				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>"
-				+ TabReader.instrument + "</part-name>\n" + "\t</score-part>\n" + "</part-list>\n"
+				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n"
+				+ "\t\t<part-name>" + TabReader.instrument + "</part-name>\n"
+				+ (TabReader.instrument.equals("Drumset") ? drumsetParts : "")
+				+ "\t</score-part>\n" + "</part-list>\n"
 				+ "<part id=\"P1\">\n";
 		builder.append(headingMXL);
 
