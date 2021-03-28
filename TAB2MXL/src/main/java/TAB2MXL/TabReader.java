@@ -23,6 +23,10 @@ public class TabReader {
 	
 	private List<Character> techniques;
 	List<Character> drumsetTechniques;
+	public String TitleGUI;
+	public String key;
+	public String composer;
+	public String timesignature;
 	
 
 
@@ -745,6 +749,21 @@ public class TabReader {
 
 		return lines;
 	}
+	
+	public String getTitleGUI() {
+		return TitleGUI;
+	}
+	public String Key() {
+		return key;
+	}
+	public String getComposer() {
+		return composer;
+	}
+	public String getTimesignature() {
+		return timesignature;
+	}
+	
+	
 
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();

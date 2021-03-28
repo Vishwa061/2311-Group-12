@@ -39,7 +39,7 @@
       </Pane>
       <Pane layoutX="33.0" layoutY="71.0" prefHeight="30.0" prefWidth="534.0">
          <children>
-            <Label alignment="TOP_LEFT" layoutX="93.0" prefHeight="22.0" prefWidth="408.0" text="Convert your text file to MUSICXML">
+            <Label alignment="TOP_LEFT" layoutX="93.0" prefHeight="22.0" prefWidth="408.0" text="Convert your text file to MusicXML">
                <font>
                   <Font name="Century" size="20.0" />
                </font>

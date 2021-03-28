@@ -72,7 +72,7 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel, step2Label, step3Label, step4Label ;
+	private Label UploadFileLabel;//, step2Label, step3Label, step4Label ;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -171,7 +171,7 @@ public class Controller {
 	void ConvertClicked() {
 		outputBox.setDisable(false);
 		save.setDisable(false);
-		step4Label.setVisible(true);
+		//step4Label.setVisible(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 			TabReader reader = new TabReader();
 			reader.setInput(file);
@@ -199,7 +199,7 @@ public class Controller {
 				// all stages created this way
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
-				popup.setTitle("ERROR");
+				popup.setTitle("Error");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
@@ -262,7 +262,7 @@ public class Controller {
 					outputBox.clear();
 					inputBox.setText(readFile(file));
 					checkTrue(file);
-					step3Label.setVisible(true);
+					//step3Label.setVisible(true);
 					convert.setDisable(false); 
 					featureButton.setDisable(false);
 
@@ -315,7 +315,7 @@ public class Controller {
 			inputBox.clear();
 			inputBox.setText(readFile(file));
 			checkTrue(file);
-			step3Label.setVisible(true);
+			//step3Label.setVisible(true);
 			convert.setDisable(false); 
 			featureButton.setDisable(false);
 		}
@@ -373,7 +373,7 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Success");
+			popup.setTitle("Error");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -406,9 +406,9 @@ public class Controller {
 		outputBox.clear();
 		outputBox.setDisable(true);
 		select.setDisable(false);
-		step2Label.setVisible(true); 
-		step3Label.setVisible(false);  
-		step4Label.setVisible(false); 
+		//step2Label.setVisible(true); 
+		//step3Label.setVisible(false);  
+		//step4Label.setVisible(false); 
 	}
 
 	//	@FXML
