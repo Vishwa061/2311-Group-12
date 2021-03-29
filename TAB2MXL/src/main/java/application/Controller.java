@@ -200,6 +200,7 @@ public class Controller {
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
 				popup.setTitle("Error");
+				popup.setTitle("Success");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
@@ -373,7 +374,8 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Error");
+			//popup.setTitle("Error");
+			popup.setTitle("Success");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
