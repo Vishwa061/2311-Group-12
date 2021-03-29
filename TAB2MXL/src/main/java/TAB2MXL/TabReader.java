@@ -15,21 +15,16 @@ public class TabReader {
 	private List<ArrayList<String>> allMeasures;
 	public static String instrument;
 	private String title;
-
 	private File file;
 	private int numStrings;
-	
 	private List<ArrayList<String>> scoreInstrument;
-	
 	private List<Character> techniques;
-	List<Character> drumsetTechniques;
-	public String TitleGUI;
-	public String key;
-	public String composer;
-	public String timesignature;
+	private List<Character> drumsetTechniques;
+	private String key;
+	private String composer;
+	private int beat;
+	private int beatTime;
 	
-
-
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 		//reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
@@ -53,18 +48,16 @@ public class TabReader {
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
 		allMeasures = new ArrayList<ArrayList<String>>();
-
 		scoreInstrument = new ArrayList<ArrayList<String>>();
-
 		techniques = new ArrayList<Character>();
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
 		drumsetTechniques = new ArrayList<Character>();
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o'));
-
 	}
-
+	
 	public void setInput(String fileAsString) {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
+		filterInput();
 	}
 
 	public String setInput(File inputFile) {
@@ -172,6 +165,10 @@ public class TabReader {
 		}
 		
 		this.tabArray = tabArray;
+		return filterInput();
+	}
+	
+	public List<String> filterInput() {
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
 		
@@ -750,20 +747,27 @@ public class TabReader {
 		return lines;
 	}
 	
-	public String getTitleGUI() {
-		return TitleGUI;
-	}
-	public String Key() {
-		return key;
-	}
-	public String getComposer() {
-		return composer;
-	}
-	public String getTimesignature() {
-		return timesignature;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
+	public void key() {
 	
+	}
+	
+	public void setComposer(String composer) {
+		this.composer = composer;
+	}
+	
+	/**
+	 * @param timeSignature
+	 * timeSignature[0] must have beat
+	 * timeSignature[1] must have beat time
+	 */
+	public void setTimeSignature(int[] timeSignature) {
+		this.beat = timeSignature[0];
+		this.beatTime = timeSignature[1];
+	}
 
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
