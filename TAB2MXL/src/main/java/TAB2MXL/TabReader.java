@@ -416,6 +416,10 @@ public class TabReader {
 		}
 		return measureElements;
 	}
+	
+//	public List<Measure> makeDrumNotes(){
+//		
+//	}
 
 	public ArrayList<Integer> countBars() {
 		ArrayList<Integer> countArray = new ArrayList<>();
