@@ -53,11 +53,13 @@ public class TabReader {
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
 		drumsetTechniques = new ArrayList<Character>();
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o'));
+		title = "Title";
+		composer = "";
 	}
 	
 	public void setInput(String fileAsString) {
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
-		filterInput();
+		tabArray = filterInput();
 	}
 
 	public String setInput(File inputFile) {
@@ -80,8 +82,8 @@ public class TabReader {
 	public TabError convertTabs() {
 		try {
 			instrument = getInstrument();
-			numStrings = countNumStrings(tabArray);
 			title = getTitle();
+			numStrings = countNumStrings(tabArray);
 			guitarTuning = getTuning();
 			Measure.setAttributes(new Attributes(guitarTuning));
 			allMeasures = compileMeasures();
@@ -234,12 +236,16 @@ public class TabReader {
 
 		return guitarTuning;
 	}
+	
+	public void setFile(File file) {
+		this.file = file;
+	}
 
 	public String getTitle() {
-		if (file == null) {
-			return "Title";
+		if (!title.equals("Title") || file == null) {
+			return title;
 		}
-
+		
 		return file.getName().split("\\.")[0];
 	}
 
@@ -846,8 +852,12 @@ public class TabReader {
 		
 		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
-				+ "</work>\n" + "<part-list>\n" + "\t<score-part id=\"P1\">\n"
+				+ "<score-partwise version=\"3.1\">\n" 
+				+ "<work>\n" 
+				+ "\t<work-title>" + title + "</work-title>\n"
+				+ "</work>\n"
+				+ (composer.equals("") ? "" : "<identification>\n\t<creator type=\"composer\">" + composer + "</creator>\n</identification>\n")
+				+ "<part-list>\n" + "\t<score-part id=\"P1\">\n"
 				+ "\t\t<part-name>" + TabReader.instrument + "</part-name>\n"
 				+ (TabReader.instrument.equals("Drumset") ? drumsetParts : "")
 				+ "\t</score-part>\n" + "</part-list>\n"
