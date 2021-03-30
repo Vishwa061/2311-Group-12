@@ -157,7 +157,7 @@ public class Controller {
 	/*
 	 * Tab parser
 	 */
-	private static final TabReader reader = new TabReader();
+	private static TabReader reader = new TabReader();
 
 	/*
 	 * 
@@ -175,9 +175,9 @@ public class Controller {
 		//step4Label.setVisible(true);
 		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 //			System.out.println(inputBox.getText());
-			reader.setInput(file);
+			reader.setInput(inputBox.getText());
 			reader.convertTabs();
-			outputBox.appendText(reader.toMXL());
+			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
 			save.setVisible(true);
 		}
@@ -316,7 +316,10 @@ public class Controller {
 			outputBox.clear();
 			inputBox.clear();
 			inputBox.setText(readFile(file));
-			checkTrue(file);
+			if (checkTrue(file)) {
+				reader = new TabReader();
+				reader.setFile(file);
+			}
 			//step3Label.setVisible(true);
 			convert.setDisable(false); 
 			featureButton.setDisable(false);
