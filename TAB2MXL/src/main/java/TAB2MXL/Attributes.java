@@ -17,7 +17,7 @@ public class Attributes {
 	public String toString() {
 		if (TabReader.instrument.equals("Drumset")) {
 			return "\t<attributes>\n"
-					+ "\t\t<divisions>4</divisions>\n"
+					+ "\t\t<divisions>8</divisions>\n"
 					+ "\t\t<key>\n"
 					+ "\t\t\t<fifths>0</fifth>\n"
 					+ "\t\t\t</key>\n"
