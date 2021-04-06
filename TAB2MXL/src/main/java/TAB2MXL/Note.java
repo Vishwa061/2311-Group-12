@@ -196,48 +196,50 @@ public class Note implements Comparable<Note> {
 		}
 
 		if (TabReader.instrument.equals("Drumset")) {
-			
+
 			if (drag || flam) {
 
 				if (drag) {
-					toMXL += "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
-							+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
-							+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n"
-							+ "\t\t</notations>\n" + "\t</note>\n";
-					
-					toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
-							+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
+					toMXL += "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th"
+							+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
+							+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t\t<notations>\n"
+							+ "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n" + "\t</note>\n";
+
+					toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
+							+ "16th" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
 							+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
-					
+
 					if (dragContinue != 0) {
 						for (int i = 0; i < dragContinue; i++) {
-							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
-									+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
-									+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n"
-									+ "\t\t</notations>\n" + "\t</note>\n";
-							
-							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
-									+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
-									+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
+									+ "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+									+ "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n"
+									+ "\t</note>\n";
+
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
+									+ "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+									+ "\t</note>\n";
 						}
 					}
 				}
 
 				if (flam) {
-					toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "eighth"
-							+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n"
-							+ "\t\t</notations>\n" + "\t</note>\n";
+					toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
+							+ "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<notations>\n"
+							+ "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n" + "\t</note>\n";
 					if (flamContinue != 0) {
 						for (int i = 0; i < flamContinue; i++) {
-							toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
-									+ "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t</note>\n";
+							toMXL += "\t<note>\n" + "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t</note>\n";
 						}
 					}
 				}
-				
+
 				toMXL += "\t<note>\n";
 			}
-			
+
 			toMXL += this.unpitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<instrument id=\""
 					+ this.unpitch.getInstrumentID() + "\"/>\n" + "\t\t<voice>1</voice>\n" + "\t\t<type>" + this.type
 					+ "</type>\n" + "\t\t<stem>up</stem>\n";
@@ -257,11 +259,51 @@ public class Note implements Comparable<Note> {
 			}
 
 			if (ghost)
-				toMXL += "\t\t<notehead parentheses=\"yes\">" + this.notehead + "</notehead>\n" + "\t</note>";
+				toMXL += "\t\t<notehead parentheses=\"yes\">" + this.notehead + "</notehead>\n";
 			else if (!notehead.equals("normal"))
-				toMXL += "\t\t<notehead>" + this.notehead + "</notehead>\n" + "\t</note>";
-			else
-				toMXL += "\t</note>";
+				toMXL += "\t\t<notehead>" + this.notehead + "</notehead>\n";
+
+//			if (beamStart || beamContinue || beamEnd) {
+//				if (beamStart) {
+//					if (beam1)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n";
+//					if (beam2)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n";
+//					if (beam3)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+//								+ "\t\t<beam number=\"3\">begin</beam>\n";
+//					if (beam4)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+//								+ "\t\t<beam number=\"3\">begin</beam>\n" + "\t\t<beam number=\"4\">begin</beam>\n";
+//				}
+//
+//				if (beamContinue) {
+//					if (beam1)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n";
+//					if (beam2)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n";
+//					if (beam3)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+//								+ "\t\t<beam number=\"3\">continue</beam>\n";
+//					if (beam4)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+//								+ "\t\t<beam number=\"3\">continue</beam>\n" + "\t\t<beam number=\"4\">continue</beam>\n";
+//				}
+//
+//				if (beamEnd) {
+//					if (beam1) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n";
+//					if (beam2) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n";
+//					if (beam3) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+//								+ "\t\t<beam number=\"3\">end</beam>\n";
+//					if (beam4) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+//								+ "\t\t<beam number=\"3\">end</beam>\n" + "\t\t<beam number=\"4\">end</beam>\n";
+//				}
+//			}
+			toMXL += "\t</note>";
 
 			return toMXL;
 		}

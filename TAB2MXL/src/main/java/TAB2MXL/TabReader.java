@@ -32,7 +32,7 @@ public class TabReader {
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		reader.convertTabs();
-		System.out.println(reader.scoreInstrument);
+		// System.out.println(reader.scoreInstrument);
 		System.out.println(reader.toMXL());
 
 //		System.out.println("\n\n\n\n");
@@ -209,7 +209,6 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).indexOf('|') != -1) {
 				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
-				System.out.println(addLine);
 			}
 		}
 
@@ -467,18 +466,20 @@ public class TabReader {
 
 				for (int k = 0; k < lineLength; k++) {
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						if (currentLine.charAt(k) == 'f' && measure.getNotes().get(measure.getNotes().size()-1).flam) {
-							measure.getNotes().get(measure.getNotes().size()-1).flamContinue++;
+						if (currentLine.charAt(k) == 'f'
+								&& measure.getNotes().get(measure.getNotes().size() - 1).flam) {
+							measure.getNotes().get(measure.getNotes().size() - 1).flamContinue++;
 							continue;
 						}
-						if (currentLine.charAt(k) == 'd' && measure.getNotes().get(measure.getNotes().size()-1).drag) {
-							measure.getNotes().get(measure.getNotes().size()-1).dragContinue++;
+						if (currentLine.charAt(k) == 'd'
+								&& measure.getNotes().get(measure.getNotes().size() - 1).drag) {
+							measure.getNotes().get(measure.getNotes().size() - 1).dragContinue++;
 							continue;
 						}
-							
+
 						else {
 							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
-						measure.addNote(note);
+							measure.addNote(note);
 						}
 					}
 
@@ -491,6 +492,7 @@ public class TabReader {
 			setDuration(measure);
 			noteDuration(measure);
 			noteType(measure);
+			beamType(measure);
 			measureElements.add(measure);
 		}
 
@@ -544,7 +546,6 @@ public class TabReader {
 				String[] lineArray2 = line.split("\\|");
 				String Score = lineArray2[0];
 				splitDrum.add(Score);
-				System.out.println(Score);
 				for (int j = 1; j < lineArray2.length; j++) {
 
 					if (measure.containsKey(j)) {
@@ -630,16 +631,16 @@ public class TabReader {
 		return measures;
 	}
 
+	public void beamType(Measure measure) {
+
+	}
+
 	public void setDuration(Measure measure) {
 
 		int indexTotal = measure.getIndexTotal();
-		System.out.println("index total: " + indexTotal);
 		int firstIndex = measure.getNotes().get(0).charIndex;
-		System.out.println("first index: " + firstIndex);
 		int totalChar = indexTotal - firstIndex;
-		System.out.println("total char: " + totalChar);
 		int eachBeatVal = totalChar / 4;
-		System.out.println("each beat val: " + eachBeatVal);
 		if (eachBeatVal < 1)
 			eachBeatVal = 1;
 		double eachCharVal = 8 / (double) eachBeatVal;
