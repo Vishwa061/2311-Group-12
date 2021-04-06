@@ -478,7 +478,7 @@ public class TabReader {
 							
 						else {
 							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
-							measure.addNote(note);
+						measure.addNote(note);
 						}
 					}
 

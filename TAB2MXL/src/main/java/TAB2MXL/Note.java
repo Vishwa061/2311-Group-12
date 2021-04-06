@@ -210,13 +210,15 @@ public class Note implements Comparable<Note> {
 							+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
 					
 					if (dragContinue != 0) {
-						for (int i = 0; i <= dragContinue; i++) {
-							toMXL += "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th"
-									+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
-									+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t</note>";
-							toMXL += "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th"
-									+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
-									+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>";
+						for (int i = 0; i < dragContinue; i++) {
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
+									+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
+									+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n"
+									+ "\t\t</notations>\n" + "\t</note>\n";
+							
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th" + "</type>\n"
+									+ "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
+									+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
 						}
 					}
 				}
@@ -224,9 +226,9 @@ public class Note implements Comparable<Note> {
 				if (flam) {
 					toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "eighth"
 							+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n"
-							+ "\t\t</notations>\n" + "\t</note>";
+							+ "\t\t</notations>\n" + "\t</note>\n";
 					if (flamContinue != 0) {
-						for (int i = 0; i <= flamContinue; i++) {
+						for (int i = 0; i < flamContinue; i++) {
 							toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
 									+ "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t</note>\n";
 						}
