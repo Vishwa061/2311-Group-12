@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TabReader {
+	private List<String> rawTabArray;
 	private List<String> tabArray;
 	private List<String> guitarTuning;
 	private List<Measure> measureElements;
@@ -24,16 +25,24 @@ public class TabReader {
 	private String composer;
 	private int beat;
 	private int beatTime;
+	private List<Repeat> repeats;
 	
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-		//reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		//reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 		reader.convertTabs();
-		System.out.println(reader.scoreInstrument);
 		System.out.println(reader.toMXL());
+//		for (String s : reader.tabArray) {
+//			System.out.println(s);
+//		}
+
+//		reader.convertTabs();
+//		System.out.println(reader.scoreInstrument);
+//		System.out.println(reader.toMXL());
 		
 //		System.out.println("\n\n\n\n");
 //		String newInput = reader.editMeasure(0, ""); // essentially deletes the zeroth measure
@@ -44,6 +53,7 @@ public class TabReader {
 	}
 
 	public TabReader() {
+		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
@@ -55,6 +65,7 @@ public class TabReader {
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o'));
 		title = "Title";
 		composer = "";
+		repeats = new ArrayList<Repeat>();
 	}
 	
 	public void setInput(String fileAsString) {
@@ -88,6 +99,7 @@ public class TabReader {
 			Measure.setAttributes(new Attributes(guitarTuning));
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
+			addRepeats();
 		} catch (Exception e) {
 			// TODO create error catching
 			System.out.println("SOMETHING WENT WRONG");
@@ -171,8 +183,13 @@ public class TabReader {
 	}
 	
 	public List<String> filterInput() {
+		rawTabArray.addAll(tabArray);
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
+		
+		for (int i = 0; i < tabArray.size(); i++) {
+			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
+		}
 		
 		if (TabReader.instrument.equals("Drumset")) {
 			return tabArray;
@@ -207,7 +224,7 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).indexOf('|') != -1) {
 				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
-				System.out.println(addLine);
+				//System.out.println(addLine);
 			}
 		}
 
@@ -528,7 +545,7 @@ public class TabReader {
 				String[] lineArray2 = line.split("\\|");
 				String Score = lineArray2[0];
 				splitDrum.add(Score);
-				System.out.println(Score);
+				//System.out.println(Score);
 				 for (int j = 1; j < lineArray2.length; j++) {
 
 						if (measure.containsKey(j)) {
@@ -586,22 +603,48 @@ public class TabReader {
 
 		return split;
 	}
-
+	
+	/**
+	 * 
+	 * @param line
+	 * @param start - inclusive
+	 * @param end - exclusive
+	 * @return number of measures between start and end
+	 */
+	public int countMeasuresInRange(String line, int start, int end) {
+		if (start >= end) {
+			return 0;
+		}
+		
+		int measures = 0;
+		for (int i = start; i < end; i++) {
+			if (line.charAt(i) == '|') {
+				measures++;
+			}
+		}
+		
+		return measures;
+	}
+	
 	public List<ArrayList<String>> compileMeasures() {
 		List<ArrayList<String>> measures = new ArrayList<ArrayList<String>>();
 		final int tabArraySize = tabArray.size();
 		int i = 0;
+		boolean repeat = false;
 
 		while (i < tabArraySize) {
 			List<String> tabs = new ArrayList<String>();
+			List<String> rawTabs = new ArrayList<String>();
 			boolean tabsFound = false;
-
+			
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
-
+				String rawLine = rawTabArray.get(i);
+				
 				if (lineHasTabs(line)) {
 					tabsFound = true;
 					tabs.add(line);
+					rawTabs.add(rawLine);
 				}
 
 				if (tabsFound && !lineHasTabs(line)) {
@@ -611,6 +654,39 @@ public class TabReader {
 			}
 
 			if (!tabs.isEmpty()) {
+				int measureNumber = measures.size(); // zero-indexed
+				String secondLine = rawTabs.get(1);
+				int prevRepeatIndex = 0;
+				int repeatIndex = secondLine.indexOf("||");
+				
+				while (repeatIndex >= 0) {
+					measureNumber += countMeasuresInRange(secondLine, prevRepeatIndex, repeatIndex);
+					if (repeat) {
+						// end repeat
+						int j = repeatIndex;
+						String firstLine = rawTabs.get(0);
+						while (firstLine.charAt(j) != '|') {
+							j++;
+						}
+						
+						int numRepeats = Integer.parseInt(firstLine.substring(repeatIndex, j));
+						repeats.add(new Repeat(measureNumber, true, numRepeats));
+						
+						// removing # of repeats from tabs
+						StringBuilder builder = new StringBuilder(firstLine);
+						builder.delete(repeatIndex, j);
+						tabs.set(0, builder.toString());
+					} else {
+						// start repeat
+						repeats.add(new Repeat(measureNumber, false, 0));
+					}
+					
+					repeat = !repeat;
+					prevRepeatIndex = repeatIndex + 2;
+					repeatIndex = secondLine.indexOf("||", repeatIndex + 1);
+					measureNumber++;
+				}
+				
 				measures.addAll(splitMeasure(tabs, tabs.size()));
 			}
 		}
@@ -773,6 +849,12 @@ public class TabReader {
 	public void setTimeSignature(int[] timeSignature) {
 		this.beat = timeSignature[0];
 		this.beatTime = timeSignature[1];
+	}
+	
+	public void addRepeats() {
+		for (Repeat r : repeats) {
+			measureElements.get(r.getMeasureNumber()).setRepeat(r);
+		}
 	}
 
 	public String toMXL() {
