@@ -47,7 +47,8 @@ public class Note implements Comparable<Note> {
 
 	// beams
 	public boolean beamStart;
-	public boolean beamContinue;
+	public boolean beamContinue1;
+	public boolean beamContinue2;
 	public boolean beamEnd;
 
 	// beam for 8th notes
@@ -260,49 +261,51 @@ public class Note implements Comparable<Note> {
 
 			if (ghost)
 				toMXL += "\t\t<notehead parentheses=\"yes\">" + this.notehead + "</notehead>\n";
+			else if (notehead == null)
+				toMXL += "";
 			else if (!notehead.equals("normal"))
 				toMXL += "\t\t<notehead>" + this.notehead + "</notehead>\n";
 
-//			if (beamStart || beamContinue || beamEnd) {
-//				if (beamStart) {
-//					if (beam1)
-//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n";
-//					if (beam2)
-//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n";
-//					if (beam3)
-//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
-//								+ "\t\t<beam number=\"3\">begin</beam>\n";
-//					if (beam4)
-//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
-//								+ "\t\t<beam number=\"3\">begin</beam>\n" + "\t\t<beam number=\"4\">begin</beam>\n";
-//				}
-//
-//				if (beamContinue) {
-//					if (beam1)
-//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n";
-//					if (beam2)
-//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n";
-//					if (beam3)
-//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
-//								+ "\t\t<beam number=\"3\">continue</beam>\n";
-//					if (beam4)
-//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
-//								+ "\t\t<beam number=\"3\">continue</beam>\n" + "\t\t<beam number=\"4\">continue</beam>\n";
-//				}
-//
-//				if (beamEnd) {
-//					if (beam1) 
-//						toMXL += "\t\t<beam number=\"1\">end</beam>\n";
-//					if (beam2) 
-//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n";
-//					if (beam3) 
-//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
-//								+ "\t\t<beam number=\"3\">end</beam>\n";
-//					if (beam4) 
-//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
-//								+ "\t\t<beam number=\"3\">end</beam>\n" + "\t\t<beam number=\"4\">end</beam>\n";
-//				}
-//			}
+			if (beamStart || beamContinue1 || beamContinue2 || beamEnd) {
+				if (beamStart) {
+					if (beam1)
+						toMXL += "\t\t<beam number=\"1\">begin</beam>\n";
+					if (beam2)
+						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n";
+					if (beam3)
+						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+								+ "\t\t<beam number=\"3\">begin</beam>\n";
+					if (beam4)
+						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+								+ "\t\t<beam number=\"3\">begin</beam>\n" + "\t\t<beam number=\"4\">begin</beam>\n";
+				}
+
+				if (beamContinue1 || beamContinue2) {
+					if (beam1)
+						toMXL += "\t\t<beam number=\"1\">continue</beam>\n";
+					if (beam2)
+						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n";
+					if (beam3)
+						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+								+ "\t\t<beam number=\"3\">continue</beam>\n";
+					if (beam4)
+						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+								+ "\t\t<beam number=\"3\">continue</beam>\n" + "\t\t<beam number=\"4\">continue</beam>\n";
+				}
+
+				if (beamEnd) {
+					if (beam1) 
+						toMXL += "\t\t<beam number=\"1\">end</beam>\n";
+					if (beam2) 
+						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n";
+					if (beam3) 
+						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+								+ "\t\t<beam number=\"3\">end</beam>\n";
+					if (beam4) 
+						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+								+ "\t\t<beam number=\"3\">end</beam>\n" + "\t\t<beam number=\"4\">end</beam>\n";
+				}
+			}
 			toMXL += "\t</note>";
 
 			return toMXL;
