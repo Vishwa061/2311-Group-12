@@ -26,14 +26,14 @@ public class TabReader {
 	private int beat;
 	private int beatTime;
 	private List<Repeat> repeats;
-	
+
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-//		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		//reader.setInput(new File("src/test/resources/BadMeasure.txt"));
-		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
+		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 		reader.convertTabs();
 		System.out.println(reader.toMXL());
 
@@ -184,7 +184,7 @@ public class TabReader {
 		rawTabArray.addAll(tabArray);
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
-		
+
 		for (int i = 0; i < tabArray.size(); i++) {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
 		}
@@ -222,7 +222,7 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).indexOf('|') != -1) {
 				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
-				//System.out.println(addLine);
+				// System.out.println(addLine);
 			}
 		}
 
@@ -560,9 +560,9 @@ public class TabReader {
 				String[] lineArray2 = line.split("\\|");
 				String Score = lineArray2[0];
 				splitDrum.add(Score);
-				//System.out.println(Score);
-				
-				 for (int j = 1; j < lineArray2.length; j++) {
+				// System.out.println(Score);
+
+				for (int j = 1; j < lineArray2.length; j++) {
 					if (measure.containsKey(j)) {
 						measure.put(j, measure.get(j) + lineArray2[j] + "\n");
 
@@ -614,29 +614,29 @@ public class TabReader {
 
 		return split;
 	}
-	
+
 	/**
 	 * 
 	 * @param line
 	 * @param start - inclusive
-	 * @param end - exclusive
+	 * @param end   - exclusive
 	 * @return number of measures between start and end
 	 */
 	public int countMeasuresInRange(String line, int start, int end) {
 		if (start >= end) {
 			return 0;
 		}
-		
+
 		int measures = 0;
 		for (int i = start; i < end; i++) {
 			if (line.charAt(i) == '|') {
 				measures++;
 			}
 		}
-		
+
 		return measures;
 	}
-	
+
 	public List<ArrayList<String>> compileMeasures() {
 		List<ArrayList<String>> measures = new ArrayList<ArrayList<String>>();
 		final int tabArraySize = tabArray.size();
@@ -648,11 +648,11 @@ public class TabReader {
 			List<String> tabs = new ArrayList<String>();
 			List<String> rawTabs = new ArrayList<String>();
 			boolean tabsFound = false;
-			
+
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
 				String rawLine = rawTabArray.get(i);
-				
+
 				if (lineHasTabs(line)) {
 					tabsFound = true;
 					tabs.add(line);
@@ -670,7 +670,7 @@ public class TabReader {
 				String secondLine = rawTabs.get(1);
 				int prevRepeatIndex = 0;
 				int repeatIndex = secondLine.indexOf("||");
-				
+
 				while (repeatIndex >= 0) {
 					measureNumber += countMeasuresInRange(secondLine, prevRepeatIndex, repeatIndex);
 					if (repeat) {
@@ -680,10 +680,10 @@ public class TabReader {
 						while (firstLine.charAt(j) != '|') {
 							j++;
 						}
-						
+
 						int numRepeats = Integer.parseInt(firstLine.substring(repeatIndex, j));
 						repeats.add(new Repeat(measureNumber, true, numRepeats));
-						
+
 						// removing # of repeats from tabs
 						StringBuilder builder = new StringBuilder(firstLine);
 						builder.delete(repeatIndex, j);
@@ -692,13 +692,13 @@ public class TabReader {
 						// start repeat
 						repeats.add(new Repeat(measureNumber, false, 0));
 					}
-					
+
 					repeat = !repeat;
 					prevRepeatIndex = repeatIndex + 2;
 					repeatIndex = secondLine.indexOf("||", repeatIndex + 1);
 					measureNumber++;
 				}
-				
+
 				measures.addAll(splitMeasure(tabs, tabs.size()));
 			}
 		}
@@ -707,7 +707,88 @@ public class TabReader {
 	}
 
 	public void beamType(Measure measure) {
+		List<Note> noteArr = measure.getNotes();
+		List<String> types = new ArrayList<String>();
+		List<Note> beamNotes = new ArrayList<Note>();
+		types.add("eighth");
+		types.add("16th");
+		types.add("32nd");
+		types.add("64th");
 
+		for (int i = 0; i < noteArr.size(); i++) {
+			Note note = noteArr.get(i);
+			if (!note.chord && types.contains(note.type) && !note.drag && !note.flam) {
+
+				if (i == 0) {
+					note.beamStart = true;
+					beamNotes.add(note);
+					continue;
+				}
+				
+				if (i != noteArr.size() - 1) {
+					if (!types.contains(noteArr.get(i + 1).type) || noteArr.get(i + 1).drag
+							|| noteArr.get(i + 1).flam) {
+						note.beamEnd = true;
+						beamNotes.add(note);
+						continue;
+					}
+				}
+
+				if (i > 0) {
+					Note prev;
+					if (!beamNotes.isEmpty()) {
+						prev = beamNotes.get(beamNotes.size() - 1);
+					} else {
+						prev = noteArr.get(i - 1);
+					}
+
+					if (prev.beamEnd) {
+						note.beamStart = true;
+						beamNotes.add(note);
+						continue;
+					}
+
+					if (prev.beamStart) {
+						note.beamContinue1 = true;
+						beamNotes.add(note);
+						continue;
+					}
+					if (prev.beamContinue1) {
+						note.beamContinue2 = true;
+						beamNotes.add(note);
+						continue;
+					}
+					if (prev.beamContinue2) {
+						note.beamEnd = true;
+						beamNotes.add(note);
+						continue;
+					}
+
+					else
+						note.beamStart = true;
+					beamNotes.add(note);
+				}
+			}
+		}
+		assignBeamNumber(beamNotes);
+	}
+
+	public void assignBeamNumber(List<Note> arr) {
+		for (int i = 0; i < arr.size(); i++) {
+			Note note = arr.get(i);
+			if (note.type.equals("eighth")) {
+				note.beam1 = true;
+			}
+			if (note.type.equals("16th")) {
+				note.beam2 = true;
+			}
+			if (note.type.equals("32nd")) {
+				note.beam3 = true;
+			}
+			if (note.type.equals("64th")) {
+				note.beam4 = true;
+			}
+		}
 	}
 
 	public void setDuration(Measure measure) {
@@ -866,7 +947,7 @@ public class TabReader {
 		this.beat = timeSignature[0];
 		this.beatTime = timeSignature[1];
 	}
-	
+
 	public void addRepeats() {
 		for (Repeat r : repeats) {
 			measureElements.get(r.getMeasureNumber()).setRepeat(r);
