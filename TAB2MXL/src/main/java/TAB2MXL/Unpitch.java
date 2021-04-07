@@ -31,6 +31,7 @@ public class Unpitch {
 		step = DRUMSET_STEPS.get(scoreInstrument);
 		octave = DRUMSET_OCTAVES.get(scoreInstrument);
 		instrumentID = DRUMSET_IDS.get(scoreInstrument);
+		
 	}
 
 	public int getOctave() {
@@ -65,6 +66,7 @@ public class Unpitch {
 		drumSteps.put("T2", "D");
 		drumSteps.put("t", "D");
 		
+		drumSteps.put("F", "A");
 		drumSteps.put("FT", "A");
 		drumSteps.put("T3", "A");
 		
@@ -77,7 +79,12 @@ public class Unpitch {
 		
 		drumSteps.put("R", "F");
 		drumSteps.put("RD", "F");
+		drumSteps.put("Rd", "F");
 		drumSteps.put("RC", "F");
+		
+		drumSteps.put("Hf", "D");
+		drumSteps.put("HF", "D");
+		drumSteps.put("FH", "D");
 		
 		return drumSteps;
 	}
@@ -102,6 +109,7 @@ public class Unpitch {
 		drumOctaves.put("T2", 5);
 		drumOctaves.put("t", 5);
 		
+		drumOctaves.put("F", 4);
 		drumOctaves.put("FT", 4);
 		drumOctaves.put("T3", 4);
 		
@@ -114,8 +122,13 @@ public class Unpitch {
 		
 		drumOctaves.put("R", 5);
 		drumOctaves.put("RD", 5);
+		drumOctaves.put("Rd", 5);
 		drumOctaves.put("RC", 5);
 		
+		drumOctaves.put("Hf", 4);
+		drumOctaves.put("HF", 4);
+		drumOctaves.put("FH", 4);
+
 		return drumOctaves;
 	}
 	
@@ -139,6 +152,7 @@ public class Unpitch {
 		drumsetIDS.put("T2", "P1-I46");
 		drumsetIDS.put("t", "P1-I46");
 		
+		drumsetIDS.put("F", "P1-I42");
 		drumsetIDS.put("FT", "P1-I42");
 		drumsetIDS.put("T3", "P1-I42");
 		
@@ -151,8 +165,13 @@ public class Unpitch {
 		
 		drumsetIDS.put("R", "P1-I52");
 		drumsetIDS.put("RD", "P1-I52");
+		drumsetIDS.put("Rd", "P1-I52");
 		drumsetIDS.put("RC", "P1-I52");
 		
+		drumsetIDS.put("Hf", "P1-I45");
+		drumsetIDS.put("HF", "P1-I45");
+		drumsetIDS.put("FH", "P1-I45");
+
 		return drumsetIDS;
 	}
 

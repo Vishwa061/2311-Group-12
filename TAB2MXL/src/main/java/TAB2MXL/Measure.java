@@ -30,6 +30,7 @@ public class Measure {
 
 	@Override
 	public String toString() {
+		
 		String mxl = "<measure number=\"" + measureNumber + "\">\n";
 
 		if (measureNumber == 1) {
@@ -44,7 +45,7 @@ public class Measure {
 			mxl += repeat;
 		}
 
-		mxl += "</measure>";
+			mxl += "</measure>";
 
 		return mxl;
 	}

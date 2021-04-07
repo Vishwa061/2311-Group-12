@@ -201,6 +201,7 @@ public class Controller {
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
 				popup.setTitle("Error");
+				popup.setTitle("Success");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
@@ -331,7 +332,6 @@ public class Controller {
 	private boolean checkTrue(File file) {
 
 		if(!(file.length() == 0)) {
-			inputBox.setText(readFile(file));
 			showOtherButtons();
 			UploadFileLabel.setText("File Uploaded");
 
@@ -377,7 +377,8 @@ public class Controller {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Error");
+			//popup.setTitle("Error");
+			popup.setTitle("Success");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 

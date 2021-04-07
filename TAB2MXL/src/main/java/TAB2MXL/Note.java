@@ -1,5 +1,8 @@
 package TAB2MXL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Note implements Comparable<Note> {
 	public Pitch pitch;
 	public Unpitch unpitch;
@@ -22,6 +25,44 @@ public class Note implements Comparable<Note> {
 	public boolean release;
 	public int bendAlter;
 	public boolean grace;
+
+	// will never have their own lines on tab, but have seperate instrument IDs
+	public boolean tambourine;
+	public boolean china;
+	public boolean splash;
+	public boolean bell;
+
+	private static final Map<String, String> DRUMSET_NOTEHEADS = drumsetNotehead();
+
+	// ways to play SD
+	public boolean ghost;
+	public boolean roll;
+	public boolean accent;
+
+	// drum grace notes
+	public boolean flam;
+	public int flamContinue = 0;
+	public boolean drag;
+	public int dragContinue = 0;
+
+	// beams
+	public boolean beamStart;
+	public boolean beamContinue;
+	public boolean beamEnd;
+
+	// beam for 8th notes
+	public boolean beam1;
+
+	// beam for 16th notes
+	public boolean beam2;
+
+	// beam for 32nd notes
+	public boolean beam3;
+
+	// beam for 64th notes
+	public boolean beam4;
+
+	public String notehead;
 
 	/**
 	 * Creates a guitar note
@@ -51,6 +92,98 @@ public class Note implements Comparable<Note> {
 	public Note(String scoreInstrument, String drumsetNote, int charIndex) {
 		this.unpitch = new Unpitch(scoreInstrument, drumsetNote);
 		this.charIndex = charIndex;
+		String instrumentNote = scoreInstrument.concat(drumsetNote);
+		if (drumsetNote.equals("x") || drumsetNote.equals("X") || drumsetNote.equals("o") || drumsetNote.equals("@")
+				|| drumsetNote.equals("#"))
+			this.notehead = DRUMSET_NOTEHEADS.get(instrumentNote);
+		else
+			this.notehead = this.modifyNote(drumsetNote, scoreInstrument);
+	}
+
+	public String modifyNote(String note, String instrument) {
+
+		if (note.equals("g"))
+			ghost = true;
+
+		if (note.equals("B")) {
+			roll = true;
+			accent = true;
+		}
+
+		if (note.equals("O"))
+			accent = true;
+
+		if (note.equals("f"))
+			flam = true;
+
+		if (note.equals("d"))
+			drag = true;
+
+		if (note.equals("b") && (instrument.equals("S") || instrument.equals("SN") || instrument.equals("SD")))
+			roll = true;
+
+		if (note.equals("b") && (instrument.equals("R") || instrument.equals("RD") || instrument.equals("RC")
+				|| instrument.equals("Rd")))
+			return "diamond";
+
+		return "normal";
+	}
+
+	private static Map<String, String> drumsetNotehead() {
+		Map<String, String> drumNoteheads = new HashMap<String, String>();
+
+		drumNoteheads.put("Bo", "normal");
+		drumNoteheads.put("BDo", "normal");
+
+		drumNoteheads.put("So", "normal");
+		drumNoteheads.put("SNo", "normal");
+		drumNoteheads.put("SDo", "normal");
+
+		drumNoteheads.put("S@", "x");
+		drumNoteheads.put("SN@", "x");
+		drumNoteheads.put("SD@", "x");
+
+		drumNoteheads.put("STo", "normal");
+		drumNoteheads.put("HTo", "normal");
+		drumNoteheads.put("T1o", "normal");
+		drumNoteheads.put("To", "normal");
+
+		drumNoteheads.put("MTo", "normal");
+		drumNoteheads.put("LTo", "normal");
+		drumNoteheads.put("T2o", "normal");
+		drumNoteheads.put("to", "normal");
+
+		drumNoteheads.put("Fo", "normal");
+		drumNoteheads.put("FTo", "normal");
+		drumNoteheads.put("T3o", "normal");
+
+		drumNoteheads.put("Hx", "x");
+		drumNoteheads.put("HHx", "x");
+
+		drumNoteheads.put("HX", "diamond");
+		drumNoteheads.put("HHX", "diamond");
+
+		drumNoteheads.put("Ho", "circle-x");
+		drumNoteheads.put("HHo", "circle-x");
+
+		drumNoteheads.put("Cx", "x");
+		drumNoteheads.put("CRx", "x");
+		drumNoteheads.put("CCx", "x");
+
+		drumNoteheads.put("C#", "circle-x");
+		drumNoteheads.put("CR#", "circle-x");
+		drumNoteheads.put("CC#", "circle-x");
+
+		drumNoteheads.put("Rx", "x");
+		drumNoteheads.put("RDx", "x");
+		drumNoteheads.put("Rdx", "x");
+		drumNoteheads.put("RCx", "x");
+
+		drumNoteheads.put("Hfx", "x");
+		drumNoteheads.put("HFx", "x");
+		drumNoteheads.put("FHx", "x");
+
+		return drumNoteheads;
 	}
 
 	@Override
@@ -61,24 +194,120 @@ public class Note implements Comparable<Note> {
 		if (chord) {
 			toMXL += "\t\t<chord/>\n";
 		}
-		
-		if (grace) {
-			toMXL += "\t\t<grace/>\n";
-		}
-		
+
 		if (TabReader.instrument.equals("Drumset")) {
-			toMXL += this.unpitch
-					+ "\t\t<duration>" + this.duration + "</duration>\n"
-					+ "\t\t<instrument id=\"" + this.unpitch.getInstrumentID() + "\"/>\n"
-					+ "\t\t<voice>1</voice>\n"
-					+ "\t\t<type>" + this.type + "</type>\n"
-					+ "\t\t<stem>NOT DONE</stem>\n"
-					+ "\t\t<notehead>NOT DONE</notehead>\n"
-					+ "\t\t<beam number=\"1\">NOT DONE</beam>\n"
-					+ "\t</note>";
+
+			if (drag || flam) {
+
+				if (drag) {
+					toMXL += "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>" + "16th"
+							+ "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">begin</beam>\n"
+							+ "\t\t<beam number=\"2\">begin</beam>\n" + "\t\t<notations>\n"
+							+ "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n" + "\t</note>\n";
+
+					toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
+							+ "16th" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
+							+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
+
+					if (dragContinue != 0) {
+						for (int i = 0; i < dragContinue; i++) {
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
+									+ "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+									+ "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n"
+									+ "\t</note>\n";
+
+							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
+									+ "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+									+ "\t</note>\n";
+						}
+					}
+				}
+
+				if (flam) {
+					toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
+							+ "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<notations>\n"
+							+ "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n" + "\t</note>\n";
+					if (flamContinue != 0) {
+						for (int i = 0; i < flamContinue; i++) {
+							toMXL += "\t<note>\n" + "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
+									+ "\t\t<type>" + "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t</note>\n";
+						}
+					}
+				}
+
+				toMXL += "\t<note>\n";
+			}
+
+			toMXL += this.unpitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<instrument id=\""
+					+ this.unpitch.getInstrumentID() + "\"/>\n" + "\t\t<voice>1</voice>\n" + "\t\t<type>" + this.type
+					+ "</type>\n" + "\t\t<stem>up</stem>\n";
+
+			if (drag || flam || accent || roll) {
+				toMXL += "\t\t<notations>\n";
+
+				if (drag || flam)
+					toMXL += "\t\t\t<slur type=\"stop\"/>\n";
+				if (accent)
+					toMXL += "\t\t\t<articulations>\n" + "\t\t\t\t<accent/>" + "\t\t\t</articulations>";
+				if (roll)
+					toMXL += "\t\t\t<ornaments>\n" + "\t\t\t\t<tremolo type=\"single\">3</tremolo>\n"
+							+ "\t\t\t</ornaments>\n";
+
+				toMXL += "\t\t</notations>\n";
+			}
+
+			if (ghost)
+				toMXL += "\t\t<notehead parentheses=\"yes\">" + this.notehead + "</notehead>\n";
+			else if (!notehead.equals("normal"))
+				toMXL += "\t\t<notehead>" + this.notehead + "</notehead>\n";
+
+//			if (beamStart || beamContinue || beamEnd) {
+//				if (beamStart) {
+//					if (beam1)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n";
+//					if (beam2)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n";
+//					if (beam3)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+//								+ "\t\t<beam number=\"3\">begin</beam>\n";
+//					if (beam4)
+//						toMXL += "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
+//								+ "\t\t<beam number=\"3\">begin</beam>\n" + "\t\t<beam number=\"4\">begin</beam>\n";
+//				}
+//
+//				if (beamContinue) {
+//					if (beam1)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n";
+//					if (beam2)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n";
+//					if (beam3)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+//								+ "\t\t<beam number=\"3\">continue</beam>\n";
+//					if (beam4)
+//						toMXL += "\t\t<beam number=\"1\">continue</beam>\n" + "\t\t<beam number=\"2\">continue</beam>\n"
+//								+ "\t\t<beam number=\"3\">continue</beam>\n" + "\t\t<beam number=\"4\">continue</beam>\n";
+//				}
+//
+//				if (beamEnd) {
+//					if (beam1) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n";
+//					if (beam2) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n";
+//					if (beam3) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+//								+ "\t\t<beam number=\"3\">end</beam>\n";
+//					if (beam4) 
+//						toMXL += "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
+//								+ "\t\t<beam number=\"3\">end</beam>\n" + "\t\t<beam number=\"4\">end</beam>\n";
+//				}
+//			}
+			toMXL += "\t</note>";
+
 			return toMXL;
 		}
-		
+
 		toMXL += this.pitch + "\t\t<duration>" + this.duration + "</duration>\n" + "\t\t<type>" + this.type
 				+ "</type>\n";
 
@@ -89,13 +318,13 @@ public class Note implements Comparable<Note> {
 		toMXL += "\t\t<stem>down</stem>\n" + "\t\t<notations>\n" + "\t\t\t<technical>\n";
 
 		if (hammerStart || hammerStop || pullStart || pullStop || bend || release) {
-			if (hammerStop) 
-				toMXL += "\t\t\t\t<hammer-on type=\"stop\"/>\n";	
-			if (hammerStart) 
-				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";				
-			if (pullStop) 
+			if (hammerStop)
+				toMXL += "\t\t\t\t<hammer-on type=\"stop\"/>\n";
+			if (hammerStart)
+				toMXL += "\t\t\t\t<hammer-on type=\"start\">H</hammer-on>\n";
+			if (pullStop)
 				toMXL += "\t\t\t\t<pull-off type=\"stop\"/>\n";
-			if (pullStart) 
+			if (pullStart)
 				toMXL += "\t\t\t\t<pull-off type=\"start\">P</pull-off>\n";
 			if (bend)
 				toMXL += "\t\t\t\t<bend>\n" + "\t\t\t\t\t<bend-alter>" + bendAlter + "</bend-alter>\n"
