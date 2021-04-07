@@ -261,6 +261,8 @@ public class Note implements Comparable<Note> {
 
 			if (ghost)
 				toMXL += "\t\t<notehead parentheses=\"yes\">" + this.notehead + "</notehead>\n";
+			else if (notehead == null)
+				toMXL += "";
 			else if (!notehead.equals("normal"))
 				toMXL += "\t\t<notehead>" + this.notehead + "</notehead>\n";
 

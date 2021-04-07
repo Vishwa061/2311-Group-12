@@ -30,7 +30,8 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
@@ -503,6 +504,10 @@ public class TabReader {
 			}
 
 			measure.sortArray();
+			if (measure.getNotes().isEmpty()) {
+				measureElements.add(measure);
+				continue;
+			}
 			setDuration(measure);
 			noteDuration(measure);
 			noteType(measure);
