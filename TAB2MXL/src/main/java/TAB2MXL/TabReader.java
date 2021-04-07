@@ -2,6 +2,8 @@ package TAB2MXL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ public class TabReader {
 //		reader.setInput(newInput);
 //		reader.convertTabs();
 //		System.out.println(reader.toMXL());
+		
 	}
 
 	public TabReader() {
@@ -509,6 +512,40 @@ public class TabReader {
 		}
 		return countArray;
 	}
+	
+	public void errorMeasure(String filepath) throws IOException{
+		String lineError = "";
+		try {
+		      if(TabReader.instrument.equals("Drumset")) {
+		    	  
+		    	  for(int i = 0; i < tabArray.size();i++) {
+		    		  if(tabArray.get(i) != null) {
+		    			  if(lineError.charAt(i)==',' || lineError.charAt(i)=='.' || lineError.charAt(i)=='/' ||lineError.charAt(i)==';' ||lineError.charAt(i)=='"'|| lineError.charAt(i)=='['||lineError.charAt(i)==']'||lineError.charAt(i)=='+'||lineError.charAt(i)=='-' ) {
+		    				  System.out.println("Error in line.");//+ lineError.get(i));
+		    			  }
+		    			  else if (lineError.charAt(i)=='!' || lineError.charAt(i)=='@' || lineError.charAt(i)=='#' ||lineError.charAt(i)=='$' ||lineError.charAt(i)=='%'|| lineError.charAt(i)=='^'||lineError.charAt(i)=='&'||lineError.charAt(i)=='*'||lineError.charAt(i)=='(' ) {
+		    				  System.out.println("Error in line.");//+ lineError.get(i));
+		    			  }
+		    			  else if(lineError.charAt(i)==')' || lineError.charAt(i)=='=' || lineError.charAt(i)=='_' ||lineError.charAt(i)=='{' ||lineError.charAt(i)=='}'|| lineError.charAt(i)==':'||lineError.charAt(i)=='?'||lineError.charAt(i)=='>'||lineError.charAt(i)=='<' ) {
+		    				  System.out.println("Error in line.");//+ lineError.get(i));
+		    			  }
+//		    		  lineError=filepath[i];
+//		    		  String fileName = System.in.lineError.GetFileName(path);
+//		                String fileDirectory = System.in.Path.GetDirectoryName(path);
+		    		  
+		    	  }
+		      }
+		      
+		    }
+		}
+		catch (Exception e) {
+		      e.printStackTrace();
+		    } 
+		finally {
+		      System.out.println("Please fix the error.");
+		    }
+		
+	}
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
 		
@@ -774,6 +811,8 @@ public class TabReader {
 		this.beat = timeSignature[0];
 		this.beatTime = timeSignature[1];
 	}
+	
+	
 
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
