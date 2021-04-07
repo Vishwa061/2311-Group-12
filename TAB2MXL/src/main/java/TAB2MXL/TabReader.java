@@ -47,6 +47,12 @@ public class TabReader {
 	}
 
 	public TabReader() {
+		init();
+		title = "Title";
+		composer = "";
+	}
+	
+	private void init() {
 		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
@@ -57,17 +63,17 @@ public class TabReader {
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
 		drumsetTechniques = new ArrayList<Character>();
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o', '#', 'g', '@', 's', 'S', 'c', 'C'));
-		title = "Title";
-		composer = "";
 		repeats = new ArrayList<Repeat>();
 	}
 
 	public void setInput(String fileAsString) {
+		init();
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 		tabArray = filterInput();
 	}
 
 	public String setInput(File inputFile) {
+		init();
 		tabArray = readFile(inputFile);
 		file = inputFile;
 
@@ -652,6 +658,7 @@ public class TabReader {
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
 				String rawLine = rawTabArray.get(i);
+//				System.out.println(line);
 				
 				if (lineHasTabs(line)) {
 					tabsFound = true;
@@ -676,21 +683,25 @@ public class TabReader {
 					if (repeat) {
 						// end repeat
 						int j = repeatIndex;
-						String firstLine = rawTabs.get(0);
-						while (firstLine.charAt(j) != '|') {
+						String firstRawLine = rawTabs.get(0);
+						while (firstRawLine.charAt(j) != '|') {
 							j++;
 						}
 						
-						int numRepeats = Integer.parseInt(firstLine.substring(repeatIndex, j));
-						repeats.add(new Repeat(measureNumber, true, numRepeats));
+						int numRepeats = Integer.parseInt(firstRawLine.substring(repeatIndex, j));
+						repeats.add(new Repeat(measureNumber-1, true, numRepeats));
 						
 						// removing # of repeats from tabs
-						StringBuilder builder = new StringBuilder(firstLine);
-						builder.delete(repeatIndex, j);
+						StringBuilder builder = new StringBuilder(tabs.get(0));
+						builder.delete(repeatIndex - 1, j - 1);
+//						System.out.println(tabs.get(0));
 						tabs.set(0, builder.toString());
+//						System.out.println(tabs.get(0));
+//						System.out.println(measureNumber-1);
 					} else {
 						// start repeat
 						repeats.add(new Repeat(measureNumber, false, 0));
+//						System.out.println(measureNumber);
 					}
 					
 					repeat = !repeat;
