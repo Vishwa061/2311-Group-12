@@ -21,7 +21,7 @@ public class TabReader {
 	private List<ArrayList<String>> scoreInstrument;
 	private List<Character> techniques;
 	private List<Character> drumsetTechniques;
-	private String key;
+	private int key;
 	private String composer;
 	private int beat;
 	private int beatTime;
@@ -50,6 +50,9 @@ public class TabReader {
 		init();
 		title = "Title";
 		composer = "";
+		beat = 4;
+		beatTime = 4;
+		key = 0;
 	}
 	
 	private void init() {
@@ -96,7 +99,9 @@ public class TabReader {
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
 			guitarTuning = getTuning();
-			Measure.setAttributes(new Attributes(guitarTuning));
+			Attributes attr = new Attributes(guitarTuning);
+			attr.setKey(key);
+			Measure.setAttributes(attr);
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 			addRepeats();
@@ -693,8 +698,8 @@ public class TabReader {
 						
 						// removing # of repeats from tabs
 						StringBuilder builder = new StringBuilder(tabs.get(0));
-						builder.delete(repeatIndex - 1, j - 1);
-//						System.out.println(tabs.get(0));
+						builder.delete(repeatIndex - 1, j);
+//						System.out.println(tabs.get(0).charAt(repeatIndex));
 						tabs.set(0, builder.toString());
 //						System.out.println(tabs.get(0));
 //						System.out.println(measureNumber-1);
@@ -861,8 +866,8 @@ public class TabReader {
 		this.title = title;
 	}
 
-	public void key() {
-
+	public void setKey(int key) {
+		this.key = key;
 	}
 
 	public void setComposer(String composer) {
