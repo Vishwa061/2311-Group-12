@@ -19,7 +19,7 @@ public class Unpitch {
 	/**
 	 * Creates a drum note
 	 * 
-	 * @param scoreInstrument - (ignore case except t) B/BD, S/SN/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, HF, C/CR/CC, R/RD/RC
+	 * @param scoreInstrument - (ignore case except t) B/BD, S/SN/SD, ST/HT/T1/T, MT/LT/T2/t, FT/T3, H/HH, C/CR/CC, R/RD/RC
 	 * @param drumsetNote - O, f, d, b, x, X, o
 	 */
 	public Unpitch(String scoreInstrument, String drumsetNote) {
@@ -31,6 +31,7 @@ public class Unpitch {
 		step = DRUMSET_STEPS.get(scoreInstrument);
 		octave = DRUMSET_OCTAVES.get(scoreInstrument);
 		instrumentID = DRUMSET_IDS.get(scoreInstrument);
+		
 	}
 
 	public int getOctave() {
@@ -45,7 +46,6 @@ public class Unpitch {
 		return instrumentID;
 	}
 
-	// TODO
 	private static Map<String, String> initDrumsetSteps() {
 		Map<String, String> drumSteps = new HashMap<String, String>();
 		
@@ -66,26 +66,29 @@ public class Unpitch {
 		drumSteps.put("T2", "D");
 		drumSteps.put("t", "D");
 		
-		drumSteps.put("FT", null);
-		drumSteps.put("T3", null);
+		drumSteps.put("F", "A");
+		drumSteps.put("FT", "A");
+		drumSteps.put("T3", "A");
 		
 		drumSteps.put("H", "G");
 		drumSteps.put("HH", "G");
-		
-		drumSteps.put("HF", null);
 		
 		drumSteps.put("C", "A");
 		drumSteps.put("CR", "A");
 		drumSteps.put("CC", "A");
 		
-		drumSteps.put("R", null);
-		drumSteps.put("RD", null);
-		drumSteps.put("RC", null);
+		drumSteps.put("R", "F");
+		drumSteps.put("RD", "F");
+		drumSteps.put("Rd", "F");
+		drumSteps.put("RC", "F");
+		
+		drumSteps.put("Hf", "D");
+		drumSteps.put("HF", "D");
+		drumSteps.put("FH", "D");
 		
 		return drumSteps;
 	}
 
-	// TODO
 	private static Map<String, Integer> initDrumsetOctaves() {
 		Map<String, Integer> drumOctaves = new HashMap<String, Integer>();
 		
@@ -106,26 +109,29 @@ public class Unpitch {
 		drumOctaves.put("T2", 5);
 		drumOctaves.put("t", 5);
 		
-		drumOctaves.put("FT", null);
-		drumOctaves.put("T3", null);
+		drumOctaves.put("F", 4);
+		drumOctaves.put("FT", 4);
+		drumOctaves.put("T3", 4);
 		
 		drumOctaves.put("H", 5);
 		drumOctaves.put("HH", 5);
-		
-		drumOctaves.put("HF", null);
 		
 		drumOctaves.put("C", 5);
 		drumOctaves.put("CR", 5);
 		drumOctaves.put("CC", 5);
 		
-		drumOctaves.put("R", null);
-		drumOctaves.put("RD", null);
-		drumOctaves.put("RC", null);
+		drumOctaves.put("R", 5);
+		drumOctaves.put("RD", 5);
+		drumOctaves.put("Rd", 5);
+		drumOctaves.put("RC", 5);
 		
+		drumOctaves.put("Hf", 4);
+		drumOctaves.put("HF", 4);
+		drumOctaves.put("FH", 4);
+
 		return drumOctaves;
 	}
 	
-	// TODO
 	private static Map<String, String> initDrumsetIDS() {
 		Map<String, String> drumsetIDS = new HashMap<String, String>();
 		
@@ -146,22 +152,26 @@ public class Unpitch {
 		drumsetIDS.put("T2", "P1-I46");
 		drumsetIDS.put("t", "P1-I46");
 		
-		drumsetIDS.put("FT", null);
-		drumsetIDS.put("T3", null);
+		drumsetIDS.put("F", "P1-I42");
+		drumsetIDS.put("FT", "P1-I42");
+		drumsetIDS.put("T3", "P1-I42");
 		
 		drumsetIDS.put("H", "P1-I43");
 		drumsetIDS.put("HH", "P1-I43");
-		
-		drumsetIDS.put("HF", null);
 		
 		drumsetIDS.put("C", "P1-I50");
 		drumsetIDS.put("CR", "P1-I50");
 		drumsetIDS.put("CC", "P1-I50");
 		
-		drumsetIDS.put("R", null);
-		drumsetIDS.put("RD", null);
-		drumsetIDS.put("RC", null);
+		drumsetIDS.put("R", "P1-I52");
+		drumsetIDS.put("RD", "P1-I52");
+		drumsetIDS.put("Rd", "P1-I52");
+		drumsetIDS.put("RC", "P1-I52");
 		
+		drumsetIDS.put("Hf", "P1-I45");
+		drumsetIDS.put("HF", "P1-I45");
+		drumsetIDS.put("FH", "P1-I45");
+
 		return drumsetIDS;
 	}
 

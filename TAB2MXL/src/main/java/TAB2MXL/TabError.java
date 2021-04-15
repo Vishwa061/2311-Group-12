@@ -2,11 +2,13 @@ package TAB2MXL;
 
 public class TabError {
 	private String exitCode;
-	private int lineNumber;
+	private int measureNumber;
+	private String measure;
 
-	public TabError(String exitCode, int lineNumber) {
+	public TabError(String exitCode, int measureNumber, String measure) {
 		this.exitCode = exitCode;
-		this.lineNumber = lineNumber;
+		this.measureNumber = measureNumber;
+		this.measure = measure;
 	}
 
 	/**
@@ -23,12 +25,11 @@ public class TabError {
 		return exitCode;
 	}
 
-	/**
-	 * Gets the line number for which the error occurs on
-	 * @return lineNumber
-	 */
-	public int getLine() {
-		return lineNumber;
+	public int getMeasureNumber() {
+		return measureNumber;
 	}
 
+	public String getMeasure() {
+		return measure;
+	}
 }

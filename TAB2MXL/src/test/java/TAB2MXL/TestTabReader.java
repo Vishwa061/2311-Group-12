@@ -82,6 +82,7 @@ public class TestTabReader {
 	//		assertEquals(expected, actual);
 	//	}
 	//	
+<<<<<<< HEAD
 
 	@Test
 	void testCountBars() {
@@ -89,74 +90,83 @@ public class TestTabReader {
 		expected.add(2);
 		expected.add(3);
 		expected.add(4);
+=======
 
-		reader.setInput(new File(PATH + "countBar.txt"));
-		reader.convertTabs();
+//	@Test
+//	void testCountBars() {
+//		ArrayList<Integer> expected = new ArrayList<Integer>();
+//		expected.add(2);
+//		expected.add(3);
+//		expected.add(4);
+//
+//		reader.setInput(new File(PATH + "countBar.txt"));
+//		reader.convertTabs();
+//
+//		assertEquals(expected, reader.countBars());
+//	}
+>>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 
-		assertEquals(expected, reader.countBars());
-	}
-
-	@Test
-	void testCompileMeasures() {
-		reader.setInput(new File(PATH + "CompileMeasures_Input.txt"));
-		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
-
-		ArrayList<String> m1 = new ArrayList<String>();
-		m1.add("--0-----------------------");
-		m1.add("------------------3-----5-");
-		m1.add("------------------3-------");
-		m1.add("------------------5-------");
-		m1.add("--------------------------");
-		m1.add("--------------------------");
-		ArrayList<String> m2 = new ArrayList<String>();
-		m2.add("-------------------------");
-		m2.add("-2-----------------------");
-		m2.add("-2-----------------------");
-		m2.add("-2-----------------------");
-		m2.add("-0-----------------------");
-		m2.add("-------------------------");
-		ArrayList<String> m3 = new ArrayList<String>();
-		m3.add("----15-7-----5-7-");
-		m3.add("-----5-----5-----");
-		m3.add("---5---------5---");
-		m3.add("-7-------6-------");
-		m3.add("-----------------");
-		m3.add("-----------------");
-		ArrayList<String> m4 = new ArrayList<String>();
-		m4.add("-8----------8------------2-----2-");
-		m4.add("---5-----------------------3-----");
-		m4.add("-----5------------------2--------");
-		m4.add("-5-------4-----------------------");
-		m4.add("---------------------------------");
-		m4.add("---------------------------------");
-		ArrayList<String> m5 = new ArrayList<String>();
-		m5.add("-0---0-----");
-		m5.add("--1--1-1---");
-		m5.add("-----2---2-");
-		m5.add("-3---------");
-		m5.add("-----------");
-		m5.add("-----------");
-		ArrayList<String> m6 = new ArrayList<String>();
-		m6.add("--2-----------------------");
-		m6.add("------------------7-----1-");
-		m6.add("--------------------------");
-		m6.add("--------------------------");
-		ArrayList<String> m7 = new ArrayList<String>();
-		m7.add("-------------------------");
-		m7.add("-9-----------------------");
-		m7.add("-8-----------------------");
-		m7.add("-------------------------");
-
-		expected.add(m1);
-		expected.add(m2);
-		expected.add(m3);
-		expected.add(m4);
-		expected.add(m5);
-		expected.add(m6);
-		expected.add(m7);
-
-		assertEquals(expected, reader.compileMeasures());
-	}
+//	@Test
+//	void testCompileMeasures() {
+//		reader.setInput(new File(PATH + "CompileMeasures_Input.txt"));
+//		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
+//
+//		ArrayList<String> m1 = new ArrayList<String>();
+//		m1.add("--0-----------------------");
+//		m1.add("------------------3-----5-");
+//		m1.add("------------------3-------");
+//		m1.add("------------------5-------");
+//		m1.add("--------------------------");
+//		m1.add("--------------------------");
+//		ArrayList<String> m2 = new ArrayList<String>();
+//		m2.add("-------------------------");
+//		m2.add("-2-----------------------");
+//		m2.add("-2-----------------------");
+//		m2.add("-2-----------------------");
+//		m2.add("-0-----------------------");
+//		m2.add("-------------------------");
+//		ArrayList<String> m3 = new ArrayList<String>();
+//		m3.add("----15-7-----5-7-");
+//		m3.add("-----5-----5-----");
+//		m3.add("---5---------5---");
+//		m3.add("-7-------6-------");
+//		m3.add("-----------------");
+//		m3.add("-----------------");
+//		ArrayList<String> m4 = new ArrayList<String>();
+//		m4.add("-8----------8------------2-----2-");
+//		m4.add("---5-----------------------3-----");
+//		m4.add("-----5------------------2--------");
+//		m4.add("-5-------4-----------------------");
+//		m4.add("---------------------------------");
+//		m4.add("---------------------------------");
+//		ArrayList<String> m5 = new ArrayList<String>();
+//		m5.add("-0---0-----");
+//		m5.add("--1--1-1---");
+//		m5.add("-----2---2-");
+//		m5.add("-3---------");
+//		m5.add("-----------");
+//		m5.add("-----------");
+//		ArrayList<String> m6 = new ArrayList<String>();
+//		m6.add("--2-----------------------");
+//		m6.add("------------------7-----1-");
+//		m6.add("--------------------------");
+//		m6.add("--------------------------");
+//		ArrayList<String> m7 = new ArrayList<String>();
+//		m7.add("-------------------------");
+//		m7.add("-9-----------------------");
+//		m7.add("-8-----------------------");
+//		m7.add("-------------------------");
+//
+//		expected.add(m1);
+//		expected.add(m2);
+//		expected.add(m3);
+//		expected.add(m4);
+//		expected.add(m5);
+//		expected.add(m6);
+//		expected.add(m7);
+//System.out.println(reader.compileMeasures());
+//		assertEquals(expected, reader.compileMeasures());
+//	}
 
 	@Test
 	void testLineHasTabs() {

@@ -41,8 +41,6 @@ public class Controller {
 	/*
 	 * Translated File + Other Important Imports 
 	 */
-
-	TabReader outputXMLFile;
 	private Window stage;
 	BufferedReader input;
 	StreamResult output;
@@ -72,10 +70,7 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel, step2Label, step3Label, step4Label, startOverLabel ;
-	
-	@FXML 
-	private MenuButton instrumentOption;
+	private Label UploadFileLabel;//, step2Label, step3Label, step4Label ;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -159,7 +154,10 @@ public class Controller {
 	@FXML
 	private Button continueButtonConvert;	
 
-
+	/*
+	 * Tab parser
+	 */
+	private static TabReader reader = new TabReader();
 
 	/*
 	 * 
@@ -172,12 +170,23 @@ public class Controller {
 
 	@FXML
 	void ConvertClicked() {
+
 	//	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
 			TabReader reader = new TabReader();
 			reader.setInput(file);
+
+		outputBox.setDisable(false);
+		save.setDisable(false);
+		//step4Label.setVisible(true);
+		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
+//			System.out.println(inputBox.getText());
+			reader.setInput(inputBox.getText());
 			reader.convertTabs();
-			outputBox.appendText(reader.toMXL());
+
+			outputBox.setText(reader.toMXL());
+			displaySuccessConvert();
 			save.setVisible(true);
+
 	//	}
 	//	else  {
 	//		FileChooser fileChooser = new FileChooser();
@@ -198,7 +207,8 @@ public class Controller {
 				// all stages created this way
 				final Stage popup = new Stage();
 				popup.initModality(Modality.APPLICATION_MODAL);
-				popup.setTitle("ERROR");
+				popup.setTitle("Error");
+				popup.setTitle("Success");
 				popup.setScene(new Scene(root, 334, 226));
 				popup.show();
 
@@ -217,10 +227,10 @@ public class Controller {
 					FileWriter myWriter = new FileWriter(file);
 					myWriter.write(outputBox.getText());
 					myWriter.close();
+					//	SaveFile(textInput.getText(), file);
 					Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
 					errorAlert.setHeaderText("File is saved. Happy making music!"); 
 					errorAlert.showAndWait();
-					startOverLabel.setVisible(true);
 				}
 			}
 			catch (IOException ex) {
@@ -237,7 +247,11 @@ public class Controller {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
+<<<<<<< HEAD
 					if(!Files.probeContentType(path).isEmpty() && Files.probeContentType(path).equals("text/plain")) {
+=======
+					if(Files.probeContentType(path).equals("text")) {
+>>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 						e.acceptTransferModes(TransferMode.COPY);//copy data 
 					}
 
@@ -261,7 +275,7 @@ public class Controller {
 					outputBox.clear();
 					inputBox.setText(readFile(file));
 					checkTrue(file);
-					step3Label.setVisible(true);
+					//step3Label.setVisible(true);
 					convert.setDisable(false); 
 					featureButton.setDisable(false);
 
@@ -315,6 +329,11 @@ public class Controller {
 			inputBox.setText(readFile(file));
 			checkTrue(file);
 			step3Label.setVisible(true);
+			if (checkTrue(file)) {
+				reader = new TabReader();
+				reader.setFile(file);
+			}
+			//step3Label.setVisible(true);
 			convert.setDisable(false); 
 			featureButton.setDisable(false);
 		}
@@ -326,7 +345,6 @@ public class Controller {
 	private boolean checkTrue(File file) {
 
 		if(!(file.length() == 0)) {
-			inputBox.setText(readFile(file));
 			showOtherButtons();
 			UploadFileLabel.setText("File Uploaded");
 
@@ -349,6 +367,39 @@ public class Controller {
 	}
 
 
+	private void displayErrorPage(){
+		Parent root;
+		try {
+			// used the same style for all popup windows 
+			root = FXMLLoader.load(getClass().getResource("AlertFileUploadSuccess.fxml"));
+			Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Error");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+			count ++;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void displaySuccessConvert() {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
+			final Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			//popup.setTitle("Error");
+			popup.setTitle("Success");
+			popup.setScene(new Scene(root, 334, 226));
+			popup.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	private void ErrorOutput(File file) {
 		Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error alert window 
@@ -359,8 +410,12 @@ public class Controller {
 
 
 	@FXML 
+
 	void startClick(ActionEvent e){
 		/*instrumentOption.setVisible(false);
+=======
+	void startClick() {
+>>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 		timeSigButton.setVisible(false);
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
@@ -374,9 +429,14 @@ public class Controller {
 		outputBox.clear();
 		outputBox.setDisable(true);
 		select.setDisable(false);
+<<<<<<< HEAD
 		step2Label.setVisible(true); 
 		step3Label.setVisible(false);  
 		step4Label.setVisible(false); */
+=======
+		//step2Label.setVisible(true); 
+		//step3Label.setVisible(false);  
+		//step4Label.setVisible(false); 
 	}
 
 	//	@FXML
@@ -409,12 +469,18 @@ public class Controller {
 
 		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+
 		
 		
 		assert instrumentOption != null  : "fx:id=\"instrumentOption\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		
 		assert startOverLabel != null  : "fx:id=\"startOverLabel\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		
+
+		if (featureButton != null) {
+			featureButton.setDisable(true);
+		}
+
 	}
 
 
@@ -516,18 +582,30 @@ public class Controller {
 	}
 
 	/*
-	 * All methods below are for the time signiture page 
+	 * All methods below are for the time signature page 
 	 */
 	@FXML
 	void cancelTimeSig() {
-		cancelButton.getScene().getWindow().hide();;
+		cancelButton.getScene().getWindow().hide();
 	}
 
 	@FXML
 	void saveTimeSigClicked() {
-		SaveTimeSig.getScene().getWindow().hide();;
+		int[] timeSig = new int[2];
+		timeSig[0] = 4;
+		timeSig[1] = 4;
+		
+		try {
+			beat = Integer.parseInt(beatOption.getText());
+			beatTime = Integer.parseInt(beatTimeOption.getText());
+		} catch(Exception e) {}
+		
+		reader.setTimeSignature(timeSig);
+		SaveTimeSig.getScene().getWindow().hide();
+		
+//		System.out.println("beat: " + timeSig[0]);
+//		System.out.println("beatTime: " + timeSig[1]);
 	}
-
 
 	@FXML
 	void beat1Select(ActionEvent event) {
@@ -540,6 +618,7 @@ public class Controller {
 		beat5.setSelected(false);
 		beat6.setSelected(false);
 	}
+	
 	@FXML
 	void beat2Select(ActionEvent event) {
 		beat1.setSelected(false);
@@ -667,17 +746,17 @@ public class Controller {
 	void saveTitleClick() {
 		SaveTitle.setOnAction( e -> setTitleName(titleTextField.getText()));
 		title = titleTextField.getText();
-		System.out.println(title);
-		SaveTitle.getScene().getWindow().hide();;
+//		System.out.println(title);
+		reader.setTitle(title);
+		SaveTitle.getScene().getWindow().hide();
+		
 	}
 
 	private void setTitleName(String title) {
 		title = titleTextField.getText();
 		this.title = title;
 	}
-
-
-
+	
 	public void returnTitle() {
 		System.out.println(title);
 	}
@@ -699,8 +778,9 @@ public class Controller {
 	@FXML
 	void saveComposer() {
 		ComposerName = composerText.getText();
-		System.out.println(ComposerName);
-		SaveComposer.getScene().getWindow().hide();;
+//		System.out.println(ComposerName);
+		reader.setComposer(ComposerName);
+		SaveComposer.getScene().getWindow().hide();
 	}
 
 
@@ -715,14 +795,15 @@ public class Controller {
 
 	@FXML
 	void cancelKey() {
-		cancelKey.getScene().getWindow().hide();;
+		cancelKey.getScene().getWindow().hide();
 
 	}
 
 	@FXML
 	void saveKey() {
+		reader.setKey(keyFifths);
 		setKey(keySelected);
-		saveKey.getScene().getWindow().hide();;
+		saveKey.getScene().getWindow().hide();
 		System.out.println(keySelected);
 	}
 
@@ -1040,6 +1121,7 @@ public class Controller {
 		titleButton.setVisible(true);
 		composerButton.setDisable(false);
 		composerButton.setVisible(true);
+
 		instrumentOption.setDisable(false);
 		instrumentOption.setVisible(true); */
 

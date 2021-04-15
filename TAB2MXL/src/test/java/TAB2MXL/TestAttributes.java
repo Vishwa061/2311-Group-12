@@ -19,23 +19,6 @@ class TestAttributes {
 	}
 	
 	@Test
-	void testAttributes() {
-		try {
-			List<String> guitarTuning = new ArrayList<String>();
-			guitarTuning.add("E");
-			guitarTuning.add("B");
-			guitarTuning.add("G");
-			guitarTuning.add("D");
-			guitarTuning.add("A");
-			guitarTuning.add("E");
-			new Attributes(guitarTuning);
-		} catch(Exception e) {
-			fail();
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
 	void testToString() throws IOException {
 		List<String> guitarTuning = new ArrayList<String>();
 		guitarTuning.add("E");
@@ -52,6 +35,7 @@ class TestAttributes {
 			expected += sc.nextLine() + "\n";
 		}
 		sc.close();
+		
 		
 		assertEquals(expected.substring(0, expected.length()-1), a.toString());
 	}

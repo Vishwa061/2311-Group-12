@@ -5,17 +5,40 @@ import java.util.List;
 
 public class Attributes {
 	private List<String> guitarTuning = new ArrayList<String>();
-
+	private int key;
+	
 	public Attributes(List<String> guitarTuning) {
 		this.guitarTuning = guitarTuning;
+		key = 0;
 	}
 
+	public void setKey(int key) {
+		this.key = key;
+	}
+	
 	@Override
 	public String toString() {
+		if (TabReader.instrument.equals("Drumset")) {
+			return "\t<attributes>\n"
+					+ "\t\t<divisions>8</divisions>\n"
+					+ "\t\t<key>\n"
+					+ "\t\t\t<fifths>" + key + "</fifths>\n"
+					+ "\t\t</key>\n"
+					+ "\t\t<time>\n"
+					+ "\t\t\t<beats>4</beats>\n"
+					+ "\t\t\t<beat-type>4</beat-type>\n"
+					+ "\t\t</time>\n"
+					+ "\t\t<clef>\n"
+					+ "\t\t\t<sign>percussion</sign>\n"
+					+ "\t\t\t<line>2</line>\n"
+					+ "\t\t</clef>\n"
+					+ "\t</attributes>";
+		}
+
 		String mxl = "\t<attributes>"
-				+ "\n\t\t<divisions>120</divisions>"
+				+ "\n\t\t<divisions>8</divisions>"
 				+ "\n\t\t<key>"
-				+ "\n\t\t\t<fifths>0</fifths>"
+				+ "\n\t\t\t<fifths>" + key + "</fifths>"
 				+ "\n\t\t</key>"
 				+ "\n\t\t<time>"
 				+ "\n\t\t\t<beats>4</beats>"
@@ -32,10 +55,10 @@ public class Attributes {
 			int index = (guitarTuning.size() - i);
 			mxl += "\n\t\t\t<staff-tuning line=\"" + i + "\">"
 					+ "\n\t\t\t\t<tuning-step>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getStep() 
+					+ new Pitch(index + 1, guitarTuning.get(index), 0).getStep() 
 					+ "</tuning-step>"
 					+ "\n\t\t\t\t<tuning-octave>" 
-					+ new Note(index + 1, guitarTuning.get(index), 0, 0).getPitch().getOctave() 
+					+ new Pitch(index + 1, guitarTuning.get(index), 0).getOctave() 
 					+ "</tuning-octave>"
 					+ "\n\t\t\t</staff-tuning>";
 		}
@@ -45,3 +68,4 @@ public class Attributes {
 		return mxl;
 	}
 }
+
