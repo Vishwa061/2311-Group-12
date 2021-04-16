@@ -2,6 +2,7 @@ package TAB2MXL;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -195,5 +196,78 @@ public class TestTabReader {
 
 		reader.setInput(new File(PATH + "SplitDrum.txt"));
 		assertEquals("Drumset", reader.getInstrument());
+	}
+	
+	@Test
+	void testLastCharacter() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/LastCharTest.txt"));
+		test.convertTabs();
+		test.makeNotes();
+
+		Measure m = test.getMeasures().get(0);
+
+		int measureLength = m.getIndexTotal();
+		int noteCharIndex = m.getNotes().get(m.size() - 1).charIndex;
+
+		assertTrue(measureLength - 1 == noteCharIndex);
+
+	}
+
+	@Test
+	void testLastCharacterTechnique() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/LastCharTechnique.txt"));
+		test.convertTabs();
+		test.makeNotes();
+		boolean[] actuals = new boolean[5];
+		boolean[] expecteds = new boolean[5];
+		Arrays.fill(expecteds, true);
+
+		for (int i = 0; i < test.getMeasures().size(); i = i + 2) {
+			Measure m = test.getMeasures().get(i);
+			Note note = m.getNotes().get(m.size() - 1);
+			boolean techStart = false;
+			if (note.release || note.pullStart || note.hammerStart || note.slideStart || note.bend)
+				techStart = true;
+			actuals[i / 2] = techStart;
+		}
+
+		assertArrayEquals(expecteds, actuals);
+
+	}
+	
+	@Test
+	void testguitarTechniques() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/guitarTechniques.txt"));
+		test.convertTabs();
+		test.makeNotes();
+		boolean[] actuals = new boolean[8];
+		boolean[] expecteds = new boolean[8];
+		Arrays.fill(expecteds, true);
+		int i = 0;
+		for (Measure m : test.getMeasures()) {
+			m.sortArray();
+			Note note1 = m.getNotes().get(0);
+			Note note2 = m.getNotes().get(1);
+			boolean techStart = false;
+			boolean techStop = false;
+			if (note1.release || note1.bend) {
+				actuals[i] = true;
+				i++;
+				continue;
+			}
+			if (note1.hammerStart || note1.slideStart || note1.pullStart)
+				techStart = true;
+			if (note2.pullStop || note2.hammerStop || note2.slideStop)
+				techStop = true;
+			
+			actuals[i] = techStart && techStop;
+			i++;
+		}
+
+		assertArrayEquals(expecteds, actuals);
+
 	}
 }

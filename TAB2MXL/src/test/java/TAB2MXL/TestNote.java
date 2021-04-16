@@ -47,18 +47,4 @@ class TestNote {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	void testLastCharacter() {
-		TabReader test2 = new TabReader();
-		test2.setInput(new File("src/test/resources/LastCharTest.txt"));
-		test2.convertTabs();
-		test2.makeNotes();
-
-		Measure m = test2.getMeasures().get(0);
-
-		int measureLength = m.getIndexTotal();
-		int noteCharIndex = m.getNotes().get(0).charIndex;
-
-		assertTrue(measureLength - 1 == noteCharIndex);
-	}
 }

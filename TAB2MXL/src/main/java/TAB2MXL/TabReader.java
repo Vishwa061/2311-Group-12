@@ -378,21 +378,6 @@ public class TabReader {
 								measure.getNote(noteCounter - 1).release = true;
 							}
 
-							if (currentLine.charAt(k) == 'g') {
-								if (Character.isDigit(currentLine.charAt(k + 2))) {
-									temp = currentLine.substring(k + 1, k + 3);
-									k = k + 2;
-								} else {
-									temp = currentLine.substring(k + 1, k + 2);
-									k++;
-								}
-								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
-								note.grace = true;
-								measure.addNote(note);
-								noteCounter++;
-								continue;
-							}
 							continue;
 						}
 
