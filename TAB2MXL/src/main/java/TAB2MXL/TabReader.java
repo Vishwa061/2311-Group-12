@@ -23,8 +23,8 @@ public class TabReader {
 	private List<Character> drumsetTechniques;
 	private int key;
 	private String composer;
-	private int beat;
-	private int beatTime;
+	private int beats;
+	private int beatType;
 	private List<Repeat> repeats;
 
 	public static void main(String[] args) {
@@ -54,8 +54,8 @@ public class TabReader {
 		init();
 		title = "Title";
 		composer = "";
-		beat = 4;
-		beatTime = 4;
+		beats = 4;
+		beatType = 4;
 		key = 0;
 	}
 
@@ -787,18 +787,30 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
-
+		
+		double eachCharVal = 0;
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar / 4;
+		int eachBeatVal = totalChar / beats;
 		if (eachBeatVal < 1)
 			eachBeatVal = 1;
-		double eachCharVal = 8 / (double) eachBeatVal;
+		
+		
+		if (beatType == 1)
+			eachCharVal = 32 / (double) eachBeatVal;
+		if (beatType == 2)
+			eachCharVal = 16 / (double) eachBeatVal;
+		if (beatType == 4)
+			eachCharVal = 8 / (double) eachBeatVal;
+		if (beatType == 8)
+			eachCharVal = 4 / (double) eachBeatVal;
+		if (beatType == 16)
+			eachCharVal = 2 / (double) eachBeatVal;
 
-		if (eachCharVal < 1) {
+		if (eachCharVal < 1) 
 			eachCharVal = 1;
-		}
+		
 		measure.durationVal = eachCharVal;
 	}
 
@@ -934,8 +946,8 @@ public class TabReader {
 	 *                      have beat time
 	 */
 	public void setTimeSignature(int[] timeSignature) {
-		this.beat = timeSignature[0];
-		this.beatTime = timeSignature[1];
+		this.beats = timeSignature[0];
+		this.beatType = timeSignature[1];
 	}
 
 	public void addRepeats() {
