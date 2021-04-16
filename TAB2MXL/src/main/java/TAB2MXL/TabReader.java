@@ -26,6 +26,7 @@ public class TabReader {
 	private int beats;
 	private int beatType;
 	private List<Repeat> repeats;
+	private int errorMeasure;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
@@ -33,13 +34,17 @@ public class TabReader {
 		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 		// reader.setInput(new File("src/test/resources/LastCharTest.txt"));
 		// reader.setInput(new File("src/test/resources/ChopSuey.txt"));
-		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+		//reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
 		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		 reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
-		reader.convertTabs();
+		//reader.convertTabs();
+		TabError tError = reader.convertTabs();
+		System.out.println(tError.getMeasure() );
+		System.out.println(tError.getMeasureNumber());
 		System.out.println(reader.toMXL());
+		
 
 		// System.out.println(reader.scoreInstrument);
 //		for (String s : reader.tabArray) {
@@ -71,6 +76,7 @@ public class TabReader {
 		drumsetTechniques = new ArrayList<Character>();
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o', '#', 'g', '@', 's', 'S', 'c', 'C'));
 		repeats = new ArrayList<Repeat>();
+		errorMeasure = 0;
 	}
 
 	public void setInput(String fileAsString) {
@@ -110,12 +116,19 @@ public class TabReader {
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 			addRepeats();
 		} catch (Exception e) {
+			String m1="";
 			// TODO create error catching
-			System.out.println("SOMETHING WENT WRONG");
+			//System.out.println("Error in measure " + (errorMeasure+1));
 			e.printStackTrace();
+			for(String m: allMeasures.get(errorMeasure)) {
+				
+				m1+="|"+m+"|\n";
+				
+			}
+			return new TabError(errorMeasure+1,m1);
 		}
 
-		return new TabError("done", 0, "");
+		return new TabError( 0, "");
 	}
 
 	/**
@@ -312,8 +325,10 @@ public class TabReader {
 
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
+	
 
 		for (int i = 0; i < allMeasures.size(); i++) {
+			errorMeasure = i;
 			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			Measure measure = new Measure(i + 1);
 			int noteCounter = 0;
@@ -498,6 +513,7 @@ public class TabReader {
 		int amSize = allMeasures.size();
 
 		for (int i = 0; i < amSize; i++) {
+			errorMeasure = i;
 			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			ArrayList<String> scoreInstruments = scoreInstrument.get(i);
 			Measure measure = new Measure(i + 1);
@@ -535,6 +551,8 @@ public class TabReader {
 
 		return measureElements;
 	}
+	
+	
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
