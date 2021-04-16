@@ -30,10 +30,11 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		//reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
-
-		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		// reader.setInput(new File("src/test/resources/LastCharTest.txt"));
+		// reader.setInput(new File("src/test/resources/ChopSuey.txt"));
+		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
@@ -57,7 +58,7 @@ public class TabReader {
 		beatTime = 4;
 		key = 0;
 	}
-	
+
 	private void init() {
 		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
@@ -166,6 +167,36 @@ public class TabReader {
 	 * @return true iff the line contains 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
+		if (line.indexOf('-') == -1) {
+			boolean containsTechniques = true;
+			char[] lineArr = line.toCharArray();
+			int start = line.indexOf('|') + 1;
+			int end = line.lastIndexOf('|');
+			
+			for (int i = start; i < end; i++) {
+				
+				if (Character.isDigit(lineArr[i]))
+					continue;
+				
+				if (this.getInstrument().equals("Drumset") && !drumsetTechniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+				
+				if (this.getInstrument().equals("Classical Guitar") && !techniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+				
+				if (this.getInstrument().equals("Bass") && !techniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+			}
+			
+			return line.lastIndexOf('|') > line.indexOf('|') && containsTechniques;
+		}
+
 		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
@@ -478,10 +509,10 @@ public class TabReader {
 
 				for (int k = 0; k < lineLength; k++) {
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						
-							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
-							measure.addNote(note);
-						
+
+						Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
+						measure.addNote(note);
+
 					}
 
 					if (measure.getIndexTotal() == 0)
@@ -502,35 +533,6 @@ public class TabReader {
 		}
 
 		return measureElements;
-	}
-
-	public ArrayList<Integer> countBars() {
-		ArrayList<Integer> countArray = new ArrayList<>();
-		for (int i = 0; i < tabArray.size(); i++) {
-			if (tabArray.get(i).contains("-")) {
-				ArrayList<Integer> indices = new ArrayList<Integer>();
-				int index = 0;
-				while ((index = tabArray.get(i).indexOf('|', index + 1)) > 0) {
-					indices.add(index);
-				}
-				for (int j = 0; j < indices.size() - 1; j++) {
-					String lineBefore = "";
-					lineBefore = tabArray.get(i - 1);
-					int lastIndex = indices.get(j + 1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|')
-							: indices.get(j + 1);
-					lineBefore = lineBefore.substring(indices.get(j), lastIndex + 1);
-					int count = 0;
-					for (String s : lineBefore.split("\\s+")) {
-						if (s.equals("|")) {
-							count++;
-						}
-					}
-					countArray.add(count);
-				}
-				break;
-			}
-		}
-		return countArray;
 	}
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
@@ -643,7 +645,6 @@ public class TabReader {
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
 				String rawLine = rawTabArray.get(i);
-
 				if (lineHasTabs(line)) {
 					tabsFound = true;
 					tabs.add(line);
@@ -671,10 +672,10 @@ public class TabReader {
 						while (firstRawLine.charAt(j) != '|') {
 							j++;
 						}
-						
+
 						int numRepeats = Integer.parseInt(firstRawLine.substring(repeatIndex, j));
-						repeats.add(new Repeat(measureNumber-1, true, numRepeats));
-						
+						repeats.add(new Repeat(measureNumber - 1, true, numRepeats));
+
 						// removing # of repeats from tabs
 						StringBuilder builder = new StringBuilder(tabs.get(0));
 						builder.delete(repeatIndex - 1, j);
@@ -719,7 +720,7 @@ public class TabReader {
 					beamNotes.add(note);
 					continue;
 				}
-				
+
 				if (i != noteArr.size() - 1) {
 					if (!types.contains(noteArr.get(i + 1).type) || noteArr.get(i + 1).drag
 							|| noteArr.get(i + 1).flam) {

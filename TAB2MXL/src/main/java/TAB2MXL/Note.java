@@ -35,9 +35,7 @@ public class Note implements Comparable<Note> {
 
 	// drum grace notes
 	public boolean flam;
-	public int flamContinue = 0;
 	public boolean drag;
-	public int dragContinue = 0;
 
 	// beams
 	public boolean beamStart;
