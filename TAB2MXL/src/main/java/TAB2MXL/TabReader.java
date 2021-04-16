@@ -21,7 +21,7 @@ public class TabReader {
 	private List<ArrayList<String>> scoreInstrument;
 	private List<Character> techniques;
 	private List<Character> drumsetTechniques;
-	private String key;
+	private int key;
 	private String composer;
 	private int beat;
 	private int beatTime;
@@ -49,6 +49,15 @@ public class TabReader {
 	}
 
 	public TabReader() {
+		init();
+		title = "Title";
+		composer = "";
+		beat = 4;
+		beatTime = 4;
+		key = 0;
+	}
+	
+	private void init() {
 		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
@@ -59,17 +68,17 @@ public class TabReader {
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
 		drumsetTechniques = new ArrayList<Character>();
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o', '#', 'g', '@', 's', 'S', 'c', 'C'));
-		title = "Title";
-		composer = "";
 		repeats = new ArrayList<Repeat>();
 	}
 
 	public void setInput(String fileAsString) {
+		init();
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 		tabArray = filterInput();
 	}
 
 	public String setInput(File inputFile) {
+		init();
 		tabArray = readFile(inputFile);
 		file = inputFile;
 
@@ -92,7 +101,9 @@ public class TabReader {
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
 			guitarTuning = getTuning();
-			Measure.setAttributes(new Attributes(guitarTuning));
+			Attributes attr = new Attributes(guitarTuning);
+			attr.setKey(key);
+			Measure.setAttributes(attr);
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 			addRepeats();
@@ -595,7 +606,11 @@ public class TabReader {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
+<<<<<<< HEAD
+				
+=======
 
+>>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 				for (int j = 1; j < lineArray.length; j++) {
 
 					if (measure.containsKey(j)) {
@@ -682,21 +697,25 @@ public class TabReader {
 					if (repeat) {
 						// end repeat
 						int j = repeatIndex;
-						String firstLine = rawTabs.get(0);
-						while (firstLine.charAt(j) != '|') {
+						String firstRawLine = rawTabs.get(0);
+						while (firstRawLine.charAt(j) != '|') {
 							j++;
 						}
-
-						int numRepeats = Integer.parseInt(firstLine.substring(repeatIndex, j));
-						repeats.add(new Repeat(measureNumber, true, numRepeats));
-
+						
+						int numRepeats = Integer.parseInt(firstRawLine.substring(repeatIndex, j));
+						repeats.add(new Repeat(measureNumber-1, true, numRepeats));
+						
 						// removing # of repeats from tabs
-						StringBuilder builder = new StringBuilder(firstLine);
-						builder.delete(repeatIndex, j);
+						StringBuilder builder = new StringBuilder(tabs.get(0));
+						builder.delete(repeatIndex - 1, j);
+//						System.out.println(tabs.get(0).charAt(repeatIndex));
 						tabs.set(0, builder.toString());
+//						System.out.println(tabs.get(0));
+//						System.out.println(measureNumber-1);
 					} else {
 						// start repeat
 						repeats.add(new Repeat(measureNumber, false, 0));
+//						System.out.println(measureNumber);
 					}
 
 					repeat = !repeat;
@@ -950,8 +969,8 @@ public class TabReader {
 		this.title = title;
 	}
 
-	public void key() {
-
+	public void setKey(int key) {
+		this.key = key;
 	}
 
 	public void setComposer(String composer) {
@@ -1018,7 +1037,7 @@ public class TabReader {
 				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
 				+ "</work>\n"
 				+ (composer.equals("") ? ""
-						: "<identification>\n\t<creator type=\"composer\">" + composer
+						: "<identification>\n\t<creator type=\"composer\">By: " + composer
 								+ "</creator>\n</identification>\n")
 				+ "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + TabReader.instrument
 				+ "</part-name>\n" + (TabReader.instrument.equals("Drumset") ? drumsetParts : "") + "\t</score-part>\n"
