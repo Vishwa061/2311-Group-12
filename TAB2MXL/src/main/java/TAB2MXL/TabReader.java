@@ -492,21 +492,10 @@ public class TabReader {
 
 				for (int k = 0; k < lineLength; k++) {
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						if (currentLine.charAt(k) == 'f'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).flam) {
-							measure.getNotes().get(measure.getNotes().size() - 1).flamContinue++;
-							continue;
-						}
-						if (currentLine.charAt(k) == 'd'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).drag) {
-							measure.getNotes().get(measure.getNotes().size() - 1).dragContinue++;
-							continue;
-						}
-
-						else {
+						
 							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
 							measure.addNote(note);
-						}
+						
 					}
 
 					if (measure.getIndexTotal() == 0)
