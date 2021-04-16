@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TabReader {
-	private List<String> rawTabArray;
 	private List<String> tabArray;
 	private List<String> guitarTuning;
 	private List<Measure> measureElements;
@@ -23,44 +22,31 @@ public class TabReader {
 	private List<ArrayList<String>> scoreInstrument;
 	private List<Character> techniques;
 	private List<Character> drumsetTechniques;
-	private int key;
+	private String key;
 	private String composer;
 	private int beat;
 	private int beatTime;
-	private List<Repeat> repeats;
-
+	
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		//reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
-		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
+		//reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		reader.convertTabs();
+		System.out.println(reader.scoreInstrument);
 		System.out.println(reader.toMXL());
-
-		// System.out.println(reader.scoreInstrument);
-//		for (String s : reader.tabArray) {
-//			System.out.println(s);
-//		}
-
-//		System.out.println(reader.scoreInstrument);
+		
+//		System.out.println("\n\n\n\n");
+//		String newInput = reader.editMeasure(0, ""); // essentially deletes the zeroth measure
+//		System.out.println(newInput);
+//		reader.setInput(newInput);
+//		reader.convertTabs();
 //		System.out.println(reader.toMXL());
 		
 	}
 
 	public TabReader() {
-		init();
-		title = "Title";
-		composer = "";
-		beat = 4;
-		beatTime = 4;
-		key = 0;
-	}
-	
-	private void init() {
-		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
 		guitarTuning = new ArrayList<String>();
 		measureElements = new ArrayList<Measure>();
@@ -69,18 +55,17 @@ public class TabReader {
 		techniques = new ArrayList<Character>();
 		techniques.addAll(Arrays.asList('\\', '/', 'b', 'g', 'h', 'p', 'r', 'S', 's'));
 		drumsetTechniques = new ArrayList<Character>();
-		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o', '#', 'g', '@', 's', 'S', 'c', 'C'));
-		repeats = new ArrayList<Repeat>();
+		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o'));
+		title = "Title";
+		composer = "";
 	}
-
+	
 	public void setInput(String fileAsString) {
-		init();
 		tabArray = Arrays.asList(fileAsString.split("\\n"));
 		tabArray = filterInput();
 	}
 
 	public String setInput(File inputFile) {
-		init();
 		tabArray = readFile(inputFile);
 		file = inputFile;
 
@@ -103,12 +88,9 @@ public class TabReader {
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
 			guitarTuning = getTuning();
-			Attributes attr = new Attributes(guitarTuning);
-			attr.setKey(key);
-			Measure.setAttributes(attr);
+			Measure.setAttributes(new Attributes(guitarTuning));
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
-			addRepeats();
 		} catch (Exception e) {
 			// TODO create error catching
 			System.out.println("SOMETHING WENT WRONG");
@@ -117,46 +99,44 @@ public class TabReader {
 
 		return new TabError("done", 0, "");
 	}
-
+	
 	/**
 	 * Saves a given measure
-	 * 
-	 * @param measureNumber   - the zero-indexed measure number
+	 * @param measureNumber - the zero-indexed measure number
 	 * @param measureAsString - the edited measure
 	 * @return the edited tabs
 	 */
 	public String editMeasure(int measureNumber, String measureAsString) {
 		List<String> temp = Arrays.asList(measureAsString.split("\\n"));
-
+		
 		// List to ArrayList
 		ArrayList<String> measure = new ArrayList<String>();
 		measure.addAll(temp);
-
+		
 		allMeasures.remove(measureNumber);
 		if (measureNumber >= allMeasures.size()) { // accounts for when the user edits the last measure
 			allMeasures.add(measure);
 		}
 		allMeasures.add(measureNumber, measure);
-
+		
 		tabArray.clear();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			ArrayList<String> m = allMeasures.get(i);
 			for (int j = 0; j < m.size(); j++) {
-				if (m.get(j).lastIndexOf('-') > m.get(j).indexOf('-')) {
-					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|" + "\n"); // THIS ONLY WORKS FOR GUITAR RIGHT
-																						// NOW
+				if (m.get(j).lastIndexOf('-') > m.get(j).indexOf('-') ) {
+					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|" + "\n"); // THIS ONLY WORKS FOR GUITAR RIGHT NOW
 					// System.out.println(guitarTuning.get(j)+"|"+m.get(j)+"|");
 				}
 			}
 			tabArray.add("\n");
 			// System.out.println("");
 		}
-
+		
 		String savedTabs = "";
 		for (int i = 0; i < tabArray.size(); i++) {
 			savedTabs += tabArray.get(i);
 		}
-
+		
 		return savedTabs;
 	}
 
@@ -175,8 +155,6 @@ public class TabReader {
 	}
 
 	public List<String> readFile(File inputFile) {
-		this.tabArray = new ArrayList<String>();
-		this.rawTabArray = new ArrayList<String>();
 		List<String> tabArray = new ArrayList<String>();
 		Scanner sc = null;
 
@@ -190,24 +168,19 @@ public class TabReader {
 		} finally {
 			sc.close();
 		}
-
+		
 		this.tabArray = tabArray;
 		return filterInput();
 	}
-
+	
 	public List<String> filterInput() {
-		rawTabArray.addAll(tabArray);
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
-
-		for (int i = 0; i < tabArray.size(); i++) {
-			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
-		}
-
+		
 		if (TabReader.instrument.equals("Drumset")) {
 			return tabArray;
 		}
-
+		
 		ArrayList<String> temp = new ArrayList<String>();
 		for (int i = 0; i < tabArray.size(); i++) {
 
@@ -237,7 +210,7 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).indexOf('|') != -1) {
 				String addLine = tabArray.get(i).substring(0, (tabArray.get(i).lastIndexOf('|') + 1));
 				temp.add(addLine);
-				// System.out.println(addLine);
+				System.out.println(addLine);
 			}
 		}
 
@@ -266,7 +239,7 @@ public class TabReader {
 
 		return guitarTuning;
 	}
-
+	
 	public void setFile(File file) {
 		this.file = file;
 	}
@@ -275,7 +248,7 @@ public class TabReader {
 		if (!title.equals("Title") || file == null) {
 			return title;
 		}
-
+		
 		return file.getName().split("\\.")[0];
 	}
 
@@ -291,6 +264,8 @@ public class TabReader {
 				measure.setIndexTotal(currentLine.length());
 				String temp;
 				for (int k = 0; k < currentLine.length(); k++) {
+
+
 
 					if (currentLine.charAt(k) != '-') {
 
@@ -477,58 +452,35 @@ public class TabReader {
 		}
 		return measureElements;
 	}
-
+	
 	public List<Measure> makeDrumNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
 		int amSize = allMeasures.size();
-
+		
 		for (int i = 0; i < amSize; i++) {
 			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			ArrayList<String> scoreInstruments = scoreInstrument.get(i);
 			Measure measure = new Measure(i + 1);
 			int mSize = measuresAsStrings.size();
-
+			
 			for (int j = 0; j < mSize; j++) {
 				String currentLine = measuresAsStrings.get(j);
 				String scoreIns = scoreInstruments.get(j);
 				int lineLength = currentLine.length();
-
+				
 				for (int k = 0; k < lineLength; k++) {
+//					System.out.println(currentLine.charAt(k));
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						if (currentLine.charAt(k) == 'f'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).flam) {
-							measure.getNotes().get(measure.getNotes().size() - 1).flamContinue++;
-							continue;
-						}
-						if (currentLine.charAt(k) == 'd'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).drag) {
-							measure.getNotes().get(measure.getNotes().size() - 1).dragContinue++;
-							continue;
-						}
-
-						else {
-							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
-							measure.addNote(note);
-						}
+						Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
+						measure.addNote(note);
 					}
-
-					if (measure.getIndexTotal() == 0)
-						measure.setIndexTotal(currentLine.length());
 				}
 			}
-
+			
 			measure.sortArray();
-			if (measure.getNotes().isEmpty()) {
-				measureElements.add(measure);
-				continue;
-			}
-			setDuration(measure);
-			noteDuration(measure);
-			noteType(measure);
-			beamType(measure);
 			measureElements.add(measure);
 		}
-
+		
 		return measureElements;
 	}
 
@@ -597,16 +549,16 @@ public class TabReader {
 //	}
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
-
+		
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		ArrayList<String> splitDrum = new ArrayList<String>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int k = 0;
 		String str;
-
-		if (TabReader.instrument.equals("Drumset")) {
-			while (k < length) {
+		
+		if(TabReader.instrument.equals("Drumset")) {
+			while (k<length) {
 				line = tabArray.get(k);
 //				String[] lineArray2 = line.split(line != null ? "HH" : "SD");
 //				 lineArray2 = line.split(line != null ? "HT" : "MT");
@@ -614,17 +566,17 @@ public class TabReader {
 				String[] lineArray2 = line.split("\\|");
 				String Score = lineArray2[0];
 				splitDrum.add(Score);
-				// System.out.println(Score);
+				System.out.println(Score);
+				 for (int j = 1; j < lineArray2.length; j++) {
 
-				for (int j = 1; j < lineArray2.length; j++) {
-					if (measure.containsKey(j)) {
-						measure.put(j, measure.get(j) + lineArray2[j] + "\n");
+						if (measure.containsKey(j)) {
+							measure.put(j, measure.get(j) + lineArray2[j] + "\n");
 
-					} else {
-						measure.put(j, lineArray2[j] + "\n");
+						} else {
+							measure.put(j, lineArray2[j] + "\n");
+						}
 					}
-				}
-				k++;
+				 k++;
 			}
 			for (int j = 1; j <= measure.size(); j++) {
 				String string = measure.get(j);
@@ -634,20 +586,19 @@ public class TabReader {
 				}
 				split.add(splitMeasure);
 				scoreInstrument.add(splitDrum);
+				
 
 			}
 			return split;
 		}
-
+		
+		
+		
 		while (k < length) {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
-<<<<<<< HEAD
-				
-=======
 
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 				for (int j = 1; j < lineArray.length; j++) {
 
 					if (measure.containsKey(j)) {
@@ -669,52 +620,26 @@ public class TabReader {
 			}
 			split.add(splitMeasure);
 		}
+		
 
 		return split;
-	}
-
-	/**
-	 * 
-	 * @param line
-	 * @param start - inclusive
-	 * @param end   - exclusive
-	 * @return number of measures between start and end
-	 */
-	public int countMeasuresInRange(String line, int start, int end) {
-		if (start >= end) {
-			return 0;
-		}
-
-		int measures = 0;
-		for (int i = start; i < end; i++) {
-			if (line.charAt(i) == '|') {
-				measures++;
-			}
-		}
-
-		return measures;
 	}
 
 	public List<ArrayList<String>> compileMeasures() {
 		List<ArrayList<String>> measures = new ArrayList<ArrayList<String>>();
 		final int tabArraySize = tabArray.size();
 		int i = 0;
-		boolean repeat = false;
-		repeats = new ArrayList<Repeat>();
 
 		while (i < tabArraySize) {
 			List<String> tabs = new ArrayList<String>();
-			List<String> rawTabs = new ArrayList<String>();
 			boolean tabsFound = false;
 
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
-				String rawLine = rawTabArray.get(i);
 
 				if (lineHasTabs(line)) {
 					tabsFound = true;
 					tabs.add(line);
-					rawTabs.add(rawLine);
 				}
 
 				if (tabsFound && !lineHasTabs(line)) {
@@ -724,133 +649,11 @@ public class TabReader {
 			}
 
 			if (!tabs.isEmpty()) {
-				int measureNumber = measures.size(); // zero-indexed
-				String secondLine = rawTabs.get(1);
-				int prevRepeatIndex = 0;
-				int repeatIndex = secondLine.indexOf("||");
-
-				while (repeatIndex >= 0) {
-					measureNumber += countMeasuresInRange(secondLine, prevRepeatIndex, repeatIndex);
-					if (repeat) {
-						// end repeat
-						int j = repeatIndex;
-						String firstRawLine = rawTabs.get(0);
-						while (firstRawLine.charAt(j) != '|') {
-							j++;
-						}
-						
-						int numRepeats = Integer.parseInt(firstRawLine.substring(repeatIndex, j));
-						repeats.add(new Repeat(measureNumber-1, true, numRepeats));
-						
-						// removing # of repeats from tabs
-						StringBuilder builder = new StringBuilder(tabs.get(0));
-						builder.delete(repeatIndex - 1, j);
-//						System.out.println(tabs.get(0).charAt(repeatIndex));
-						tabs.set(0, builder.toString());
-//						System.out.println(tabs.get(0));
-//						System.out.println(measureNumber-1);
-					} else {
-						// start repeat
-						repeats.add(new Repeat(measureNumber, false, 0));
-//						System.out.println(measureNumber);
-					}
-
-					repeat = !repeat;
-					prevRepeatIndex = repeatIndex + 2;
-					repeatIndex = secondLine.indexOf("||", repeatIndex + 1);
-					measureNumber++;
-				}
-
 				measures.addAll(splitMeasure(tabs, tabs.size()));
 			}
 		}
 
 		return measures;
-	}
-
-	public void beamType(Measure measure) {
-		List<Note> noteArr = measure.getNotes();
-		List<String> types = new ArrayList<String>();
-		List<Note> beamNotes = new ArrayList<Note>();
-		types.add("eighth");
-		types.add("16th");
-		types.add("32nd");
-		types.add("64th");
-
-		for (int i = 0; i < noteArr.size(); i++) {
-			Note note = noteArr.get(i);
-			if (!note.chord && types.contains(note.type) && !note.drag && !note.flam) {
-
-				if (i == 0) {
-					note.beamStart = true;
-					beamNotes.add(note);
-					continue;
-				}
-				
-				if (i != noteArr.size() - 1) {
-					if (!types.contains(noteArr.get(i + 1).type) || noteArr.get(i + 1).drag
-							|| noteArr.get(i + 1).flam) {
-						note.beamEnd = true;
-						beamNotes.add(note);
-						continue;
-					}
-				}
-
-				if (i > 0) {
-					Note prev;
-					if (!beamNotes.isEmpty()) {
-						prev = beamNotes.get(beamNotes.size() - 1);
-					} else {
-						prev = noteArr.get(i - 1);
-					}
-
-					if (prev.beamEnd) {
-						note.beamStart = true;
-						beamNotes.add(note);
-						continue;
-					}
-
-					if (prev.beamStart) {
-						note.beamContinue1 = true;
-						beamNotes.add(note);
-						continue;
-					}
-					if (prev.beamContinue1) {
-						note.beamContinue2 = true;
-						beamNotes.add(note);
-						continue;
-					}
-					if (prev.beamContinue2) {
-						note.beamEnd = true;
-						beamNotes.add(note);
-						continue;
-					}
-
-					else
-						note.beamStart = true;
-					beamNotes.add(note);
-				}
-			}
-		}
-		assignBeamNumber(beamNotes);
-	}
-
-	public void assignBeamNumber(List<Note> arr) {
-		for (int i = 0; i < arr.size(); i++) {
-			Note note = arr.get(i);
-			if (note.type.equals("eighth")) {
-				note.beam1 = true;
-			}
-			if (note.type.equals("16th")) {
-				note.beam2 = true;
-			}
-			if (note.type.equals("32nd")) {
-				note.beam3 = true;
-			}
-			if (note.type.equals("64th")) {
-				note.beam4 = true;
-			}
-		}
 	}
 
 	public void setDuration(Measure measure) {
@@ -965,10 +768,9 @@ public class TabReader {
 		int lines = countNumStrings(tabArray);
 		return lines == 4 ? "Bass" : "Classical Guitar";
 	}
-
+	
 	/**
 	 * Counts the number of guitars strings
-	 * 
 	 * @param tabArray - the tab input
 	 * @return an integer representing the number of guitar strings
 	 */
@@ -988,22 +790,23 @@ public class TabReader {
 
 		return lines;
 	}
-
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public void setKey(int key) {
-		this.key = key;
+	
+	public void key() {
+	
 	}
-
+	
 	public void setComposer(String composer) {
 		this.composer = composer;
 	}
-
+	
 	/**
-	 * @param timeSignature timeSignature[0] must have beat timeSignature[1] must
-	 *                      have beat time
+	 * @param timeSignature
+	 * timeSignature[0] must have beat
+	 * timeSignature[1] must have beat time
 	 */
 	public void setTimeSignature(int[] timeSignature) {
 		this.beat = timeSignature[0];
@@ -1012,62 +815,93 @@ public class TabReader {
 	
 	
 
-	public void addRepeats() {
-		for (Repeat r : repeats) {
-			measureElements.get(r.getMeasureNumber()).setRepeat(r);
-		}
-	}
-
 	public String toMXL() {
 		StringBuilder builder = new StringBuilder();
 		String drumsetParts = "\t\t<score-instrument id=\"P1-I36\">\n"
-				+ "\t\t\t<instrument-name>Bass Drum 1</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I37\">\n" + "\t\t\t<instrument-name>Bass Drum 2</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I38\">\n"
-				+ "\t\t\t<instrument-name>Side Stick</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I39\">\r\n" + "\t\t\t<instrument-name>Snare</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I42\">\n"
-				+ "\t\t\t<instrument-name>Low Floor Tom</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I43\">\n" + "\t\t\t<instrument-name>Closed Hi-Hat</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I44\">\n"
-				+ "\t\t\t<instrument-name>High Floor Tom</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I45\">\n" + "\t\t\t<instrument-name>Pedal Hi-Hat</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I46\">\n"
-				+ "\t\t\t<instrument-name>Low Tom</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I47\">\n" + "\t\t\t<instrument-name>Open Hi-Hat</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I48\">\n"
-				+ "\t\t\t<instrument-name>Low-Mid Tom</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I49\">\n" + "\t\t\t<instrument-name>Hi-Mid Tom</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I50\">\n"
-				+ "\t\t\t<instrument-name>Crash Cymbal 1</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I51\">\n" + "\t\t\t<instrument-name>High Tom</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I52\">\n"
-				+ "\t\t\t<instrument-name>Ride Cymbal 1</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I53\">\n" + "\t\t\t<instrument-name>Chinese Cymbal</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I54\">\n"
-				+ "\t\t\t<instrument-name>Ride Bell</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I55\">\n" + "\t\t\t<instrument-name>Tambourine</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I56\">\n"
-				+ "\t\t\t<instrument-name>Splash Cymbal</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I57\">\n" + "\t\t\t<instrument-name>Cowbell</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I58\">\n"
-				+ "\t\t\t<instrument-name>Crash Cymbal 2</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I60\">\n" + "\t\t\t<instrument-name>Ride Cymbal 2</instrument-name>\n"
-				+ "\t\t</score-instrument>\n" + "\t\t<score-instrument id=\"P1-I64\">\n"
-				+ "\t\t\t<instrument-name>Open Hi Conga</instrument-name>\n" + "\t\t</score-instrument>\n"
-				+ "\t\t<score-instrument id=\"P1-I65\">\n" + "\t\t\t<instrument-name>Low Conga</instrument-name>\n"
+				+ "\t\t\t<instrument-name>Bass Drum 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I37\">\n"
+				+ "\t\t\t<instrument-name>Bass Drum 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I38\">\n"
+				+ "\t\t\t<instrument-name>Side Stick</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I39\">\r\n"
+				+ "\t\t\t<instrument-name>Snare</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I42\">\n"
+				+ "\t\t\t<instrument-name>Low Floor Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I43\">\n"
+				+ "\t\t\t<instrument-name>Closed Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I44\">\n"
+				+ "\t\t\t<instrument-name>High Floor Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I45\">\n"
+				+ "\t\t\t<instrument-name>Pedal Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I46\">\n"
+				+ "\t\t\t<instrument-name>Low Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I47\">\n"
+				+ "\t\t\t<instrument-name>Open Hi-Hat</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I48\">\n"
+				+ "\t\t\t<instrument-name>Low-Mid Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I49\">\n"
+				+ "\t\t\t<instrument-name>Hi-Mid Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I50\">\n"
+				+ "\t\t\t<instrument-name>Crash Cymbal 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I51\">\n"
+				+ "\t\t\t<instrument-name>High Tom</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I52\">\n"
+				+ "\t\t\t<instrument-name>Ride Cymbal 1</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I53\">\n"
+				+ "\t\t\t<instrument-name>Chinese Cymbal</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I54\">\n"
+				+ "\t\t\t<instrument-name>Ride Bell</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I55\">\n"
+				+ "\t\t\t<instrument-name>Tambourine</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I56\">\n"
+				+ "\t\t\t<instrument-name>Splash Cymbal</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I57\">\n"
+				+ "\t\t\t<instrument-name>Cowbell</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I58\">\n"
+				+ "\t\t\t<instrument-name>Crash Cymbal 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I60\">\n"
+				+ "\t\t\t<instrument-name>Ride Cymbal 2</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I64\">\n"
+				+ "\t\t\t<instrument-name>Open Hi Conga</instrument-name>\n"
+				+ "\t\t</score-instrument>\n"
+				+ "\t\t<score-instrument id=\"P1-I65\">\n"
+				+ "\t\t\t<instrument-name>Low Conga</instrument-name>\n"
 				+ "\t\t</score-instrument>\n";
-
+		
 		String headingMXL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML 3.1 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\">\n"
-				+ "<score-partwise version=\"3.1\">\n" + "<work>\n" + "\t<work-title>" + title + "</work-title>\n"
+				+ "<score-partwise version=\"3.1\">\n" 
+				+ "<work>\n" 
+				+ "\t<work-title>" + title + "</work-title>\n"
 				+ "</work>\n"
-				+ (composer.equals("") ? ""
-						: "<identification>\n\t<creator type=\"composer\">By: " + composer
-								+ "</creator>\n</identification>\n")
-				+ "<part-list>\n" + "\t<score-part id=\"P1\">\n" + "\t\t<part-name>" + TabReader.instrument
-				+ "</part-name>\n" + (TabReader.instrument.equals("Drumset") ? drumsetParts : "") + "\t</score-part>\n"
-				+ "</part-list>\n" + "<part id=\"P1\">\n";
+				+ (composer.equals("") ? "" : "<identification>\n\t<creator type=\"composer\">" + composer + "</creator>\n</identification>\n")
+				+ "<part-list>\n" + "\t<score-part id=\"P1\">\n"
+				+ "\t\t<part-name>" + TabReader.instrument + "</part-name>\n"
+				+ (TabReader.instrument.equals("Drumset") ? drumsetParts : "")
+				+ "\t</score-part>\n" + "</part-list>\n"
+				+ "<part id=\"P1\">\n";
 		builder.append(headingMXL);
 
 		for (Measure m : getMeasures()) {
