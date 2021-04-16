@@ -227,14 +227,14 @@ public class TabReader {
 
 	public List<String> filterInput() {
 		rawTabArray.addAll(tabArray);
-		numStrings = countNumStrings(tabArray);
-		TabReader.instrument = getInstrument();
 
 		for (int i = 0; i < tabArray.size(); i++) {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
-			tabArray.set(i, tabArray.get(i).replaceAll("*", "-"));
+			tabArray.set(i, tabArray.get(i).replaceAll("\\*", "-"));
 		}
-
+		
+		numStrings = countNumStrings(tabArray);
+		TabReader.instrument = getInstrument();
 		if (TabReader.instrument.equals("Drumset")) {
 			return tabArray;
 		}
