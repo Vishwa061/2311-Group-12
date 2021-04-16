@@ -2,8 +2,6 @@ package TAB2MXL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,15 +23,18 @@ public class TabReader {
 	private List<Character> drumsetTechniques;
 	private int key;
 	private String composer;
-	private int beat;
-	private int beatTime;
+	private int beats;
+	private int beatType;
 	private List<Repeat> repeats;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		// reader.setInput(new File("src/test/resources/LastCharTest.txt"));
+		// reader.setInput(new File("src/test/resources/ChopSuey.txt"));
+		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
@@ -47,18 +48,17 @@ public class TabReader {
 
 //		System.out.println(reader.scoreInstrument);
 //		System.out.println(reader.toMXL());
-		
 	}
 
 	public TabReader() {
 		init();
 		title = "Title";
 		composer = "";
-		beat = 4;
-		beatTime = 4;
+		beats = 4;
+		beatType = 4;
 		key = 0;
 	}
-	
+
 	private void init() {
 		rawTabArray = new ArrayList<String>();
 		tabArray = new ArrayList<String>();
@@ -167,6 +167,36 @@ public class TabReader {
 	 * @return true iff the line contains 2 vertical bars and 2 dashes
 	 */
 	public boolean lineHasTabs(String line) {
+		if (line.indexOf('-') == -1) {
+			boolean containsTechniques = true;
+			char[] lineArr = line.toCharArray();
+			int start = line.indexOf('|') + 1;
+			int end = line.lastIndexOf('|');
+			
+			for (int i = start; i < end; i++) {
+				
+				if (Character.isDigit(lineArr[i]))
+					continue;
+				
+				if (this.getInstrument().equals("Drumset") && !drumsetTechniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+				
+				if (this.getInstrument().equals("Classical Guitar") && !techniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+				
+				if (this.getInstrument().equals("Bass") && !techniques.contains(lineArr[i])) {
+					containsTechniques = false;
+					break;
+				}
+			}
+			
+			return line.lastIndexOf('|') > line.indexOf('|') && containsTechniques;
+		}
+
 		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
 	}
 
@@ -197,13 +227,14 @@ public class TabReader {
 
 	public List<String> filterInput() {
 		rawTabArray.addAll(tabArray);
-		numStrings = countNumStrings(tabArray);
-		TabReader.instrument = getInstrument();
 
 		for (int i = 0; i < tabArray.size(); i++) {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
+			tabArray.set(i, tabArray.get(i).replaceAll("\\*", "-"));
 		}
-
+		
+		numStrings = countNumStrings(tabArray);
+		TabReader.instrument = getInstrument();
 		if (TabReader.instrument.equals("Drumset")) {
 			return tabArray;
 		}
@@ -293,17 +324,16 @@ public class TabReader {
 				for (int k = 0; k < currentLine.length(); k++) {
 
 					if (currentLine.charAt(k) != '-') {
-
 						if (k == (currentLine.length() - 1)) {
 							if (techniques.contains(currentLine.charAt(k)))
 								continue;
-							temp = currentLine.substring(k, k + 1);
+							temp = currentLine.substring(k);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 							measure.addNote(note);
 							noteCounter++;
 
-							if (measure.size() >= 1) {
+							if (measure.size() > 1) {
 								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
 									note.slurStop = true;
 									if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
@@ -380,21 +410,6 @@ public class TabReader {
 								measure.getNote(noteCounter - 1).release = true;
 							}
 
-							if (currentLine.charAt(k) == 'g') {
-								if (Character.isDigit(currentLine.charAt(k + 2))) {
-									temp = currentLine.substring(k + 1, k + 3);
-									k = k + 2;
-								} else {
-									temp = currentLine.substring(k + 1, k + 2);
-									k++;
-								}
-								int fret = Integer.valueOf(temp);
-								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
-								note.grace = true;
-								measure.addNote(note);
-								noteCounter++;
-								continue;
-							}
 							continue;
 						}
 
@@ -495,21 +510,10 @@ public class TabReader {
 
 				for (int k = 0; k < lineLength; k++) {
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
-						if (currentLine.charAt(k) == 'f'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).flam) {
-							measure.getNotes().get(measure.getNotes().size() - 1).flamContinue++;
-							continue;
-						}
-						if (currentLine.charAt(k) == 'd'
-								&& measure.getNotes().get(measure.getNotes().size() - 1).drag) {
-							measure.getNotes().get(measure.getNotes().size() - 1).dragContinue++;
-							continue;
-						}
 
-						else {
-							Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
-							measure.addNote(note);
-						}
+						Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
+						measure.addNote(note);
+
 					}
 
 					if (measure.getIndexTotal() == 0)
@@ -532,78 +536,12 @@ public class TabReader {
 		return measureElements;
 	}
 
-	public ArrayList<Integer> countBars() {
-		ArrayList<Integer> countArray = new ArrayList<>();
-		for (int i = 0; i < tabArray.size(); i++) {
-			if (tabArray.get(i).contains("-")) {
-				ArrayList<Integer> indices = new ArrayList<Integer>();
-				int index = 0;
-				while ((index = tabArray.get(i).indexOf('|', index + 1)) > 0) {
-					indices.add(index);
-				}
-				for (int j = 0; j < indices.size() - 1; j++) {
-					String lineBefore = "";
-					lineBefore = tabArray.get(i - 1);
-					int lastIndex = indices.get(j + 1) > lineBefore.lastIndexOf('|') ? lineBefore.lastIndexOf('|')
-							: indices.get(j + 1);
-					lineBefore = lineBefore.substring(indices.get(j), lastIndex + 1);
-					int count = 0;
-					for (String s : lineBefore.split("\\s+")) {
-						if (s.equals("|")) {
-							count++;
-						}
-					}
-					countArray.add(count);
-				}
-				break;
-			}
-		}
-		return countArray;
-	}
-	
-	//do not remove still working on it - sara
-//	public void errorMeasure(String filepath) throws IOException{
-//		String lineError = "";
-//		try {
-//		      if(TabReader.instrument.equals("Drumset")) {
-//		    	  
-//		    	  for(int i = 0; i < tabArray.size();i++) {
-//		    		  if(tabArray.get(i) != null) {
-//		    			  if(lineError.charAt(i)==',' || lineError.charAt(i)=='.' || lineError.charAt(i)=='/' ||lineError.charAt(i)==';' ||lineError.charAt(i)=='"'|| lineError.charAt(i)=='['||lineError.charAt(i)==']'||lineError.charAt(i)=='+'||lineError.charAt(i)=='-' ) {
-//		    				  System.out.println("Error in line.");//+ lineError.get(i));
-//		    			  }
-//		    			  else if (lineError.charAt(i)=='!' || lineError.charAt(i)=='@' || lineError.charAt(i)=='#' ||lineError.charAt(i)=='$' ||lineError.charAt(i)=='%'|| lineError.charAt(i)=='^'||lineError.charAt(i)=='&'||lineError.charAt(i)=='*'||lineError.charAt(i)=='(' ) {
-//		    				  System.out.println("Error in line.");//+ lineError.get(i));
-//		    			  }
-//		    			  else if(lineError.charAt(i)==')' || lineError.charAt(i)=='=' || lineError.charAt(i)=='_' ||lineError.charAt(i)=='{' ||lineError.charAt(i)=='}'|| lineError.charAt(i)==':'||lineError.charAt(i)=='?'||lineError.charAt(i)=='>'||lineError.charAt(i)=='<' ) {
-//		    				  System.out.println("Error in line.");//+ lineError.get(i));
-//		    			  }
-////		    		  lineError=filepath[i];
-////		    		  String fileName = System.in.lineError.GetFileName(path);
-////		                String fileDirectory = System.in.Path.GetDirectoryName(path);
-//		    		  
-//		    	  }
-//		      }
-//		      
-//		    }
-//		}
-//		catch (Exception e) {
-//		      e.printStackTrace();
-//		    } 
-//		finally {
-//		      System.out.println("Please fix the error.");
-//		    }
-//		
-//	}
-
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
-
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		ArrayList<String> splitDrum = new ArrayList<String>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int k = 0;
-		String str;
 
 		if (TabReader.instrument.equals("Drumset")) {
 			while (k < length) {
@@ -706,7 +644,6 @@ public class TabReader {
 			while (i < tabArraySize) {
 				String line = tabArray.get(i);
 				String rawLine = rawTabArray.get(i);
-
 				if (lineHasTabs(line)) {
 					tabsFound = true;
 					tabs.add(line);
@@ -734,10 +671,10 @@ public class TabReader {
 						while (firstRawLine.charAt(j) != '|') {
 							j++;
 						}
-						
+
 						int numRepeats = Integer.parseInt(firstRawLine.substring(repeatIndex, j));
-						repeats.add(new Repeat(measureNumber-1, true, numRepeats));
-						
+						repeats.add(new Repeat(measureNumber - 1, true, numRepeats));
+
 						// removing # of repeats from tabs
 						StringBuilder builder = new StringBuilder(tabs.get(0));
 						builder.delete(repeatIndex - 1, j);
@@ -782,7 +719,7 @@ public class TabReader {
 					beamNotes.add(note);
 					continue;
 				}
-				
+
 				if (i != noteArr.size() - 1) {
 					if (!types.contains(noteArr.get(i + 1).type) || noteArr.get(i + 1).drag
 							|| noteArr.get(i + 1).flam) {
@@ -850,18 +787,30 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
-
+		
+		double eachCharVal = 0;
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
 		int totalChar = indexTotal - firstIndex;
-		int eachBeatVal = totalChar / 4;
+		int eachBeatVal = totalChar / beats;
 		if (eachBeatVal < 1)
 			eachBeatVal = 1;
-		double eachCharVal = 8 / (double) eachBeatVal;
+		
+		
+		if (beatType == 1)
+			eachCharVal = 32 / (double) eachBeatVal;
+		if (beatType == 2)
+			eachCharVal = 16 / (double) eachBeatVal;
+		if (beatType == 4)
+			eachCharVal = 8 / (double) eachBeatVal;
+		if (beatType == 8)
+			eachCharVal = 4 / (double) eachBeatVal;
+		if (beatType == 16)
+			eachCharVal = 2 / (double) eachBeatVal;
 
-		if (eachCharVal < 1) {
+		if (eachCharVal < 1) 
 			eachCharVal = 1;
-		}
+		
 		measure.durationVal = eachCharVal;
 	}
 
@@ -947,15 +896,10 @@ public class TabReader {
 	 * @return the instrument name
 	 */
 	public String getInstrument() {
-		boolean isDrums = true;
 		for (String t : getTuning()) {
-			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
-				isDrums = false;
-				break;
+			if (!Pitch.ALL_NOTES_MAP.containsKey(t)) {
+				return "Drumset";
 			}
-		}
-		if (isDrums) {
-			return "Drumset";
 		}
 
 		int lines = countNumStrings(tabArray);
@@ -1002,11 +946,9 @@ public class TabReader {
 	 *                      have beat time
 	 */
 	public void setTimeSignature(int[] timeSignature) {
-		this.beat = timeSignature[0];
-		this.beatTime = timeSignature[1];
+		this.beats = timeSignature[0];
+		this.beatType = timeSignature[1];
 	}
-	
-	
 
 	public void addRepeats() {
 		for (Repeat r : repeats) {

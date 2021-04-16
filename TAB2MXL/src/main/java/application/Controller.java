@@ -170,11 +170,6 @@ public class Controller {
 
 	@FXML
 	void ConvertClicked() {
-
-	//	if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-			TabReader reader = new TabReader();
-			reader.setInput(file);
-
 		outputBox.setDisable(false);
 		save.setDisable(false);
 		//step4Label.setVisible(true);
@@ -182,18 +177,18 @@ public class Controller {
 //			System.out.println(inputBox.getText());
 			reader.setInput(inputBox.getText());
 			reader.convertTabs();
-
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
-			save.setVisible(true);}
 
-	//	}
-	//	else  {
-	//		FileChooser fileChooser = new FileChooser();
-	//		fileChooser.setTitle("Save");
-	//		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-	//		fileChooser.getExtensionFilters().add(extFilter);
-	//	}
+			save.setVisible(true);
+		}
+		else  {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save");
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
+			fileChooser.getExtensionFilters().add(extFilter);
+		}
+
 
 	}
 
@@ -325,8 +320,7 @@ public class Controller {
 			outputBox.clear();
 			inputBox.clear();
 			inputBox.setText(readFile(file));
-			checkTrue(file);
-			//step3Label.setVisible(true);
+
 			if (checkTrue(file)) {
 				reader = new TabReader();
 				reader.setFile(file);
@@ -347,6 +341,7 @@ public class Controller {
 			UploadFileLabel.setText("File Uploaded");
 
 			if (count == 0) {	
+				displayErrorPage();
 				showOtherButtons();
 				count++;
 			}
@@ -363,7 +358,6 @@ public class Controller {
 		}
 		return false;
 	}
-
 
 	private void displayErrorPage(){
 		Parent root;
@@ -407,42 +401,78 @@ public class Controller {
 	}
 
 
-	
+
+	@FXML 
+	void startClick() {
+		timeSigButton.setVisible(false);
+		keyButton.setVisible(false);
+		titleButton.setVisible(false);
+		composerButton.setVisible(false);
+		convert.setVisible(false);
+		save.setVisible(false);
+		featureButton.setVisible(false);
+		UploadFileLabel.setText("No File Uploaded");
+		inputBox.clear();
+		inputBox.setDisable(false);
+		outputBox.clear();
+		outputBox.setDisable(true);
+		select.setDisable(false);
+		//step2Label.setVisible(true); 
+		//step3Label.setVisible(false);  
+		//step4Label.setVisible(false); 
+	}
+
+
 	//	@FXML
 	public  void initialize() {
 		assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
-				
+		if (inputBox != null) {
+			inputBox.setDisable(true);
+		}		
 
 		assert outputBox != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
-		
+		if (outputBox != null) {
+			outputBox.setDisable(true);
+		}	
+
+		if (select != null) { 
+			select.setDisable(true);
+		}	
 		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
 		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
-		
+		if (convert != null) { 
+			convert.setDisable(true);
+		}
 
 
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
-		
+		if (save != null) { 
+			save.setDisable(true);
+		}
 
 		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 
 		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		
+		if (timeSigButton != null) {
+			timeSigButton.setDisable(true);
+		}
 
 		assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-			
+		if (keyButton != null) {
+			keyButton.setDisable(true);
+		}	
 
 		assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		
+		if (titleButton != null) {
+			titleButton.setDisable(true);
+		}
 		assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		
+		if (composerButton != null) {
+			composerButton.setDisable(true);
+		}
 
 		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-
-		
-		
-		
-		
 
 		if (featureButton != null) {
 			featureButton.setDisable(true);
@@ -563,8 +593,8 @@ public class Controller {
 		timeSig[1] = 4;
 		
 		try {
-			beat = Integer.parseInt(beatOption.getText());
-			beatTime = Integer.parseInt(beatTimeOption.getText());
+			timeSig[0] = Integer.parseInt(beatOption.getText());
+			timeSig[1] = Integer.parseInt(beatTimeOption.getText());
 		} catch(Exception e) {}
 		
 		reader.setTimeSignature(timeSig);
@@ -1080,7 +1110,7 @@ public class Controller {
 
 	@FXML
 	private void showFeature() {
-		/*timeSigButton.setDisable(false);
+		timeSigButton.setDisable(false);
 		timeSigButton.setVisible(true);
 		keyButton.setDisable(false);
 		keyButton.setVisible(true);
@@ -1089,8 +1119,6 @@ public class Controller {
 		composerButton.setDisable(false);
 		composerButton.setVisible(true);
 
-		instrumentOption.setDisable(false);
-		instrumentOption.setVisible(true); */
 
 	}
 

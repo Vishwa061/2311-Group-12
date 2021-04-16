@@ -1,7 +1,9 @@
 package TAB2MXL;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +58,7 @@ public class TestTabReader {
 		assertEquals(expected, actual);
 	}
 
+
 	//	@Test
 	//	void testSplitMeasureDrum() {
 	//		TabReader reader = new TabReader();
@@ -82,6 +85,35 @@ public class TestTabReader {
 	//		assertEquals(expected, actual);
 	//	}
 	//	
+
+
+	// @Test
+	// void testSplitMeasureDrum() {
+	// TabReader reader = new TabReader();
+	// List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
+	// ArrayList<String> expMeasure1 = new ArrayList<String>();
+	// expMeasure1.add("CC|x---------------|");
+	// expMeasure1.add("HH|--x-x-x-x-x-x-x-|");
+	// expMeasure1.add("SD|----o-------o---|");
+	// expMeasure1.add("HT|----------------|");
+	// expMeasure1.add("MT|----------------|");
+	// expMeasure1.add("BD|o-------o-------|");
+	// expected.add(expMeasure1);
+	//// ArrayList<String> expMeasure2 = new ArrayList<String>();
+	//// expMeasure2.add("-------------------------");
+	//// expMeasure2.add("-2-----------------------");
+	//// expMeasure2.add("-2-----------------------");
+	//// expMeasure2.add("-2-----------------------");
+	//// expMeasure2.add("-0-----------------------");
+	//// expMeasure2.add("-------------------------");
+	//// expected.add(expMeasure2);
+	//
+	// List<String> tabArray = reader.readFile(new File(PATH + "SplitDrum.txt"));
+	// List<ArrayList<String>> actual = reader.splitMeasure(tabArray,
+	// tabArray.size());
+	// assertEquals(expected, actual);
+	// }
+	//
 
 
 //	@Test
@@ -198,4 +230,143 @@ public class TestTabReader {
 		reader.setInput(new File(PATH + "SplitDrum.txt"));
 		assertEquals("Drumset", reader.getInstrument());
 	}
+
+	@Test
+	void testLastCharacter() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/LastCharTest.txt"));
+		test.convertTabs();
+		test.makeNotes();
+
+		Measure m = test.getMeasures().get(0);
+
+		int measureLength = m.getIndexTotal();
+		int noteCharIndex = m.getNotes().get(m.size() - 1).charIndex;
+
+		assertTrue(measureLength - 1 == noteCharIndex);
+
+	}
+
+	@Test
+	void testLastCharacterTechnique() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/LastCharTechnique.txt"));
+		test.convertTabs();
+		test.makeNotes();
+		boolean[] actuals = new boolean[5];
+		boolean[] expecteds = new boolean[5];
+		Arrays.fill(expecteds, true);
+
+		for (int i = 0; i < test.getMeasures().size(); i = i + 2) {
+			Measure m = test.getMeasures().get(i);
+			Note note = m.getNotes().get(m.size() - 1);
+			boolean techStart = false;
+			if (note.release || note.pullStart || note.hammerStart || note.slideStart || note.bend)
+				techStart = true;
+			actuals[i / 2] = techStart;
+		}
+
+		assertArrayEquals(expecteds, actuals);
+
+	}
+
+	@Test
+	void testguitarTechniques() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/guitarTechniques.txt"));
+		test.convertTabs();
+		test.makeNotes();
+		boolean[] actuals = new boolean[8];
+		boolean[] expecteds = new boolean[8];
+		Arrays.fill(expecteds, true);
+		int i = 0;
+		for (Measure m : test.getMeasures()) {
+			m.sortArray();
+			Note note1 = m.getNotes().get(0);
+			Note note2 = m.getNotes().get(1);
+			boolean techStart = false;
+			boolean techStop = false;
+			if (note1.release || note1.bend) {
+				actuals[i] = true;
+				i++;
+				continue;
+			}
+			if (note1.hammerStart || note1.slideStart || note1.pullStart)
+				techStart = true;
+			if (note2.pullStop || note2.hammerStop || note2.slideStop)
+				techStop = true;
+
+			actuals[i] = techStart && techStop;
+			i++;
+		}
+
+		assertArrayEquals(expecteds, actuals);
+
+	}
+
+	@Test
+	void testDrumBeams() {
+		TabReader test = new TabReader();
+		test.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+		test.convertTabs();
+		test.makeDrumNotes();
+		boolean[] actuals = new boolean[4];
+		boolean[] expecteds = new boolean[4];
+		Arrays.fill(expecteds, true);
+		int i = 0;
+
+		for (Measure m : test.getMeasures()) {
+			boolean correctBeamNumber = false;
+			if (m.getNotes().get(0).type.equals("quarter") && !(m.getNotes().get(0).beam1))
+				correctBeamNumber = true;
+			else if (m.getNotes().get(0).type.equals("eighth") && m.getNotes().get(0).beam1)
+				correctBeamNumber = true;
+			else if (m.getNotes().get(0).type.equals("16th") && m.getNotes().get(0).beam2)
+				correctBeamNumber = true;
+			else if (m.getNotes().get(0).type.equals("32nd") && m.getNotes().get(0).beam3)
+				correctBeamNumber = true;
+			
+			actuals[i] = correctBeamNumber;
+			i++;
+		}
+
+		assertArrayEquals(expecteds, actuals);
+	}
+	
+	@Test
+	void testDrumGhost() {
+		Note note = new Note("SN", "g", 0);
+		assertTrue(note.ghost);
+	}
+	
+	@Test
+	void testDrumRoll() {
+		Note note = new Note("SN", "b", 0);
+		assertTrue(note.roll);
+	}
+	
+	@Test
+	void testDrumFlam() {
+		Note note = new Note("SN", "f", 0);
+		assertTrue(note.flam);
+	}
+	
+	@Test
+	void testDrumDrag() {
+		Note note = new Note("SN", "d", 0);
+		assertTrue(note.drag);
+	}
+	
+	@Test
+	void testHiHatRoll() {
+		Note note = new Note("HH", "B", 0);
+		assertTrue(note.roll);
+	}
+	
+	@Test
+	void testDrumAccent() {
+		Note note = new Note("SN", "O", 0);
+		assertTrue(note.accent);
+	}
+	
 }
