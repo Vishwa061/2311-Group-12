@@ -29,8 +29,8 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
@@ -559,13 +559,11 @@ public class TabReader {
 	}
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
-
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
 		ArrayList<String> splitDrum = new ArrayList<String>();
 		HashMap<Integer, String> measure = new HashMap<Integer, String>();
 		String line = "";
 		int k = 0;
-		String str;
 
 		if (TabReader.instrument.equals("Drumset")) {
 			while (k < length) {
@@ -909,15 +907,10 @@ public class TabReader {
 	 * @return the instrument name
 	 */
 	public String getInstrument() {
-		boolean isDrums = true;
 		for (String t : getTuning()) {
-			if (Pitch.ALL_NOTES_MAP.containsKey(t)) {
-				isDrums = false;
-				break;
+			if (!Pitch.ALL_NOTES_MAP.containsKey(t)) {
+				return "Drumset";
 			}
-		}
-		if (isDrums) {
-			return "Drumset";
 		}
 
 		int lines = countNumStrings(tabArray);
