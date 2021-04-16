@@ -30,7 +30,9 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		//reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
+
 		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
@@ -290,17 +292,16 @@ public class TabReader {
 				for (int k = 0; k < currentLine.length(); k++) {
 
 					if (currentLine.charAt(k) != '-') {
-
 						if (k == (currentLine.length() - 1)) {
 							if (techniques.contains(currentLine.charAt(k)))
 								continue;
-							temp = currentLine.substring(k, k + 1);
+							temp = currentLine.substring(k);
 							int fret = Integer.valueOf(temp);
 							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
 							measure.addNote(note);
 							noteCounter++;
 
-							if (measure.size() >= 1) {
+							if (measure.size() > 1) {
 								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
 									note.slurStop = true;
 									if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
