@@ -30,22 +30,21 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-//		 reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-//		 reader.setInput(new File("src/test/resources/LastCharTest.txt"));
-//		 reader.setInput(new File("src/test/resources/ChopSuey.txt"));
+		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+//		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
+//		reader.setInput(new File("src/test/resources/ChopSuey.txt"));
 //		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
-		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+//		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-//		 reader.setInput(new File("src/test/resources/BadMeasure.txt"));
-//		 reader.setInput(new File("src/test/resources/examplerepeat.txt"));
-		reader.setInput(new File("src/test/resources/test2.txt"));
+//		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+//		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
+//		reader.setInput(new File("src/test/resources/test2.txt"));
 		reader.convertTabs();
 //		TabError tError = reader.convertTabs();
 //		System.out.println(tError.getMeasure() );
 //		System.out.println(tError.getMeasureNumber());
 		System.out.println(reader.toMXL());
-		
 
 		// System.out.println(reader.scoreInstrument);
 //		for (String s : reader.tabArray) {
@@ -123,10 +122,10 @@ public class TabReader {
 			for(String m : allMeasures.get(errorMeasure)) {
 				m1 += "|" + m + "|\n";
 			}
-			return new TabError(errorMeasure+1,m1);
+			return new TabError(errorMeasure + 1, m1);
 		}
 
-		return new TabError( 0, "");
+		return new TabError(0, "");
 	}
 
 	/**
@@ -225,7 +224,7 @@ public class TabReader {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
 			tabArray.set(i, tabArray.get(i).replaceAll("\\*", "-"));
 		}
-		
+
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
 		if (TabReader.instrument.equals("Drumset")) {
@@ -243,13 +242,6 @@ public class TabReader {
 			if (tabArray.get(i).indexOf('x') != -1) {
 				String replaceLine = tabArray.get(i).replace('x', '0');
 				tabArray.set(i, replaceLine);
-			}
-
-			for (int j = 0; j < tabArray.get(i).length(); j++) {
-				if (tabArray.get(i).charAt(j) != '-' && tabArray.get(i).charAt(j) != '|'
-						&& !(techniques.contains(tabArray.get(i).charAt(j)))
-						&& !(Character.isDigit(tabArray.get(i).charAt(j))))
-					tabArray.get(i).replace(tabArray.get(i).charAt(j), '-');
 			}
 
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
@@ -305,185 +297,190 @@ public class TabReader {
 
 	public List<Measure> makeNotes() {
 		List<Measure> measureElements = new ArrayList<Measure>();
-	
 
-		for (int i = 0; i < allMeasures.size(); i++) {
-			errorMeasure = i;
-			ArrayList<String> measuresAsStrings = allMeasures.get(i);
-			Measure measure = new Measure(i + 1);
-			int noteCounter = 0;
-			for (int j = 0; j < measuresAsStrings.size(); j++) {
-				String currentLine = measuresAsStrings.get(j);
-				measure.setIndexTotal(currentLine.length());
-				String temp;
-				for (int k = 0; k < currentLine.length(); k++) {
+			for (int i = 0; i < allMeasures.size(); i++) {
+				errorMeasure = i;
+				ArrayList<String> measuresAsStrings = allMeasures.get(i);
+				Measure measure = new Measure(i + 1);
+				int noteCounter = 0;
+				for (int j = 0; j < measuresAsStrings.size(); j++) {
+					
+					String currentLine = measuresAsStrings.get(j);
+					measure.setIndexTotal(currentLine.length());
+					String temp;
+					for (int k = 0; k < currentLine.length(); k++) {
+						
+						if (currentLine.charAt(k) == '-' || currentLine.charAt(k) == '|'
+								|| techniques.contains(currentLine.charAt(k))
+								|| Character.isDigit(currentLine.charAt(k))) {
 
-					if (currentLine.charAt(k) != '-') {
-						if (k == (currentLine.length() - 1)) {
-							if (techniques.contains(currentLine.charAt(k)))
+						if (currentLine.charAt(k) != '-') {
+							if (k == (currentLine.length() - 1)) {
+								if (techniques.contains(currentLine.charAt(k)))
+									continue;
+								temp = currentLine.substring(k);
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
+								measure.addNote(note);
+								noteCounter++;
+
+								if (measure.size() > 1) {
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
+										note.slurStop = true;
+										if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
+											note.pullStop = true;
+										if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
+											note.hammerStop = true;
+									}
+
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
+										note.slideStop = true;
+									if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+											|| measure.getNotes().get(measure.getNotes().size() - 2).release)
+										measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
+												- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
+
+								}
 								continue;
-							temp = currentLine.substring(k);
-							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
-							measure.addNote(note);
-							noteCounter++;
+							}
 
-							if (measure.size() > 1) {
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
-									note.slurStop = true;
+							if (techniques.contains(currentLine.charAt(k))) {
+
+								if (currentLine.charAt(k) == 'p') {
+									if (measure.getNotes().isEmpty()) {
+										Measure prevMeasure = measureElements.get(measureElements.size() - 1);
+										Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
+										lastNote.slurStart = true;
+										lastNote.pullStart = true;
+										continue;
+									}
+									measure.getNote(noteCounter - 1).slurStart = true;
+									measure.getNote(noteCounter - 1).pullStart = true;
+								}
+
+								if (currentLine.charAt(k) == 'h') {
+									if (measure.getNotes().isEmpty()) {
+										Measure prevMeasure = measureElements.get(measureElements.size() - 1);
+										Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
+										lastNote.slurStart = true;
+										lastNote.hammerStart = true;
+										continue;
+									}
+									measure.getNote(noteCounter - 1).slurStart = true;
+									measure.getNote(noteCounter - 1).hammerStart = true;
+								}
+
+								if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/'
+										|| currentLine.charAt(k) == '\\') {
+									if (measure.getNotes().isEmpty()) {
+										Measure prevMeasure = measureElements.get(measureElements.size() - 1);
+										Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
+										lastNote.slideStart = true;
+										continue;
+									}
+									measure.getNote(noteCounter - 1).slideStart = true;
+								}
+
+								if (currentLine.charAt(k) == 'b') {
+									if (measure.getNotes().isEmpty()) {
+										Measure prevMeasure = measureElements.get(measureElements.size() - 1);
+										Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
+										lastNote.bend = true;
+										continue;
+									}
+									measure.getNote(noteCounter - 1).bend = true;
+								}
+
+								if (currentLine.charAt(k) == 'r') {
+									if (measure.getNotes().isEmpty()) {
+										Measure prevMeasure = measureElements.get(measureElements.size() - 1);
+										Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
+										lastNote.release = true;
+										continue;
+									}
+									measure.getNote(noteCounter - 1).release = true;
+								}
+
+								continue;
+							}
+
+							if (Character.isDigit(currentLine.charAt(k + 1))) {
+								temp = currentLine.substring(k, k + 2);
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
+								measure.addNote(note);
+								noteCounter++;
+
+								if (measure.size() > 1) {
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
+										note.slurStop = true;
+										if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
+											note.pullStop = true;
+										if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
+											note.hammerStop = true;
+									}
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
+										note.slideStop = true;
+									if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+											|| measure.getNotes().get(measure.getNotes().size() - 2).release)
+										measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
+												- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
+								}
+
+								if (k + 1 == currentLine.length())
+									break;
+
+								k++;
+								continue;
+							}
+
+							if (currentLine.charAt(k + 1) == '-' || techniques.contains(currentLine.charAt(k + 1))) {
+
+								temp = currentLine.substring(k, k + 1);
+
+								int fret = Integer.valueOf(temp);
+								Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
+								measure.addNote(note);
+								noteCounter++;
+
+								if (measure.size() > 1) {
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart)
+										note.slurStop = true;
 									if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
 										note.pullStop = true;
 									if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
 										note.hammerStop = true;
+									if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
+										note.slideStop = true;
+									if (measure.getNotes().get(measure.getNotes().size() - 2).bend
+											|| measure.getNotes().get(measure.getNotes().size() - 2).release)
+										measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
+												- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
+
 								}
-
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
-									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
-										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-
-							}
-							continue;
-						}
-
-						if (techniques.contains(currentLine.charAt(k))) {
-
-							if (currentLine.charAt(k) == 'p') {
-								if (measure.getNotes().isEmpty()) {
-									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
-									Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
-									lastNote.slurStart = true;
-									lastNote.pullStart = true;
-									continue;
-								}
-								measure.getNote(noteCounter - 1).slurStart = true;
-								measure.getNote(noteCounter - 1).pullStart = true;
-							}
-
-							if (currentLine.charAt(k) == 'h') {
-								if (measure.getNotes().isEmpty()) {
-									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
-									Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
-									lastNote.slurStart = true;
-									lastNote.hammerStart = true;
-									continue;
-								}
-								measure.getNote(noteCounter - 1).slurStart = true;
-								measure.getNote(noteCounter - 1).hammerStart = true;
-							}
-
-							if (currentLine.charAt(k) == 's' || currentLine.charAt(k) == '/'
-									|| currentLine.charAt(k) == '\\') {
-								if (measure.getNotes().isEmpty()) {
-									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
-									Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
-									lastNote.slideStart = true;
-									continue;
-								}
-								measure.getNote(noteCounter - 1).slideStart = true;
-							}
-
-							if (currentLine.charAt(k) == 'b') {
-								if (measure.getNotes().isEmpty()) {
-									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
-									Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
-									lastNote.bend = true;
-									continue;
-								}
-								measure.getNote(noteCounter - 1).bend = true;
-							}
-
-							if (currentLine.charAt(k) == 'r') {
-								if (measure.getNotes().isEmpty()) {
-									Measure prevMeasure = measureElements.get(measureElements.size() - 1);
-									Note lastNote = prevMeasure.getNotes().get(prevMeasure.size() - 1);
-									lastNote.release = true;
-									continue;
-								}
-								measure.getNote(noteCounter - 1).release = true;
-							}
-
-							continue;
-						}
-
-						if (Character.isDigit(currentLine.charAt(k + 1))) {
-							temp = currentLine.substring(k, k + 2);
-							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
-							measure.addNote(note);
-							noteCounter++;
-
-							if (measure.size() > 1) {
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart) {
-									note.slurStop = true;
-									if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
-										note.pullStop = true;
-									if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
-										note.hammerStop = true;
-								}
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
-									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
-										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
-							}
-
-							if (k + 1 == currentLine.length())
-								break;
-
-							k++;
-							continue;
-						}
-
-						if (currentLine.charAt(k + 1) == '-' || techniques.contains(currentLine.charAt(k + 1))) {
-
-							temp = currentLine.substring(k, k + 1);
-
-							int fret = Integer.valueOf(temp);
-							Note note = new Note(j + 1, guitarTuning.get(j), fret, k);
-							measure.addNote(note);
-							noteCounter++;
-
-							if (measure.size() > 1) {
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slurStart)
-									note.slurStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).pullStart)
-									note.pullStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).hammerStart)
-									note.hammerStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).slideStart)
-									note.slideStop = true;
-								if (measure.getNotes().get(measure.getNotes().size() - 2).bend
-										|| measure.getNotes().get(measure.getNotes().size() - 2).release)
-									measure.getNotes().get(measure.getNotes().size() - 2).bendAlter = (note.fret
-											- measure.getNotes().get(measure.getNotes().size() - 2).fret) * 4;
 
 							}
 
 						}
 
 					}
-
 				}
-			}
 
-			if (measure.getNotes().isEmpty()) {
+				if (measure.getNotes().isEmpty()) {
+					measureElements.add(measure);
+					continue;
+				}
+
+				noteCounter = 0;
+				measure.sortArray();
+				measure.setGrace();
+				setDuration(measure);
+				noteDuration(measure);
+				noteType(measure);
+
 				measureElements.add(measure);
-				continue;
+
 			}
-
-			noteCounter = 0;
-			measure.sortArray();
-			measure.setGrace();
-			setDuration(measure);
-			noteDuration(measure);
-			noteType(measure);
-
-			measureElements.add(measure);
-
 		}
 		return measureElements;
 	}
@@ -531,8 +528,6 @@ public class TabReader {
 
 		return measureElements;
 	}
-	
-	
 
 	public List<ArrayList<String>> splitMeasure(List<String> tabArray, int length) {
 		List<ArrayList<String>> split = new ArrayList<ArrayList<String>>();
@@ -785,7 +780,7 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
-		
+
 		double eachCharVal = 0;
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
@@ -793,8 +788,7 @@ public class TabReader {
 		int eachBeatVal = totalChar / beats;
 		if (eachBeatVal < 1)
 			eachBeatVal = 1;
-		
-		
+
 		if (beatType == 1)
 			eachCharVal = 32 / (double) eachBeatVal;
 		if (beatType == 2)
@@ -806,9 +800,9 @@ public class TabReader {
 		if (beatType == 16)
 			eachCharVal = 2 / (double) eachBeatVal;
 
-		if (eachCharVal < 1) 
+		if (eachCharVal < 1)
 			eachCharVal = 1;
-		
+
 		measure.durationVal = eachCharVal;
 	}
 
