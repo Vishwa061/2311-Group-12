@@ -585,8 +585,8 @@ public class Controller {
 		timeSig[1] = 4;
 		
 		try {
-			beat = Integer.parseInt(beatOption.getText());
-			beatTime = Integer.parseInt(beatTimeOption.getText());
+			timeSig[0] = Integer.parseInt(beatOption.getText());
+			timeSig[1] = Integer.parseInt(beatTimeOption.getText());
 		} catch(Exception e) {}
 		
 		reader.setTimeSignature(timeSig);
