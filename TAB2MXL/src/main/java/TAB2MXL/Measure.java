@@ -9,11 +9,15 @@ public class Measure {
 	public static Attributes a;
 	private int indexTotal;
 	public double durationVal;
-
+	private Repeat repeat;
 
 	public Measure(int measureNumber) {
 		notes = new ArrayList<Note>();
 		this.measureNumber = measureNumber;
+	}
+	
+	public void setRepeat(Repeat repeat) {
+		this.repeat = repeat;
 	}
 
 	public static void setAttributes(Attributes a) {
@@ -26,6 +30,7 @@ public class Measure {
 
 	@Override
 	public String toString() {
+		
 		String mxl = "<measure number=\"" + measureNumber + "\">\n";
 
 		if (measureNumber == 1) {
@@ -35,8 +40,12 @@ public class Measure {
 		for (Note note : notes) {
 			mxl += note + "\n";
 		}
+		
+		if (repeat != null) {
+			mxl += repeat;
+		}
 
-		mxl += "</measure>";
+			mxl += "</measure>";
 
 		return mxl;
 	}

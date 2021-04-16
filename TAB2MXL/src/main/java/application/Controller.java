@@ -332,7 +332,6 @@ public class Controller {
 	private boolean checkTrue(File file) {
 
 		if(!(file.length() == 0)) {
-			inputBox.setText(readFile(file));
 			showOtherButtons();
 			UploadFileLabel.setText("File Uploaded");
 
@@ -785,14 +784,15 @@ public class Controller {
 
 	@FXML
 	void cancelKey() {
-		cancelKey.getScene().getWindow().hide();;
+		cancelKey.getScene().getWindow().hide();
 
 	}
 
 	@FXML
 	void saveKey() {
+		reader.setKey(keyFifths);
 		setKey(keySelected);
-		saveKey.getScene().getWindow().hide();;
+		saveKey.getScene().getWindow().hide();
 		System.out.println(keySelected);
 	}
 
