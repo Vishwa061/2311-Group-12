@@ -179,6 +179,7 @@ public class Controller {
 			reader.convertTabs();
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
+
 			save.setVisible(true);
 		}
 		else  {
@@ -187,6 +188,7 @@ public class Controller {
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
 			fileChooser.getExtensionFilters().add(extFilter);
 		}
+
 
 	}
 
@@ -240,7 +242,9 @@ public class Controller {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
+
 					if(Files.probeContentType(path).equals("text")) {
+
 						e.acceptTransferModes(TransferMode.COPY);//copy data 
 					}
 
@@ -316,6 +320,7 @@ public class Controller {
 			outputBox.clear();
 			inputBox.clear();
 			inputBox.setText(readFile(file));
+
 			if (checkTrue(file)) {
 				reader = new TabReader();
 				reader.setFile(file);
@@ -396,6 +401,7 @@ public class Controller {
 	}
 
 
+
 	@FXML 
 	void startClick() {
 		timeSigButton.setVisible(false);
@@ -415,6 +421,7 @@ public class Controller {
 		//step3Label.setVisible(false);  
 		//step4Label.setVisible(false); 
 	}
+
 
 	//	@FXML
 	public  void initialize() {
@@ -466,6 +473,7 @@ public class Controller {
 
 		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+
 		if (featureButton != null) {
 			featureButton.setDisable(true);
 		}
@@ -585,8 +593,8 @@ public class Controller {
 		timeSig[1] = 4;
 		
 		try {
-			beat = Integer.parseInt(beatOption.getText());
-			beatTime = Integer.parseInt(beatTimeOption.getText());
+			timeSig[0] = Integer.parseInt(beatOption.getText());
+			timeSig[1] = Integer.parseInt(beatTimeOption.getText());
 		} catch(Exception e) {}
 		
 		reader.setTimeSignature(timeSig);

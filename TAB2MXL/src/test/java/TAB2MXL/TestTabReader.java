@@ -58,6 +58,35 @@ public class TestTabReader {
 		assertEquals(expected, actual);
 	}
 
+
+	//	@Test
+	//	void testSplitMeasureDrum() {
+	//		TabReader reader = new TabReader();
+	//		List<ArrayList<String>> expected = new ArrayList<ArrayList<String>>();
+	//		ArrayList<String> expMeasure1 = new ArrayList<String>();
+	//		expMeasure1.add("CC|x---------------|");
+	//		expMeasure1.add("HH|--x-x-x-x-x-x-x-|");
+	//		expMeasure1.add("SD|----o-------o---|");
+	//		expMeasure1.add("HT|----------------|");
+	//		expMeasure1.add("MT|----------------|");
+	//		expMeasure1.add("BD|o-------o-------|");
+	//		expected.add(expMeasure1);
+	////		ArrayList<String> expMeasure2 = new ArrayList<String>();
+	////		expMeasure2.add("-------------------------");
+	////		expMeasure2.add("-2-----------------------");
+	////		expMeasure2.add("-2-----------------------");
+	////		expMeasure2.add("-2-----------------------");
+	////		expMeasure2.add("-0-----------------------");
+	////		expMeasure2.add("-------------------------");
+	////		expected.add(expMeasure2);
+	//		
+	//		List<String> tabArray = reader.readFile(new File(PATH + "SplitDrum.txt"));
+	//		List<ArrayList<String>> actual = reader.splitMeasure(tabArray, tabArray.size());
+	//		assertEquals(expected, actual);
+	//	}
+	//	
+
+
 	// @Test
 	// void testSplitMeasureDrum() {
 	// TabReader reader = new TabReader();
@@ -86,6 +115,7 @@ public class TestTabReader {
 	// }
 	//
 
+
 //	@Test
 //	void testCountBars() {
 //		ArrayList<Integer> expected = new ArrayList<Integer>();
@@ -98,6 +128,7 @@ public class TestTabReader {
 //
 //		assertEquals(expected, reader.countBars());
 //	}
+
 
 //	@Test
 //	void testCompileMeasures() {
