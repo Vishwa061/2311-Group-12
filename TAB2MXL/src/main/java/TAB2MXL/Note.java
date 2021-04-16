@@ -26,12 +26,6 @@ public class Note implements Comparable<Note> {
 	public int bendAlter;
 	public boolean grace;
 
-	// will never have their own lines on tab, but have seperate instrument IDs
-	public boolean tambourine;
-	public boolean china;
-	public boolean splash;
-	public boolean bell;
-
 	private static final Map<String, String> DRUMSET_NOTEHEADS = drumsetNotehead();
 
 	// ways to play SD
@@ -41,9 +35,7 @@ public class Note implements Comparable<Note> {
 
 	// drum grace notes
 	public boolean flam;
-	public int flamContinue = 0;
 	public boolean drag;
-	public int dragContinue = 0;
 
 	// beams
 	public boolean beamStart;
@@ -210,32 +202,12 @@ public class Note implements Comparable<Note> {
 							+ "16th" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<beam number=\"1\">end</beam>\n"
 							+ "\t\t<beam number=\"2\">end</beam>\n" + "\t</note>\n";
 
-					if (dragContinue != 0) {
-						for (int i = 0; i < dragContinue; i++) {
-							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
-									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
-									+ "\t\t<beam number=\"1\">begin</beam>\n" + "\t\t<beam number=\"2\">begin</beam>\n"
-									+ "\t\t<notations>\n" + "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n"
-									+ "\t</note>\n";
-
-							toMXL += "\t<note>\n" + "\t\t<grace/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
-									+ "\t\t<type>" + "16th" + "</type>\n" + "\t\t<stem>up</stem>\n"
-									+ "\t\t<beam number=\"1\">end</beam>\n" + "\t\t<beam number=\"2\">end</beam>\n"
-									+ "\t</note>\n";
-						}
-					}
 				}
 
 				if (flam) {
 					toMXL += "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n" + "\t\t<type>"
 							+ "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t\t<notations>\n"
 							+ "\t\t\t<slur type=\"start\"/>\n" + "\t\t</notations>\n" + "\t</note>\n";
-					if (flamContinue != 0) {
-						for (int i = 0; i < flamContinue; i++) {
-							toMXL += "\t<note>\n" + "\t\t<grace slash=\"yes\"/>\n" + this.unpitch + "\t\t<voice>1</voice>\n"
-									+ "\t\t<type>" + "eighth" + "</type>\n" + "\t\t<stem>up</stem>\n" + "\t</note>\n";
-						}
-					}
 				}
 
 				toMXL += "\t<note>\n";
