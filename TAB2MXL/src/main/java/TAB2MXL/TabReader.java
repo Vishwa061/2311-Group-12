@@ -29,11 +29,11 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
 		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 		// reader.setInput(new File("src/test/resources/LastCharTest.txt"));
 		// reader.setInput(new File("src/test/resources/ChopSuey.txt"));
-		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+		// reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
 		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
@@ -172,28 +172,28 @@ public class TabReader {
 			char[] lineArr = line.toCharArray();
 			int start = line.indexOf('|') + 1;
 			int end = line.lastIndexOf('|');
-			
+
 			for (int i = start; i < end; i++) {
-				
+
 				if (Character.isDigit(lineArr[i]))
 					continue;
-				
+
 				if (this.getInstrument().equals("Drumset") && !drumsetTechniques.contains(lineArr[i])) {
 					containsTechniques = false;
 					break;
 				}
-				
+
 				if (this.getInstrument().equals("Classical Guitar") && !techniques.contains(lineArr[i])) {
 					containsTechniques = false;
 					break;
 				}
-				
+
 				if (this.getInstrument().equals("Bass") && !techniques.contains(lineArr[i])) {
 					containsTechniques = false;
 					break;
 				}
 			}
-			
+
 			return line.lastIndexOf('|') > line.indexOf('|') && containsTechniques;
 		}
 
@@ -232,7 +232,7 @@ public class TabReader {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
 			tabArray.set(i, tabArray.get(i).replaceAll("\\*", "-"));
 		}
-		
+
 		numStrings = countNumStrings(tabArray);
 		TabReader.instrument = getInstrument();
 		if (TabReader.instrument.equals("Drumset")) {
@@ -253,10 +253,14 @@ public class TabReader {
 			}
 
 			for (int j = 0; j < tabArray.get(i).length(); j++) {
+
 				if (tabArray.get(i).charAt(j) != '-' && tabArray.get(i).charAt(j) != '|'
 						&& !(techniques.contains(tabArray.get(i).charAt(j)))
-						&& !(Character.isDigit(tabArray.get(i).charAt(j))))
-					tabArray.get(i).replace(tabArray.get(i).charAt(j), '-');
+						&& !(Character.isDigit(tabArray.get(i).charAt(j)))) {
+					String replaceLine = tabArray.get(i).replace(tabArray.get(i).charAt(j), '-');
+					tabArray.set(i, replaceLine);
+				}
+
 			}
 
 			if (tabArray.get(i).indexOf('-') != -1 && tabArray.get(i).charAt(tabArray.get(i).length() - 1) == '|'
@@ -787,7 +791,7 @@ public class TabReader {
 	}
 
 	public void setDuration(Measure measure) {
-		
+
 		double eachCharVal = 0;
 		int indexTotal = measure.getIndexTotal();
 		int firstIndex = measure.getNotes().get(0).charIndex;
@@ -795,8 +799,7 @@ public class TabReader {
 		int eachBeatVal = totalChar / beats;
 		if (eachBeatVal < 1)
 			eachBeatVal = 1;
-		
-		
+
 		if (beatType == 1)
 			eachCharVal = 32 / (double) eachBeatVal;
 		if (beatType == 2)
@@ -808,9 +811,9 @@ public class TabReader {
 		if (beatType == 16)
 			eachCharVal = 2 / (double) eachBeatVal;
 
-		if (eachCharVal < 1) 
+		if (eachCharVal < 1)
 			eachCharVal = 1;
-		
+
 		measure.durationVal = eachCharVal;
 	}
 
