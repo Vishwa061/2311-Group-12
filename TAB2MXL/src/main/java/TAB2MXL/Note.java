@@ -93,7 +93,7 @@ public class Note implements Comparable<Note> {
 	public Note(String scoreInstrument, String drumsetNote, int charIndex) {
 		this.unpitch = new Unpitch(scoreInstrument, drumsetNote);
 		this.charIndex = charIndex;
-		String instrumentNote = scoreInstrument.concat(drumsetNote);
+		String instrumentNote = scoreInstrument.concat(drumsetNote).replaceAll("\\s","");
 		if (drumsetNote.equals("x") || drumsetNote.equals("X") || drumsetNote.equals("o") || drumsetNote.equals("@")
 				|| drumsetNote.equals("#"))
 			this.notehead = DRUMSET_NOTEHEADS.get(instrumentNote);
@@ -111,8 +111,10 @@ public class Note implements Comparable<Note> {
 			accent = true;
 		}
 
-		if (note.equals("O"))
+		if (note.equals("O") && (instrument.equals("S") || instrument.equals("SN") || instrument.equals("SD"))) {
+			roll = true;
 			accent = true;
+		}
 
 		if (note.equals("f"))
 			flam = true;
@@ -170,7 +172,11 @@ public class Note implements Comparable<Note> {
 		drumNoteheads.put("Cx", "x");
 		drumNoteheads.put("CRx", "x");
 		drumNoteheads.put("CCx", "x");
-
+		
+		drumNoteheads.put("CX", "x");
+		drumNoteheads.put("CRX", "x");
+		drumNoteheads.put("CCX", "x");
+		
 		drumNoteheads.put("C#", "circle-x");
 		drumNoteheads.put("CR#", "circle-x");
 		drumNoteheads.put("CC#", "circle-x");
@@ -251,7 +257,7 @@ public class Note implements Comparable<Note> {
 				if (drag || flam)
 					toMXL += "\t\t\t<slur type=\"stop\"/>\n";
 				if (accent)
-					toMXL += "\t\t\t<articulations>\n" + "\t\t\t\t<accent/>" + "\t\t\t</articulations>";
+					toMXL += "\t\t\t<articulations>\n" + "\t\t\t\t<accent/>\n" + "\t\t\t</articulations>\n";
 				if (roll)
 					toMXL += "\t\t\t<ornaments>\n" + "\t\t\t\t<tremolo type=\"single\">3</tremolo>\n"
 							+ "\t\t\t</ornaments>\n";

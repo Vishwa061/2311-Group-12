@@ -30,8 +30,9 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-		//reader.setInput(new File("src/test/resources/SplitDrum.txt"));
+		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+		// reader.setInput(new File("src/test/resources/ChoySuey.txt"));
+		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
 		// reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
@@ -719,59 +720,72 @@ public class TabReader {
 		types.add("16th");
 		types.add("32nd");
 		types.add("64th");
-
 		for (int i = 0; i < noteArr.size(); i++) {
-			Note note = noteArr.get(i);
-			if (!note.chord && types.contains(note.type) && !note.drag && !note.flam) {
+			if (!noteArr.get(i).chord && types.contains(noteArr.get(i).type)) {
+				beamNotes.add(noteArr.get(i));
+			}
+		}
 
-				if (i == 0) {
-					note.beamStart = true;
-					beamNotes.add(note);
-					continue;
-				}
-				
-				if (i != noteArr.size() - 1) {
-					if (!types.contains(noteArr.get(i + 1).type) || noteArr.get(i + 1).drag
-							|| noteArr.get(i + 1).flam) {
-						note.beamEnd = true;
-						beamNotes.add(note);
+		for (int i = 0; i < beamNotes.size(); i++) {
+			Note note = beamNotes.get(i);
+			if (note.drag || note.flam) {
+				if (i != beamNotes.size() - 1) {
+						beamNotes.get(i-1).beamStart = false;
+						beamNotes.get(i-1).beamContinue1 = false;
+						beamNotes.get(i-1).beamContinue2 = false;
+						beamNotes.get(i-1).beamEnd = true;
 						continue;
 					}
+				}
+		
+			if (!note.drag && !note.flam && !note.roll) {
+
+				if (i != beamNotes.size() - 1) {
+					if (i == 0 && !beamNotes.get(i + 1).flam && !beamNotes.get(i + 1).drag) {
+						note.beamStart = true;
+						continue;
+					}
+
+					if (!beamNotes.get(i - 1).beamStart && !beamNotes.get(i - 1).beamContinue1
+							&& !beamNotes.get(i - 1).beamContinue2
+							&& (beamNotes.get(i + 1).flam || beamNotes.get(i + 1).drag)) {
+						continue;
+					}
+					if (beamNotes.get(i - 1).beamStart || beamNotes.get(i - 1).beamContinue1
+							|| beamNotes.get(i - 1).beamContinue2
+									&& (beamNotes.get(i + 1).drag || beamNotes.get(i + 1).flam)) {
+						note.beamEnd = true;
+						continue;
+					}
+
 				}
 
 				if (i > 0) {
 					Note prev;
 					if (!beamNotes.isEmpty()) {
-						prev = beamNotes.get(beamNotes.size() - 1);
-					} else {
-						prev = noteArr.get(i - 1);
-					}
+						prev = beamNotes.get(i - 1);
 
-					if (prev.beamEnd) {
-						note.beamStart = true;
-						beamNotes.add(note);
-						continue;
-					}
+						if (prev.beamEnd) {
+							note.beamStart = true;
+							continue;
+						}
 
-					if (prev.beamStart) {
-						note.beamContinue1 = true;
-						beamNotes.add(note);
-						continue;
-					}
-					if (prev.beamContinue1) {
-						note.beamContinue2 = true;
-						beamNotes.add(note);
-						continue;
-					}
-					if (prev.beamContinue2) {
-						note.beamEnd = true;
-						beamNotes.add(note);
-						continue;
-					}
+						if (prev.beamStart) {
+							note.beamContinue1 = true;
+							continue;
+						}
+						if (prev.beamContinue1) {
+							note.beamContinue2 = true;
+							continue;
+						}
+						if (prev.beamContinue2) {
+							note.beamEnd = true;
+							continue;
+						}
 
-					else
-						note.beamStart = true;
-					beamNotes.add(note);
+						else
+							note.beamStart = true;
+					}
 				}
 			}
 		}
