@@ -82,15 +82,7 @@ public class TestTabReader {
 	//		assertEquals(expected, actual);
 	//	}
 	//	
-<<<<<<< HEAD
 
-	@Test
-	void testCountBars() {
-		ArrayList<Integer> expected = new ArrayList<Integer>();
-		expected.add(2);
-		expected.add(3);
-		expected.add(4);
-=======
 
 //	@Test
 //	void testCountBars() {
@@ -104,7 +96,7 @@ public class TestTabReader {
 //
 //		assertEquals(expected, reader.countBars());
 //	}
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
+
 
 //	@Test
 //	void testCompileMeasures() {
