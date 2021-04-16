@@ -185,7 +185,7 @@ public class Controller {
 
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
-			save.setVisible(true);
+			save.setVisible(true);}
 
 	//	}
 	//	else  {
@@ -247,11 +247,9 @@ public class Controller {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
-<<<<<<< HEAD
-					if(!Files.probeContentType(path).isEmpty() && Files.probeContentType(path).equals("text/plain")) {
-=======
+
 					if(Files.probeContentType(path).equals("text")) {
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
+
 						e.acceptTransferModes(TransferMode.COPY);//copy data 
 					}
 
@@ -328,7 +326,7 @@ public class Controller {
 			inputBox.clear();
 			inputBox.setText(readFile(file));
 			checkTrue(file);
-			step3Label.setVisible(true);
+			//step3Label.setVisible(true);
 			if (checkTrue(file)) {
 				reader = new TabReader();
 				reader.setFile(file);
@@ -409,36 +407,7 @@ public class Controller {
 	}
 
 
-	@FXML 
-
-	void startClick(ActionEvent e){
-		/*instrumentOption.setVisible(false);
-=======
-	void startClick() {
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
-		timeSigButton.setVisible(false);
-		keyButton.setVisible(false);
-		titleButton.setVisible(false);
-		composerButton.setVisible(false);
-		convert.setVisible(false);
-		save.setVisible(false);
-		featureButton.setVisible(false);
-		UploadFileLabel.setText("No File Uploaded");
-		inputBox.clear();
-		inputBox.setDisable(false);
-		outputBox.clear();
-		outputBox.setDisable(true);
-		select.setDisable(false);
-<<<<<<< HEAD
-		step2Label.setVisible(true); 
-		step3Label.setVisible(false);  
-		step4Label.setVisible(false); */
-=======
-		//step2Label.setVisible(true); 
-		//step3Label.setVisible(false);  
-		//step4Label.setVisible(false); 
-	}
-
+	
 	//	@FXML
 	public  void initialize() {
 		assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
@@ -472,9 +441,7 @@ public class Controller {
 
 		
 		
-		assert instrumentOption != null  : "fx:id=\"instrumentOption\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		
-		assert startOverLabel != null  : "fx:id=\"startOverLabel\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
 		
 
 		if (featureButton != null) {

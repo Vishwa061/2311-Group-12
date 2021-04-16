@@ -643,11 +643,7 @@ public class TabReader {
 			if (lineHasTabs(tabArray.get(k))) {
 				line = tabArray.get(k);
 				String[] lineArray = line.split("\\|");
-<<<<<<< HEAD
-				
-=======
 
->>>>>>> branch 'develop' of https://github.com/Vishwa061/2311-Group-12
 				for (int j = 1; j < lineArray.length; j++) {
 
 					if (measure.containsKey(j)) {
