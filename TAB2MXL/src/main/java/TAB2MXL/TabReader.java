@@ -232,6 +232,7 @@ public class TabReader {
 
 		for (int i = 0; i < tabArray.size(); i++) {
 			tabArray.set(i, tabArray.get(i).replaceAll("\\|\\|", "|"));
+			tabArray.set(i, tabArray.get(i).replaceAll("*", "-"));
 		}
 
 		if (TabReader.instrument.equals("Drumset")) {
