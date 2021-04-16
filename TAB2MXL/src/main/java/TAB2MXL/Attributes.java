@@ -5,24 +5,18 @@ import java.util.List;
 
 public class Attributes {
 	private List<String> guitarTuning = new ArrayList<String>();
-	private int key;
-	
+
 	public Attributes(List<String> guitarTuning) {
 		this.guitarTuning = guitarTuning;
-		key = 0;
 	}
 
-	public void setKey(int key) {
-		this.key = key;
-	}
-	
 	@Override
 	public String toString() {
 		if (TabReader.instrument.equals("Drumset")) {
 			return "\t<attributes>\n"
 					+ "\t\t<divisions>8</divisions>\n"
 					+ "\t\t<key>\n"
-					+ "\t\t\t<fifths>" + key + "</fifths>\n"
+					+ "\t\t\t<fifths>0</fifths>\n"
 					+ "\t\t</key>\n"
 					+ "\t\t<time>\n"
 					+ "\t\t\t<beats>4</beats>\n"
@@ -38,7 +32,7 @@ public class Attributes {
 		String mxl = "\t<attributes>"
 				+ "\n\t\t<divisions>8</divisions>"
 				+ "\n\t\t<key>"
-				+ "\n\t\t\t<fifths>" + key + "</fifths>"
+				+ "\n\t\t\t<fifths>0</fifths>"
 				+ "\n\t\t</key>"
 				+ "\n\t\t<time>"
 				+ "\n\t\t\t<beats>4</beats>"
