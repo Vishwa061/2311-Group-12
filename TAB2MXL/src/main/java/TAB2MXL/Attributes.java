@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Attributes {
 	private List<String> guitarTuning = new ArrayList<String>();
-	private int key;
+	private int key, beats, beatType;
 	
-	public Attributes(List<String> guitarTuning) {
+	public Attributes(List<String> guitarTuning, int beats, int beatType) {
 		this.guitarTuning = guitarTuning;
+		this.beats = beats;
+		this.beatType = beatType;
 		key = 0;
 	}
 
@@ -25,8 +27,8 @@ public class Attributes {
 					+ "\t\t\t<fifths>" + key + "</fifths>\n"
 					+ "\t\t</key>\n"
 					+ "\t\t<time>\n"
-					+ "\t\t\t<beats>4</beats>\n"
-					+ "\t\t\t<beat-type>4</beat-type>\n"
+					+ "\t\t\t<beats>" + beats + "</beats>\n"
+					+ "\t\t\t<beat-type>" + beatType + "</beat-type>\n"
 					+ "\t\t</time>\n"
 					+ "\t\t<clef>\n"
 					+ "\t\t\t<sign>percussion</sign>\n"
@@ -41,8 +43,8 @@ public class Attributes {
 				+ "\n\t\t\t<fifths>" + key + "</fifths>"
 				+ "\n\t\t</key>"
 				+ "\n\t\t<time>"
-				+ "\n\t\t\t<beats>4</beats>"
-				+ "\n\t\t\t<beat-type>4</beat-type>"
+				+ "\n\t\t\t<beats>" + beats + "</beats>"
+				+ "\n\t\t\t<beat-type>" + beatType + "</beat-type>"
 				+ "\n\t\t</time>"
 				+ "\n\t\t<clef>"
 				+ "\n\t\t\t<sign>TAB</sign>"

@@ -31,18 +31,19 @@ public class TabReader {
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
 //		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
-		// reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
-		// reader.setInput(new File("src/test/resources/LastCharTest.txt"));
-		// reader.setInput(new File("src/test/resources/ChopSuey.txt"));
-		//reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
+//		 reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
+//		 reader.setInput(new File("src/test/resources/LastCharTest.txt"));
+//		 reader.setInput(new File("src/test/resources/ChopSuey.txt"));
+//		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
 		// reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		 reader.setInput(new File("src/test/resources/BadMeasure.txt"));
-		// reader.setInput(new File("src/test/resources/examplerepeat.txt"));
-		//reader.convertTabs();
-		TabError tError = reader.convertTabs();
-		System.out.println(tError.getMeasure() );
-		System.out.println(tError.getMeasureNumber());
+//		 reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+//		 reader.setInput(new File("src/test/resources/examplerepeat.txt"));
+		reader.setInput(new File("src/test/resources/test2.txt"));
+		reader.convertTabs();
+//		TabError tError = reader.convertTabs();
+//		System.out.println(tError.getMeasure() );
+//		System.out.println(tError.getMeasureNumber());
 		System.out.println(reader.toMXL());
 		
 
@@ -109,21 +110,18 @@ public class TabReader {
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
 			guitarTuning = getTuning();
-			Attributes attr = new Attributes(guitarTuning);
+			Attributes attr = new Attributes(guitarTuning, beats, beatType);
 			attr.setKey(key);
 			Measure.setAttributes(attr);
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 			addRepeats();
 		} catch (Exception e) {
-			String m1="";
-			// TODO create error catching
-			//System.out.println("Error in measure " + (errorMeasure+1));
 			e.printStackTrace();
-			for(String m: allMeasures.get(errorMeasure)) {
-				
-				m1+="|"+m+"|\n";
-				
+			String m1 = "";
+			//System.out.println("Error in measure " + (errorMeasure+1));
+			for(String m : allMeasures.get(errorMeasure)) {
+				m1 += "|" + m + "|\n";
 			}
 			return new TabError(errorMeasure+1,m1);
 		}
@@ -177,40 +175,22 @@ public class TabReader {
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and 2 dashes
+	 * @return true iff the line contains 2 vertical bars and at least 1 dash
 	 */
 	public boolean lineHasTabs(String line) {
+		int start = line.indexOf('|') + 1;
+		int end = line.lastIndexOf('|');
+		
 		if (line.indexOf('-') == -1) {
-			boolean containsTechniques = true;
 			char[] lineArr = line.toCharArray();
-			int start = line.indexOf('|') + 1;
-			int end = line.lastIndexOf('|');
-			
+
 			for (int i = start; i < end; i++) {
-				
-				if (Character.isDigit(lineArr[i]))
-					continue;
-				
-				if (this.getInstrument().equals("Drumset") && !drumsetTechniques.contains(lineArr[i])) {
-					containsTechniques = false;
-					break;
-				}
-				
-				if (this.getInstrument().equals("Classical Guitar") && !techniques.contains(lineArr[i])) {
-					containsTechniques = false;
-					break;
-				}
-				
-				if (this.getInstrument().equals("Bass") && !techniques.contains(lineArr[i])) {
-					containsTechniques = false;
-					break;
-				}
+				if (Character.isDigit(lineArr[i]) || drumsetTechniques.contains(lineArr[i]) || techniques.contains(lineArr[i]))
+					return true;
 			}
-			
-			return line.lastIndexOf('|') > line.indexOf('|') && containsTechniques;
 		}
 
-		return line.lastIndexOf('-') > line.indexOf('-') && line.lastIndexOf('|') > line.indexOf('|');
+		return start < end;
 	}
 
 	public List<Measure> getMeasures() {
@@ -696,7 +676,7 @@ public class TabReader {
 						// removing # of repeats from tabs
 						StringBuilder builder = new StringBuilder(tabs.get(0));
 						builder.delete(repeatIndex - 1, j);
-//						System.out.println(tabs.get(0).charAt(repeatIndex));
+						//System.out.println("HERE:"+tabs.get(0).substring(repeatIndex - 1, j));
 						tabs.set(0, builder.toString());
 //						System.out.println(tabs.get(0));
 //						System.out.println(measureNumber-1);

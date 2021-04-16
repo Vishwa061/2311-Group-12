@@ -196,7 +196,7 @@ public class TestTabReader {
 	void testLineHasTabs() {
 		assertTrue(reader.lineHasTabs("|--|"));
 		assertFalse(reader.lineHasTabs("|--"));
-		assertFalse(reader.lineHasTabs("|-|"));
+		assertTrue(reader.lineHasTabs("|-|"));
 	}
 
 	@Test
