@@ -110,7 +110,7 @@
       <Button fx:id="keyButton" layoutX="423.0" layoutY="351.0" mnemonicParsing="false" onAction="#selectKey" prefHeight="25.0" prefWidth="128.0" text="Select Key" />
       <Button fx:id="titleButton" layoutX="423.0" layoutY="284.0" mnemonicParsing="false" onAction="#selectTitle" prefHeight="25.0" prefWidth="128.0" text="Specify Title " />
       <Button fx:id="composerButton" layoutX="423.0" layoutY="317.0" mnemonicParsing="false" onAction="#selectComposer" prefHeight="25.0" prefWidth="128.0" text="Specify Composer" />
-      <Button fx:id="featureButton" layoutX="423.0" layoutY="424.0" mnemonicParsing="false" onAction="#showFeature" prefHeight="30.0" prefWidth="128.0" style="-fx-background-color: #3cb371; -fx-text-fill: white; -fx-border-radius: 100;" text="Show more features">
+      <Button fx:id="featureButton" layoutX="423.0" layoutY="424.0" mnemonicParsing="false" onAction="#showFeature" prefHeight="30.0" prefWidth="128.0" style="-fx-background-color: #3cb371; -fx-text-fill: white; -fx-border-radius: 100;" text="Show More Features">
          <font>
             <Font name="Century" size="11.0" />
          </font>
