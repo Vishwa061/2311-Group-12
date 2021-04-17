@@ -27,7 +27,7 @@ class TestAttributes {
 		guitarTuning.add("D");
 		guitarTuning.add("A");
 		guitarTuning.add("E");
-		Attributes a = new Attributes(guitarTuning);
+		Attributes a = new Attributes(guitarTuning, 4, 4);
 		
 		Scanner sc = new Scanner(new File(PATH + "test_attributes_expected.txt"));
 		String expected = "";
