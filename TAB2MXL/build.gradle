@@ -69,7 +69,8 @@ run {
     }
 }
 
-mainClassName = 'application.Main'
+mainClassName = 'application.MainLaunch'
+
 
 jar {
     from {
