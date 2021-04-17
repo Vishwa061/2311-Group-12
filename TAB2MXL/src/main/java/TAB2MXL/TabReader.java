@@ -113,13 +113,16 @@ public class TabReader {
 			attr.setKey(key);
 			Measure.setAttributes(attr);
 			allMeasures = compileMeasures();
+//			for (String s: allMeasures.get(0)) {
+//				System.out.println(s);
+//			}
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
 			addRepeats();
 		} catch (Exception e) {
 			e.printStackTrace();
 			String m1 = "";
 			//System.out.println("Error in measure " + (errorMeasure+1));
-			for(String m : allMeasures.get(errorMeasure)) {
+			for (String m : allMeasures.get(errorMeasure)) {
 				m1 += "|" + m + "|\n";
 			}
 			return new TabError(errorMeasure + 1, m1);
@@ -299,6 +302,7 @@ public class TabReader {
 		List<Measure> measureElements = new ArrayList<Measure>();
 
 			for (int i = 0; i < allMeasures.size(); i++) {
+//				System.out.println(i);
 				errorMeasure = i;
 				ArrayList<String> measuresAsStrings = allMeasures.get(i);
 				Measure measure = new Measure(i + 1);
@@ -463,9 +467,9 @@ public class TabReader {
 
 						}
 
+						}
 					}
 				}
-
 				if (measure.getNotes().isEmpty()) {
 					measureElements.add(measure);
 					continue;
@@ -479,10 +483,11 @@ public class TabReader {
 				noteType(measure);
 
 				measureElements.add(measure);
+				//System.out.println(measureElements.size());
 
 			}
-		}
-		return measureElements;
+			
+			return measureElements;
 	}
 
 	public List<Measure> makeDrumNotes() {
