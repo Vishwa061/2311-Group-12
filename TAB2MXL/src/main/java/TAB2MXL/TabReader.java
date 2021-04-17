@@ -174,13 +174,13 @@ public class TabReader {
 	 * Checks if a given line has tabs
 	 * 
 	 * @param line - a line from tabArray
-	 * @return true iff the line contains 2 vertical bars and at least 1 dash
+	 * @return true iff the line contains 2 vertical bars and has a valid symbol inside
 	 */
 	public boolean lineHasTabs(String line) {
 		int start = line.indexOf('|') + 1;
 		int end = line.lastIndexOf('|');
 		
-		if (line.indexOf('-') == -1) {
+		if (!line.contains("-")) {
 			char[] lineArr = line.toCharArray();
 
 			for (int i = start; i < end; i++) {
@@ -189,7 +189,7 @@ public class TabReader {
 			}
 		}
 
-		return start < end;
+		return start < end && line.contains("-");
 	}
 
 	public List<Measure> getMeasures() {
