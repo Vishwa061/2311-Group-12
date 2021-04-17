@@ -70,7 +70,7 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel;//, step2Label, step3Label, step4Label ;
+	private Label UploadFileLabel;
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -165,30 +165,17 @@ public class Controller {
 	 *
 	 */
 
-
-
-
 	@FXML
 	void ConvertClicked() {
 		outputBox.setDisable(false);
 		save.setDisable(false);
-		//step4Label.setVisible(true);
-		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-//			System.out.println(inputBox.getText());
+		if(convert.getText().equals("Convert") && checkTrue(file) == true) {		
 			reader.setInput(inputBox.getText());
 			reader.convertTabs();
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
-
 			save.setVisible(true);
 		}
-		else  {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save");
-			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-			fileChooser.getExtensionFilters().add(extFilter);
-		}
-
 
 	}
 
@@ -417,9 +404,7 @@ public class Controller {
 		outputBox.clear();
 		outputBox.setDisable(true);
 		select.setDisable(false);
-		//step2Label.setVisible(true); 
-		//step3Label.setVisible(false);  
-		//step4Label.setVisible(false); 
+	
 	}
 
 

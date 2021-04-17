@@ -1,4 +1,5 @@
 //package org.testfx;
+//
 //import static org.junit.jupiter.api.Assertions.*;
 //
 //import java.io.IOException;
@@ -23,14 +24,14 @@
 //	
 //	
 //	@Start
-//	private void start(Stage primaryStage) {
+//     private void start(Stage primaryStage) {
 //		try {
 //			Parent root = FXMLLoader.load(getClass().getResource("/PrimaryStage.fxml"));
-//			primaryStage.setTitle("TAB2XML");
+//		primaryStage.setTitle("TAB2XML");
 //			Scene scene = new Scene(root);
 //			primaryStage.setScene(scene);
 //			primaryStage.show();
-//		}
+//			}
 //		catch(IOException e) {
 //			e.printStackTrace();
 //		}
@@ -49,7 +50,7 @@
 //	    FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
 //    }
 //    @Test
-//   	void should_contain_button_with_help(FxRobot robot) {
+//  	void should_contain_button_with_help(FxRobot robot) {
 //   	    FxAssert.verifyThat("#helpButton", LabeledMatchers.hasText("Help"));
 //       }
 //	    
