@@ -503,9 +503,11 @@ public class TabReader {
 			noteType(measure);
 
 			measureElements.add(measure);
+			
 
 		}
 		return measureElements;
+		
 	}
 
 	public List<Measure> makeDrumNotes() {
