@@ -30,7 +30,7 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 //		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 //		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
 //		reader.setInput(new File("src/test/resources/ChopSuey.txt"));
@@ -41,9 +41,9 @@ public class TabReader {
 //		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 //		reader.setInput(new File("src/test/resources/test2.txt"));
 		reader.convertTabs();
-//		TabError tError = reader.convertTabs();
-//		System.out.println(tError.getMeasure() );
-//		System.out.println(tError.getMeasureNumber());
+		TabError tError = reader.convertTabs();
+		System.out.println(tError.getMeasure() );
+		System.out.println(tError.getMeasureNumber());
 		System.out.println(reader.toMXL());
 
 		// System.out.println(reader.scoreInstrument);
@@ -1012,4 +1012,5 @@ public class TabReader {
 		builder.append("</part>\n</score-partwise>");
 		return builder.toString();
 	}
+	
 }
