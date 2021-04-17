@@ -486,8 +486,10 @@ public class TabReader {
 				//System.out.println(measureElements.size());
 
 			}
+
 			
 			return measureElements;
+
 	}
 
 	public List<Measure> makeDrumNotes() {
