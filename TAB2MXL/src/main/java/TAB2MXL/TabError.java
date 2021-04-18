@@ -2,10 +2,10 @@ package TAB2MXL;
 
 public class TabError {
 	private int measureNumber;
-	private String measure;
+	private String measure, errorMsg;
 
-	public TabError(int measureNumber, String measure) {
-		
+	public TabError(int measureNumber, String measure, String errorMsg) {
+		this.errorMsg = errorMsg;
 		this.measureNumber = measureNumber;
 		this.measure = measure;
 	}
@@ -18,6 +18,8 @@ public class TabError {
 		return measure;
 	}
 	
-
+	public String getErrorMsg() {
+		return errorMsg;
+	}
 	
 }

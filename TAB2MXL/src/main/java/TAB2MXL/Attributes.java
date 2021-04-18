@@ -1,17 +1,16 @@
 package TAB2MXL;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Attributes {
-	private List<String> guitarTuning = new ArrayList<String>();
+	private List<String> guitarTuning;
 	private int key, beats, beatType;
 	
 	public Attributes(List<String> guitarTuning, int beats, int beatType) {
 		this.guitarTuning = guitarTuning;
 		this.beats = beats;
 		this.beatType = beatType;
-		key = 0;
+		this.key = 0;
 	}
 
 	public void setKey(int key) {
