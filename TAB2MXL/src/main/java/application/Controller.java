@@ -74,11 +74,14 @@ public class Controller {
 	@FXML
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
-	@FXML 
-	private Label UploadFileLabel;
+	//@FXML 
+	//private Label UploadFileLabel;
 	
 	@FXML 
-	private Label instrumentID, titleID;
+	private Label insturmentID, titleID;
+	
+	@FXML 
+	private Button saveInputChanges;
 	
 
 	/*
@@ -175,12 +178,44 @@ public class Controller {
 	 */
 
 	@FXML
+	void saveInputFile(){
+		if (inputBox.getText().isBlank() == false) {
+		try { 
+			FileChooser fileChooser = new FileChooser();
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("textfiles files (*.txt)","*.txt");
+			fileChooser.getExtensionFilters().add(extFilter);
+			File file = fileChooser.showSaveDialog(stage);
+			if(file != null){
+				FileWriter myWriter = new FileWriter(file);
+				myWriter.write(inputBox.getText());
+				myWriter.close();
+				//	SaveFile(textInput.getText(), file);
+				Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
+				errorAlert.setHeaderText("Text file is saved!"); 
+				errorAlert.showAndWait();
+			}
+		}
+		catch (IOException ex) {
+			Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	 }
+		else {
+			Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
+			errorAlert.setHeaderText("Valid Input Required."); 
+			errorAlert.setContentText("Please provide any sort of input file. This can be a direct copy or paste, drag/drop a file or consider selecting a textfile from your desktop.");
+			errorAlert.showAndWait();
+		}
+	}
+	
+	@FXML
 	void ConvertClicked() {
 		outputBox.setDisable(false);
 		save.setDisable(false);
-		if(convert.getText().equals("Convert") && checkTrue(file) == true) {		
+		save.setVisible(true);
+		//if(convert.getText().equals("Convert") && checkTrue(file) == true) {	
+		try {
 			reader.setInput(inputBox.getText());
-			reader.convertTabs();
+				reader.convertTabs();
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
 			displaygetIntrument();
@@ -189,7 +224,12 @@ public class Controller {
 			System.out.println(reader.getInstrument());
 			save.setVisible(true);
 		}
-
+		catch (ArithmeticException e) {
+			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
+			errorAlert.setHeaderText("File Input Error");
+			errorAlert.setContentText("You have an empty file or the file is unreadable by our program. Please try again.");
+			errorAlert.showAndWait();
+		}
 	}
 
 	@FXML
@@ -238,22 +278,19 @@ public class Controller {
 	void dragFile() {
 		inputBox.setOnDragOver(e -> { //e -> dictates action needed 
 			Dragboard dragBoard = e.getDragboard(); 
-			if(dragBoard.hasFiles() && dragBoard.getFiles().size() == size) {
+			if (dragBoard.hasFiles() && dragBoard.getFiles().size() == 1) {
 
 				try {
 					Path path = FileSystems.getDefault().getPath(dragBoard.getFiles().get(0).getPath());
-
-					if(Files.probeContentType(path).equals("text")) {
-
-						e.acceptTransferModes(TransferMode.COPY);//copy data 
+					if (!Files.probeContentType(path).isEmpty() && Files.probeContentType(path).equals("text/plain")) {
+						e.acceptTransferModes(TransferMode.COPY);
 					}
 
 				} catch (IOException e1) {
-
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
-			else {
+			} else {
 				e.consume();
 			}
 		});
@@ -268,9 +305,7 @@ public class Controller {
 					outputBox.clear();
 					inputBox.setText(readFile(file));
 					checkTrue(file);
-					//step3Label.setVisible(true);
-					convert.setDisable(false); 
-					featureButton.setDisable(false);
+				    featureButton.setDisable(false);
 
 				}
 			}
@@ -313,6 +348,7 @@ public class Controller {
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"); //chooses only txt file 
 		fileChooser.setInitialFileName("myfile.txt"); // sets the file name to download 
 		fileChooser.getExtensionFilters().add(extFilter);
+		try {
 		file = fileChooser.showOpenDialog(select.getScene().getWindow()); 	
 		//String fileName = file.getAbsolutePath();
 
@@ -332,13 +368,17 @@ public class Controller {
 		else {
 			ErrorOutput(file);
 		}
+		}
+		catch(Exception e) {
+			ErrorOutput(file);
+		}
 	}
 
 	private boolean checkTrue(File file) {
 
 		if(!(file.length() == 0)) {
 			showOtherButtons();
-			UploadFileLabel.setText("File Uploaded");
+			//UploadFileLabel.setText("File Uploaded");
 
 			if (count == 0) {	
 				displayErrorPage();
@@ -401,27 +441,24 @@ public class Controller {
 	}
 
 	private void displaygetIntrument(){
-		instrumentID.setText(reader.getInstrument());
+		insturmentID.setText(reader.getInstrument());
 	}
 	private void displaygetTitle(){
+		if (reader.getTitle()!=null) {
 		titleID.setText(reader.getTitle());
+	    }
 	}
 	
 	private void displaygetMeasure() {
 		List<ArrayList<String>> allMeasures;
-		//String a = reader.getMeasures().toString();
-	//	allMeasures = reader.compileMeasures();
-		
-	//	String m1 = "";
-		//System.out.println("Error in measure " + (errorMeasure+1));
-		
-	//	for (String m : allMeasures.get(reader.getErrorMeasure())) {
-		//	System.out.println(m1 += "|" + m + "|\n");
-	//	}
 		TabError tError = reader.convertTabs();
-		System.out.println(tError.getMeasure());
-		System.out.println(tError.getMeasure());
+		System.out.println(tError.getErrorMsg());
 		System.out.println(tError.getMeasureNumber());
+		String a = tError.getErrorMsg();
+		measureBox.setDisable(false);
+		measureBox.setEditable(false);
+		measureBox.setWrapText(true);
+		measureBox.setText(a);
 		//measureBox.setText(a);
 		
 	}
@@ -432,10 +469,12 @@ public class Controller {
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
 		composerButton.setVisible(false);
-		convert.setVisible(false);
+		//convert.setVisible(false);
+		convert.setDisable(false);
+		saveInputChanges.setDisable(false);
 		save.setVisible(false);
-		featureButton.setVisible(false);
-		UploadFileLabel.setText("No File Uploaded");
+		featureButton.setDisable(false);
+		//UploadFileLabel.setText("No File Uploaded");
 		inputBox.clear();
 		inputBox.setDisable(false);
 		outputBox.clear();
@@ -455,6 +494,11 @@ public class Controller {
 		assert outputBox != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
 		if (outputBox != null) {
 			outputBox.setDisable(true);
+		}	
+		
+		assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'Untitled'.";
+		if (measureBox != null) {
+			measureBox.setDisable(true);
 		}	
 
 		if (select != null) { 
@@ -499,7 +543,11 @@ public class Controller {
 		if (featureButton != null) {
 			featureButton.setDisable(true);
 		}
-
+		
+		assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (saveInputChanges != null) {
+			saveInputChanges.setDisable(true);
+		}
 	}
 
 
