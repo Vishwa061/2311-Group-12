@@ -48,7 +48,6 @@ public class TabReader {
 			System.out.println(tError.getErrorMsg());
 		}
 		System.out.println(reader.toMXL());
-
 //		for (String s : reader.tabArray) {
 //			System.out.println(s);
 //		}
@@ -140,14 +139,33 @@ public class TabReader {
 		
 		return new TabError(errorMeasure + 1, m1, errorMsg);
 	}
+	
+	/**
+	 * Returns the requested measure
+	 * 
+	 * @param measureNumber - the zero-indexed measure number
+	 * @return the measure as a String
+	 */
+	public String getMeasure(int measureNumber) {
+		String m1 = "";
+
+		try {
+			for (String m : allMeasures.get(measureNumber)) {
+				m1 += "|" + m + "|\n";
+			}
+		} catch (Exception e) {}
+
+		return m1;
+	}
 
 	/**
 	 * Saves a given measure
 	 * 
 	 * @param measureNumber   - the zero-indexed measure number
 	 * @param measureAsString - the edited measure
-	 * @return the edited tabs
+	 * @return the edited tabs as a String
 	 */
+	// TODO fix or delete this
 	public String editMeasure(int measureNumber, String measureAsString) {
 		List<String> temp = Arrays.asList(measureAsString.split("\\n"));
 
@@ -155,24 +173,24 @@ public class TabReader {
 		ArrayList<String> measure = new ArrayList<String>();
 		measure.addAll(temp);
 
-		allMeasures.remove(measureNumber);
-		if (measureNumber >= allMeasures.size()) { // accounts for when the user edits the last measure
-			allMeasures.add(measure);
+		if (!measureAsString.equals("") && lineHasTabs(measureAsString)) {
+			allMeasures.set(measureNumber, measure);
+		} else {
+			allMeasures.remove(measureNumber);
 		}
-		allMeasures.add(measureNumber, measure);
 
 		tabArray.clear();
 		for (int i = 0; i < allMeasures.size(); i++) {
 			ArrayList<String> m = allMeasures.get(i);
 			for (int j = 0; j < m.size(); j++) {
-				if (m.get(j).lastIndexOf('-') > m.get(j).indexOf('-')) {
-					tabArray.add(guitarTuning.get(j) + "|" + m.get(j) + "|" + "\n"); // THIS ONLY WORKS FOR GUITAR RIGHT
-																						// NOW
-					// System.out.println(guitarTuning.get(j)+"|"+m.get(j)+"|");
+				if (lineHasTabs(m.get(j))) {
+					tabArray.add(
+							(TabReader.instrument.equals("Drumset") ? scoreInstrument.get(i).get(j) : guitarTuning.get(j))
+							+ "|" + m.get(j) + "|" + "\n"
+							);
 				}
 			}
 			tabArray.add("\n");
-			// System.out.println("");
 		}
 
 		String savedTabs = "";
@@ -180,6 +198,8 @@ public class TabReader {
 			savedTabs += tabArray.get(i);
 		}
 
+		rawTabArray.clear();
+		rawTabArray.addAll(tabArray);
 		return savedTabs;
 	}
 
