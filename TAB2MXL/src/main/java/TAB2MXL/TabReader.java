@@ -40,7 +40,6 @@ public class TabReader {
 		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 //		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 //		reader.setInput(new File("src/test/resources/test2.txt"));
-
 		TabError tError = reader.convertTabs();
 		System.out.println(tError.getMeasure());
 		System.out.println(tError.getErrorMsg());
@@ -493,8 +492,10 @@ public class TabReader {
 				//System.out.println(measureElements.size());
 
 			}
+
 			
 			return measureElements;
+
 	}
 
 	public List<Measure> makeDrumNotes() {
@@ -1025,4 +1026,5 @@ public class TabReader {
 		builder.append("</part>\n</score-partwise>");
 		return builder.toString();
 	}
+	
 }
