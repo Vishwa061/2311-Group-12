@@ -290,24 +290,6 @@ public class TestTabReader {
 			boolean techStart = false;
 			boolean techStop = false;
 			
-			System.out.println("Note 1: " + note1.release);
-			System.out.println("Note 1: " + note1.bend);
-			
-			System.out.println("Note 1: " + note1.pullStart);
-			System.out.println("Note 2: " + note2.pullStop);
-			
-			System.out.println("Note 1: " + note1.pullStart);
-			System.out.println("Note 2: " + note2.pullStop);
-			
-			System.out.println("Note 1: " + note1.hammerStart);
-			System.out.println("Note 2: " + note2.hammerStop);
-			
-			System.out.println("Note 1: " + note1.hammerStart);
-			System.out.println("Note 2: " + note2.hammerStop);
-			
-			System.out.println("Note 1: " + note1.slideStart);
-			System.out.println("Note 2: " + note2.slideStop);
-			
 			if (note1.release || note1.bend) {
 				actuals[i] = true;
 				i++;
@@ -353,42 +335,6 @@ public class TestTabReader {
 		}
 
 		assertArrayEquals(expecteds, actuals);
-	}
-	
-	@Test
-	void testDrumGhost() {
-		Note note = new Note("SN", "g", 0);
-		assertTrue(note.ghost);
-	}
-	
-	@Test
-	void testDrumRoll() {
-		Note note = new Note("SN", "b", 0);
-		assertTrue(note.roll);
-	}
-	
-	@Test
-	void testDrumFlam() {
-		Note note = new Note("SN", "f", 0);
-		assertTrue(note.flam);
-	}
-	
-	@Test
-	void testDrumDrag() {
-		Note note = new Note("SN", "d", 0);
-		assertTrue(note.drag);
-	}
-	
-	@Test
-	void testHiHatRoll() {
-		Note note = new Note("HH", "B", 0);
-		assertTrue(note.roll);
-	}
-	
-	@Test
-	void testDrumAccent() {
-		Note note = new Note("SN", "O", 0);
-		assertTrue(note.accent);
 	}
 	
 }

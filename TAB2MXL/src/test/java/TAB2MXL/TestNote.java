@@ -46,5 +46,43 @@ class TestNote {
 
 		assertEquals(expected, actual);
 	}
+	
+	
+	@Test
+	void testDrumGhost() {
+		Note note = new Note("SN", "g", 0);
+		assertTrue(note.ghost);
+	}
+	
+	@Test
+	void testDrumRoll() {
+		Note note = new Note("SN", "b", 0);
+		assertTrue(note.roll);
+	}
+	
+	@Test
+	void testDrumFlam() {
+		Note note = new Note("SN", "f", 0);
+		assertTrue(note.flam);
+	}
+	
+	@Test
+	void testDrumDrag() {
+		Note note = new Note("SN", "d", 0);
+		assertTrue(note.drag);
+	}
+	
+	@Test
+	void testHiHatRoll() {
+		Note note = new Note("HH", "B", 0);
+		assertTrue(note.roll);
+	}
+	
+	@Test
+	void testDrumAccent() {
+		Note note = new Note("SN", "O", 0);
+		assertTrue(note.accent);
+	}
+	
 
 }
