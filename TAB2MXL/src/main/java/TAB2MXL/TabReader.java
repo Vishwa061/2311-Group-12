@@ -27,22 +27,26 @@ public class TabReader {
 	private int beatType;
 	private List<Repeat> repeats;
 	private int errorMeasure;
+	private boolean useDefaultTuning;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
 //		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 //		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
 //		reader.setInput(new File("src/test/resources/ChopSuey.txt"));
 //		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
 //		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+//		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+//		reader.setInput(new File("src/test/resources/NoTuning.txt"));
 //		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 //		reader.setInput(new File("src/test/resources/test2.txt"));
 		TabError tError = reader.convertTabs();
-		System.out.println(tError.getMeasure());
-		System.out.println(tError.getErrorMsg());
+		if (tError != null) {
+			System.out.println(tError.getMeasure());
+			System.out.println(tError.getErrorMsg());
+		}
 		System.out.println(reader.toMXL());
 
 //		for (String s : reader.tabArray) {
@@ -73,6 +77,7 @@ public class TabReader {
 		drumsetTechniques.addAll(Arrays.asList('O', 'f', 'd', 'b', 'x', 'X', 'o', '#', 'g', '@', 's', 'S', 'c', 'C'));
 		repeats = new ArrayList<Repeat>();
 		errorMeasure = 0;
+		useDefaultTuning = false;
 	}
 
 	public void setInput(String fileAsString) {
@@ -108,7 +113,11 @@ public class TabReader {
 			instrument = getInstrument();
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
-			guitarTuning = getTuning();
+			if (useDefaultTuning) {
+				guitarTuning = numStrings == 4 ? Arrays.asList("G","D","A","E") : Arrays.asList("E","B","G","D","A","E");
+			} else {
+				guitarTuning = getTuning();
+			}
 			Attributes attr = new Attributes(guitarTuning, beats, beatType);
 			attr.setKey(key);
 			Measure.setAttributes(attr);
@@ -117,7 +126,7 @@ public class TabReader {
 			addRepeats();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new TabError(0, "", "MAJOR ERROR");
+			return new TabError(errorMeasure + 1, "", "ERROR");
 		}
 		
 		if (errorMsg.equals("")) {
@@ -907,13 +916,40 @@ public class TabReader {
 	 * @return the instrument name
 	 */
 	public String getInstrument() {
-		for (String t : getTuning()) {
-			if (!Pitch.ALL_NOTES_MAP.containsKey(t)) {
+		int lines = countNumStrings(tabArray);
+		if (lines == 0) {
+			return "No Instrument Detected";
+		}
+		
+		List<String> lettersInfront = new ArrayList<String>();
+		int i = 0;
+		while (i < tabArray.size() && lettersInfront.size() < lines) {
+			String line = tabArray.get(i);
+			if (lineHasTabs(line)) {
+				lettersInfront.add(line.substring(0, line.indexOf('|')).replaceAll("\\s", ""));
+			}
+			i++;
+		}
+		
+		boolean isNoLettersInfront = true;
+		for (String t : lettersInfront) {
+			if (!t.equals("")) {
+				isNoLettersInfront = false;
+				break;
+			}
+		}
+		
+		if (isNoLettersInfront) {
+			this.useDefaultTuning = true;
+			return lines == 4 ? "Bass" : "Classical Guitar";
+		}
+		
+		for (String t : lettersInfront) {
+			if (!Pitch.ALL_NOTES_MAP.containsKey(t.toUpperCase())) {
 				return "Drumset";
 			}
 		}
-
-		int lines = countNumStrings(tabArray);
+		
 		return lines == 4 ? "Bass" : "Classical Guitar";
 	}
 
