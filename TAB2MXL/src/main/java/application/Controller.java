@@ -418,6 +418,9 @@ public class Controller {
 
 	private void displaySuccessConvert() {
 		Parent root;
+		TabError tError = reader.convertTabs();
+		String a = tError.getErrorMsg();
+		if (!a.equals("MAJOR ERROR")) {
 		try {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
 			final Stage popup = new Stage();
@@ -429,7 +432,7 @@ public class Controller {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}}
 	}
 
 
