@@ -433,6 +433,12 @@ public class Controller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}}
+		else {
+			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error alert window 
+			errorAlert.setHeaderText("ERROR: Could not convert properly."); 
+			errorAlert.setContentText("Current Software does not recognize certain part(s) to your text"); //Shows this stage and waits for it to be hidden (closed) before returning to the caller.
+			errorAlert.showAndWait();
+		}
 	}
 
 
