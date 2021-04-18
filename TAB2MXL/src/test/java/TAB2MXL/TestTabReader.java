@@ -280,12 +280,34 @@ public class TestTabReader {
 		boolean[] expecteds = new boolean[8];
 		Arrays.fill(expecteds, true);
 		int i = 0;
+		int testNumber = 0;
 		for (Measure m : test.getMeasures()) {
+			testNumber++;
+			System.out.println("Test Number: " + testNumber);
 			m.sortArray();
 			Note note1 = m.getNotes().get(0);
 			Note note2 = m.getNotes().get(1);
 			boolean techStart = false;
 			boolean techStop = false;
+			
+			System.out.println("Note 1: " + note1.release);
+			System.out.println("Note 1: " + note1.bend);
+			
+			System.out.println("Note 1: " + note1.pullStart);
+			System.out.println("Note 2: " + note2.pullStop);
+			
+			System.out.println("Note 1: " + note1.pullStart);
+			System.out.println("Note 2: " + note2.pullStop);
+			
+			System.out.println("Note 1: " + note1.hammerStart);
+			System.out.println("Note 2: " + note2.hammerStop);
+			
+			System.out.println("Note 1: " + note1.hammerStart);
+			System.out.println("Note 2: " + note2.hammerStop);
+			
+			System.out.println("Note 1: " + note1.slideStart);
+			System.out.println("Note 2: " + note2.slideStop);
+			
 			if (note1.release || note1.bend) {
 				actuals[i] = true;
 				i++;
