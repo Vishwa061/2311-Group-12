@@ -4,8 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.xml.transform.stream.StreamResult;
+
+import TAB2MXL.Measure;
+import TAB2MXL.TabError;
 import TAB2MXL.TabReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +66,7 @@ public class Controller {
 	private File file; 
 
 	@FXML
-	private TextArea inputBox, outputBox;
+	private TextArea inputBox, outputBox, measureBox;
 
 	@FXML
 	private Button select, convert, save, featureButton, startButton;
@@ -70,7 +75,11 @@ public class Controller {
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
 
 	@FXML 
-	private Label UploadFileLabel;//, step2Label, step3Label, step4Label ;
+	private Label UploadFileLabel;
+	
+	@FXML 
+	private Label instrumentID, titleID;
+	
 
 	/*
 	 * All FXML attributes from HelpWindow called below. 
@@ -165,30 +174,21 @@ public class Controller {
 	 *
 	 */
 
-
-
-
 	@FXML
 	void ConvertClicked() {
 		outputBox.setDisable(false);
 		save.setDisable(false);
-		//step4Label.setVisible(true);
-		if(convert.getText().equals("Convert") && checkTrue(file) == true) {
-//			System.out.println(inputBox.getText());
+		if(convert.getText().equals("Convert") && checkTrue(file) == true) {		
 			reader.setInput(inputBox.getText());
 			reader.convertTabs();
 			outputBox.setText(reader.toMXL());
 			displaySuccessConvert();
-
+			displaygetIntrument();
+			displaygetTitle();
+			displaygetMeasure();
+			System.out.println(reader.getInstrument());
 			save.setVisible(true);
 		}
-		else  {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save");
-			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)", "*.musicxml");
-			fileChooser.getExtensionFilters().add(extFilter);
-		}
-
 
 	}
 
@@ -400,7 +400,31 @@ public class Controller {
 		errorAlert.showAndWait();
 	}
 
-
+	private void displaygetIntrument(){
+		instrumentID.setText(reader.getInstrument());
+	}
+	private void displaygetTitle(){
+		titleID.setText(reader.getTitle());
+	}
+	
+	private void displaygetMeasure() {
+		List<ArrayList<String>> allMeasures;
+		//String a = reader.getMeasures().toString();
+	//	allMeasures = reader.compileMeasures();
+		
+	//	String m1 = "";
+		//System.out.println("Error in measure " + (errorMeasure+1));
+		
+	//	for (String m : allMeasures.get(reader.getErrorMeasure())) {
+		//	System.out.println(m1 += "|" + m + "|\n");
+	//	}
+		TabError tError = reader.convertTabs();
+		System.out.println(tError.getMeasure());
+		System.out.println(tError.getMeasure());
+		System.out.println(tError.getMeasureNumber());
+		//measureBox.setText(a);
+		
+	}
 
 	@FXML 
 	void startClick() {
@@ -417,9 +441,7 @@ public class Controller {
 		outputBox.clear();
 		outputBox.setDisable(true);
 		select.setDisable(false);
-		//step2Label.setVisible(true); 
-		//step3Label.setVisible(false);  
-		//step4Label.setVisible(false); 
+	
 	}
 
 

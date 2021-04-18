@@ -22,7 +22,7 @@ public class TabReader {
 	private List<Character> techniques;
 	private List<Character> drumsetTechniques;
 	private int key;
-	private String composer;
+	private String composer, errorMsg;
 	private int beats;
 	private int beatType;
 	private List<Repeat> repeats;
@@ -30,29 +30,24 @@ public class TabReader {
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
-		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
+//		reader.setInput(new File("src/test/resources/StairwayHeaven.txt"));
 //		reader.setInput(new File("src/test/resources/SmellsLikeTeenSpirit.txt"));
 //		reader.setInput(new File("src/test/resources/LastCharTest.txt"));
 //		reader.setInput(new File("src/test/resources/ChopSuey.txt"));
 //		reader.setInput(new File("src/test/resources/drumBeamsTest.txt"));
 //		reader.setInput(new File("src/test/resources/SplitDrum.txt"));
 //		reader.setInput(new File("src/test/resources/basic_bass.txt"));
-//		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
+		reader.setInput(new File("src/test/resources/BadMeasure.txt"));
 //		reader.setInput(new File("src/test/resources/examplerepeat.txt"));
 //		reader.setInput(new File("src/test/resources/test2.txt"));
-		reader.convertTabs();
-//		TabError tError = reader.convertTabs();
-//		System.out.println(tError.getMeasure() );
-//		System.out.println(tError.getMeasureNumber());
+		TabError tError = reader.convertTabs();
+		System.out.println(tError.getMeasure());
+		System.out.println(tError.getErrorMsg());
 		System.out.println(reader.toMXL());
 
-		// System.out.println(reader.scoreInstrument);
 //		for (String s : reader.tabArray) {
 //			System.out.println(s);
 //		}
-
-//		System.out.println(reader.scoreInstrument);
-//		System.out.println(reader.toMXL());
 	}
 
 	public TabReader() {
@@ -62,6 +57,7 @@ public class TabReader {
 		beats = 4;
 		beatType = 4;
 		key = 0;
+		errorMsg = "";
 	}
 
 	private void init() {
@@ -97,11 +93,15 @@ public class TabReader {
 
 		return builder.toString();
 	}
+	
+	public boolean isCharAccepted(char c) {
+		return techniques.contains(c) || drumsetTechniques.contains(c) || c == '-' || Character.isDigit(c);
+	}
 
 	/**
 	 * Converts the text-tab to MXL data and populates fields
 	 * 
-	 * @return a TabError
+	 * @return a TabError or NULL iff tabs were converted without warnings or errors
 	 */
 	public TabError convertTabs() {
 		try {
@@ -117,15 +117,19 @@ public class TabReader {
 			addRepeats();
 		} catch (Exception e) {
 			e.printStackTrace();
-			String m1 = "";
-			//System.out.println("Error in measure " + (errorMeasure+1));
-			for(String m : allMeasures.get(errorMeasure)) {
-				m1 += "|" + m + "|\n";
-			}
-			return new TabError(errorMeasure + 1, m1);
+			return new TabError(0, "", "MAJOR ERROR");
 		}
-
-		return new TabError(0, "");
+		
+		if (errorMsg.equals("")) {
+			return null;
+		}
+		
+		String m1 = "";
+		for (String m : allMeasures.get(errorMeasure)) {
+			m1 += "|" + m + "|\n";
+		}
+		
+		return new TabError(errorMeasure + 1, m1, errorMsg);
 	}
 
 	/**
@@ -299,7 +303,7 @@ public class TabReader {
 		List<Measure> measureElements = new ArrayList<Measure>();
 
 			for (int i = 0; i < allMeasures.size(); i++) {
-				errorMeasure = i;
+//				System.out.println(i);
 				ArrayList<String> measuresAsStrings = allMeasures.get(i);
 				Measure measure = new Measure(i + 1);
 				int noteCounter = 0;
@@ -309,6 +313,12 @@ public class TabReader {
 					measure.setIndexTotal(currentLine.length());
 					String temp;
 					for (int k = 0; k < currentLine.length(); k++) {
+						if (!isCharAccepted(currentLine.charAt(k))) {
+							errorMeasure = i;
+							errorMsg = "WARNING (Measure " + (i + 1) + "):"
+									+ "\nCharacter \"" + currentLine.charAt(k) + "\" is not supported."
+									+ "\nThis character will be ignored.";
+						}
 						
 						if (currentLine.charAt(k) == '-' || currentLine.charAt(k) == '|'
 								|| techniques.contains(currentLine.charAt(k))
@@ -463,9 +473,9 @@ public class TabReader {
 
 						}
 
+						}
 					}
 				}
-
 				if (measure.getNotes().isEmpty()) {
 					measureElements.add(measure);
 					continue;
@@ -479,10 +489,13 @@ public class TabReader {
 				noteType(measure);
 
 				measureElements.add(measure);
+				//System.out.println(measureElements.size());
 
 			}
-		}
-		return measureElements;
+
+			
+			return measureElements;
+
 	}
 
 	public List<Measure> makeDrumNotes() {
@@ -490,7 +503,6 @@ public class TabReader {
 		int amSize = allMeasures.size();
 
 		for (int i = 0; i < amSize; i++) {
-			errorMeasure = i;
 			ArrayList<String> measuresAsStrings = allMeasures.get(i);
 			ArrayList<String> scoreInstruments = scoreInstrument.get(i);
 			Measure measure = new Measure(i + 1);
@@ -502,6 +514,13 @@ public class TabReader {
 				int lineLength = currentLine.length();
 
 				for (int k = 0; k < lineLength; k++) {
+					if (!isCharAccepted(currentLine.charAt(k))) {
+						errorMeasure = i;
+						errorMsg = "WARNING (Measure " + (i + 1) + "):"
+								+ "\nCharacter \"" + currentLine.charAt(k) + "\" is not supported."
+								+ "\nThis character will be ignored.";
+					}
+					
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
 
 						Note note = new Note(scoreIns, Character.toString(currentLine.charAt(k)), k);
@@ -1007,4 +1026,5 @@ public class TabReader {
 		builder.append("</part>\n</score-partwise>");
 		return builder.toString();
 	}
+	
 }
