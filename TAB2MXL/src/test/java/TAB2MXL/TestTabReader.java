@@ -243,7 +243,7 @@ public class TestTabReader {
 		int measureLength = m.getIndexTotal();
 		int noteCharIndex = m.getNotes().get(m.size() - 1).charIndex;
 
-		assertTrue(measureLength - 1 == noteCharIndex);
+		assertTrue(measureLength-1 == noteCharIndex);
 
 	}
 
@@ -263,9 +263,10 @@ public class TestTabReader {
 			boolean techStart = false;
 			if (note.release || note.pullStart || note.hammerStart || note.slideStart || note.bend)
 				techStart = true;
-			actuals[i / 2] = techStart;
+			actuals[i/2] = techStart;
+			
 		}
-
+		
 		assertArrayEquals(expecteds, actuals);
 
 	}

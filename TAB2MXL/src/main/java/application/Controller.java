@@ -179,7 +179,7 @@ public class Controller {
 
 	@FXML
 	void saveInputFile(){
-		if (inputBox.getText().isBlank() == false) {
+		
 		try { 
 			FileChooser fileChooser = new FileChooser();
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("textfiles files (*.txt)","*.txt");
@@ -199,13 +199,7 @@ public class Controller {
 			Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	 }
-		else {
-			Alert errorAlert = new Alert(AlertType.INFORMATION); //creates a displayable error allert window 
-			errorAlert.setHeaderText("Valid Input Required."); 
-			errorAlert.setContentText("Please provide any sort of input file. This can be a direct copy or paste, drag/drop a file or consider selecting a textfile from your desktop.");
-			errorAlert.showAndWait();
-		}
-	}
+		
 	
 	@FXML
 	void ConvertClicked() {
