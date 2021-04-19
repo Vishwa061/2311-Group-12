@@ -101,7 +101,11 @@ public class TabReader {
 	}
 	
 	public boolean isCharAccepted(char c) {
-		return techniques.contains(c) || drumsetTechniques.contains(c) || c == '-' || Character.isDigit(c);
+		if (TabReader.instrument.equals("Drumset")) {
+			return drumsetTechniques.contains(c) || c == '-';
+		}
+		
+		return techniques.contains(c) || c == '-' || Character.isDigit(c);
 	}
 
 	/**
@@ -198,38 +202,32 @@ public class TabReader {
 	 * @param measureAsString - the edited measure
 	 * @return the edited tabs as a String
 	 */
-	// TODO STILL NOT DONE
 	public String editMeasure(int startMeasure, int endMeasure, String measureAsString) {
-		if (startMeasure > endMeasure || startMeasure <= 0 || endMeasure >= allMeasures.size()) {
+		if (startMeasure > endMeasure || startMeasure < 0 || endMeasure >= allMeasures.size()) {
 			String unchangedInput = "";
 			for (String s : rawTabArray) {
 				unchangedInput += s;
 			}
 			return unchangedInput;
 		}
-		
-		List<String> temp = Arrays.asList(measureAsString.replaceAll("\\|", "").split("\\n"));
-		
-		for (int i = startMeasure; i <= endMeasure; i++) {
-			// List to ArrayList
-			ArrayList<String> measure = new ArrayList<String>(temp);
-
-			if (!measureAsString.equals("") && lineHasTabs(measureAsString)) {
-				allMeasures.set(i, measure);
-			} else {
-				allMeasures.remove(i);
-			}
-		}
 
 		tabArray.clear();
 		for (int i = 0; i < allMeasures.size(); i++) {
-			ArrayList<String> m = allMeasures.get(i);
-			for (int j = 0; j < m.size(); j++) {
-				tabArray.add(
-						(TabReader.instrument.equals("Drumset") ? scoreInstrument.get(i).get(j) : guitarTuning.get(j))
-						+ "|" + m.get(j) + "|" + "\n"
-						);
+			if (i < startMeasure || i > endMeasure) {
+				List<String> temp = Arrays.asList(getMeasure(i).split("\\n"));
+				for (String s : temp) {
+					tabArray.add(s + "\n");
+//					System.out.print(s + "\n");
+				}
+			} else {
+				List<String> temp = Arrays.asList(measureAsString.split("\\n"));
+				for (String s : temp) {
+					tabArray.add(s + "\n");
+//					System.out.print(s + "\n");
+				}
+				i += endMeasure - startMeasure;
 			}
+			
 			tabArray.add("\n");
 		}
 

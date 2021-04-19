@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -227,6 +229,7 @@ public class Controller{
 	    @FXML
 	    private Button showMeasures;
 
+
 	    @FXML
 	    void cancelMeasureEdit() {
 	    	cancelMeasure.getScene().getWindow().hide();
@@ -234,18 +237,29 @@ public class Controller{
 
 	    @FXML
 	    void saveMeasureEdit(ActionEvent event) {
-	    	//IDK HOW TO DO THIS 
+	    	try {
+		    	int start = Integer.parseInt(startMeasureID.getText());
+		    	int end = Integer.parseInt(endMeasureID.getText());
+		    	final int INPUTBOX_ID = 10; // might need to change this later
+		    	
+				Parent p = Window.getWindows().get(0).getScene().getRoot();
+				TextArea input = (TextArea) p.getChildrenUnmodifiable().get(INPUTBOX_ID);
+//				System.out.println("INPUT BOX:\n" + input.getText());
+				input.setText(reader.editMeasure(start - 1, end - 1, measureEditBox.getText()));
+				saveMeasureEdit.getScene().getWindow().hide();
+			} catch (Exception e) {e.printStackTrace();}
 	    }
 
 	    @FXML
 	    void showMeasures() {
 	    	int start = Integer.parseInt(startMeasureID.getText());
 	    	int end = Integer.parseInt(endMeasureID.getText());
-	    	String output =reader.getMeasures(start, end);
+	    	String output = reader.getMeasures(start - 1, end - 1);
 	    	System.out.println(start);
 	    	System.out.println(output);
 	         measureEditBox.setText(output);
 	    }
+
 
 	//This is for editing the timeSig in primary stage
 	@FXML
@@ -341,6 +355,8 @@ public class Controller{
 	void ConvertClicked() {
 		outputBox.setDisable(false);
 		save.setDisable(false);
+		editMeasureButton.setDisable(false);
+		addTimeSig.setDisable(false);
 		save.setVisible(true);
 		//if(convert.getText().equals("Convert") && checkTrue(file) == true) {	
 		try {
@@ -364,26 +380,7 @@ public class Controller{
 
 	@FXML
 	void SaveClicked() {
-		/*if(startButton.isPressed()== false && file == null) {
-		//	Parent root;
-			try {
-			root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
-				//new stage created with modality(events delivered)
-				// all stages created this way
-				final Stage popup = new Stage();
-				popup.initModality(Modality.APPLICATION_MODAL);
-				popup.setTitle("Error");
-				popup.setTitle("Success");
-				popup.setScene(new Scene(root, 334, 226));
-				popup.show();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-		if( checkTrue(file) == true) {
-		*/	try { 
+		try { 
 				FileChooser fileChooser = new FileChooser();
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
 				fileChooser.getExtensionFilters().add(extFilter);
@@ -509,15 +506,12 @@ public class Controller{
 
 		if(!(file.length() == 0)) {
 			showOtherButtons();
-			//UploadFileLabel.setText("File Uploaded");
-
 			if (count == 0) {	
 				displayErrorPage();
 				showOtherButtons();
 				count++;
 			}
 			return true;
-
 		}
 		return false;
 	}
@@ -591,14 +585,12 @@ public class Controller{
 	
 	private void displaygetMeasure() {
 		TabError tError = reader.convertTabs();
-//		System.out.println(tError.getErrorMsg());
-//		System.out.println(tError.getMeasureNumber());
 		String a = tError == null ? "" : tError.getErrorMsg();
 		measureBox.setDisable(false);
 		measureBox.setEditable(false);
 		measureBox.setWrapText(true);
 		measureBox.setText(a);
-		//measureBox.setText(a);
+		
 		
 	}
 
@@ -1469,8 +1461,13 @@ public class Controller{
 	        assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'fxml.fxml'.";
 	        assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'fxml.fxml'.";
 	      assert editMeasureButton != null : "fx:id=\"editMeasureButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	      if (editMeasureButton != null) {
+				editMeasureButton.setDisable(true);
+			}
 	       assert addTimeSig != null : "fx:id=\"addTimeSig\" was not injected: check your FXML file 'fxml.fxml'.";
-
+	       if (addTimeSig != null) {
+				addTimeSig.setDisable(true);
+			}
 	}
 
 
