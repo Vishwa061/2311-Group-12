@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -69,7 +70,15 @@ public class Controller {
 	private TextArea inputBox, outputBox, measureBox;
 
 	@FXML
-	private Button select, convert, save, featureButton, startButton;
+	public Button select;
+	@FXML
+	public  Button convert;
+	@FXML
+	private Button save;
+	@FXML
+	public Button featureButton;
+	@FXML
+	private Button startButton;
 
 	@FXML
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
@@ -170,13 +179,14 @@ public class Controller {
 	 * Tab parser
 	 */
 	private static TabReader reader = new TabReader();
+	
 
 	/*
 	 * 
 	 *  PrimaryStage Methods related to the FXML documents.  	
 	 *
 	 */
-
+	
 	@FXML
 	void saveInputFile(){
 		
@@ -200,6 +210,8 @@ public class Controller {
 		}
 	 }
 		
+	Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
+	 Button errorAl = (Button) errorAlert.getDialogPane().lookupButton(ButtonType.OK);
 	
 	@FXML
 	void ConvertClicked() {
@@ -228,8 +240,8 @@ public class Controller {
 
 	@FXML
 	void SaveClicked() {
-		if(startButton.isPressed()== false && file == null) {
-			Parent root;
+		/*if(startButton.isPressed()== false && file == null) {
+		//	Parent root;
 			try {
 				root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
 				//new stage created with modality(events delivered)
@@ -247,10 +259,11 @@ public class Controller {
 
 		}
 		if( checkTrue(file) == true) {
-			try { 
+		*/	try { 
 				FileChooser fileChooser = new FileChooser();
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
 				fileChooser.getExtensionFilters().add(extFilter);
+				fileChooser.setInitialFileName("Music6");
 				File file = fileChooser.showSaveDialog(stage);
 				if(file != null){
 					FileWriter myWriter = new FileWriter(file);
@@ -265,7 +278,7 @@ public class Controller {
 			catch (IOException ex) {
 				Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 			}}
-	}
+	
 
 	int size =1;
 	@FXML
@@ -309,7 +322,7 @@ public class Controller {
 
 	}
 
-	private String readFile(File file) {
+	public String readFile(File file) {
 		String fileName = file.getAbsolutePath();
 
 		StringBuilder stringBuffer = new StringBuilder();
