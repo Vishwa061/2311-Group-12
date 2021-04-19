@@ -329,7 +329,7 @@ public class Controller{
 			FileChooser fileChooser = new FileChooser();
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("textfiles files (*.txt)","*.txt");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Music666");
+			fileChooser.setInitialFileName("Music676");
 			File file = fileChooser.showSaveDialog(stage);
 			if(file != null){
 				FileWriter myWriter = new FileWriter(file);
@@ -399,7 +399,7 @@ public class Controller{
 				FileChooser fileChooser = new FileChooser();
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
 				fileChooser.getExtensionFilters().add(extFilter);
-				fileChooser.setInitialFileName("Music662");
+				fileChooser.setInitialFileName("Music667");
 				File file = fileChooser.showSaveDialog(stage);
 				if(file != null){
 					FileWriter myWriter = new FileWriter(file);
