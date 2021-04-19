@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.ToStringBuilder;
 
 class TestNote {
 
@@ -38,6 +39,7 @@ class TestNote {
 
 		assertTrue(n1.compareTo(n2) == 0);
 	}
+	
 
 	@Test
 	void testGetPitch() {
@@ -46,8 +48,7 @@ class TestNote {
 
 		assertEquals(expected, actual);
 	}
-	
-	
+     
 	@Test
 	void testDrumGhost() {
 		Note note = new Note("SN", "g", 0);
@@ -83,6 +84,7 @@ class TestNote {
 		Note note = new Note("SN", "O", 0);
 		assertTrue(note.accent);
 	}
+	
 	
 
 }

@@ -1,3 +1,4 @@
+
 package org.testfx;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,11 +195,13 @@ class ApplicationTest {
     	robot.clickOn("#convert");
     	//robot.clickOn(850, 350);
     	robot.clickOn("#save");
-    	robot.doubleClickOn(350,420);
+     	robot.doubleClickOn(350,420);
     	robot.clickOn(650,490);
     	robot.write("save");
     	robot.clickOn(850, 345);
       	FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
       //  FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
-    }
+    
 }
+}
+

@@ -322,10 +322,12 @@ public class Note implements Comparable<Note> {
 			if (slideStart)
 				toMXL += "\t\t\t<slide type=\"start\"/>\n";
 		}
+		//System.out.println(toMXL);
 
 		toMXL += "\t\t</notations>\n" + "\t</note>";
-
+		
 		return toMXL;
+		
 
 	}
 

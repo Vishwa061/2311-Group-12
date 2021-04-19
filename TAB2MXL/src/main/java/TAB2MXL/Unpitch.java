@@ -16,6 +16,7 @@ public class Unpitch {
 	private String step;
 	private String instrumentID;
 	
+	
 	/**
 	 * Creates a drum note
 	 * 
@@ -34,6 +35,7 @@ public class Unpitch {
 		
 	}
 
+	
 	public int getOctave() {
 		return octave;
 	}
