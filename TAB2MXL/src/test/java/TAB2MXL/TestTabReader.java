@@ -57,6 +57,8 @@ public class TestTabReader {
 		List<ArrayList<String>> actual = reader.splitMeasure(tabArray, tabArray.size());
 		assertEquals(expected, actual);
 	}
+	
+	
 
 
 	//	@Test
@@ -221,7 +223,17 @@ public class TestTabReader {
 		reader.setInput(new File(PATH + "test_tabs_reading.txt"));
 		assertEquals("test_tabs_reading", reader.getTitle());
 	}
-
+	
+	@Test
+	void testToString() {
+		TabReader test = new TabReader();
+		String actual = test.setInput(new File("src/test/resources/guitarTechniques.txt"));
+		
+				
+		String expected = test.toMXL();
+		assertEquals(expected, actual);
+	}
+	
 	@Test
 	void testGetInstrument() {
 		reader.setInput(new File(PATH + "test_tabs_reading.txt"));
