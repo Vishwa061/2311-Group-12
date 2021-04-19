@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -242,7 +244,7 @@ public class Controller{
 		    	
 				Parent p = Window.getWindows().get(0).getScene().getRoot();
 				TextArea input = (TextArea) p.getChildrenUnmodifiable().get(INPUTBOX_ID);
-		//	System.out.println("INPUT BOX:\n" + input.getText());
+//				System.out.println("INPUT BOX:\n" + input.getText());
 				input.setText(reader.editMeasure(start - 1, end - 1, measureEditBox.getText()));
 				saveMeasureEdit.getScene().getWindow().hide();
 			} catch (Exception e) {e.printStackTrace();}
@@ -253,10 +255,11 @@ public class Controller{
 	    	int start = Integer.parseInt(startMeasureID.getText());
 	    	int end = Integer.parseInt(endMeasureID.getText());
 	    	String output = reader.getMeasures(start - 1, end - 1);
-	    //	System.out.println(start);
-	   // 	System.out.println(output);
+	    	System.out.println(start);
+	    	System.out.println(output);
 	         measureEditBox.setText(output);
 	    }
+
 
 	//This is for editing the timeSig in primary stage
 	@FXML
