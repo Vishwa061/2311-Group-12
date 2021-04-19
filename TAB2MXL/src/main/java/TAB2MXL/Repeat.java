@@ -14,6 +14,14 @@ public class Repeat {
 		return measureNumber;
 	}
 	
+	public boolean getIsEnd() {
+		return isEnd;
+	}
+	
+	public int getNumRepeats() {
+		return numRepeats;
+	}
+	
 	@Override
 	public String toString() {
 		String mxl = "\t<barline location=\"" + (isEnd ? "right" : "left") + "\">\n"
