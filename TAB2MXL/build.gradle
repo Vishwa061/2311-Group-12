@@ -73,7 +73,20 @@ run {
 
 mainClassName = 'application.MainLaunch'
 
+task uberJar(type: Jar) {
+	manifest {
+    	attributes 'Main-Class': 'org.openjfx.Main'
+  	}
+    archiveClassifier = 'uber'
 
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+ }
+    
 jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

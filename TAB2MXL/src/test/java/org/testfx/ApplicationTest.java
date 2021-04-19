@@ -1,5 +1,3 @@
-
-
 package org.testfx;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,6 +61,9 @@ class ApplicationTest {
 	private Controller Controller;
 	private TabReader reader;
 	
+	/*
+	 * Loads the primary stage 
+	 */
 	@Start
      private void start(Stage primaryStage) {
 		try {
@@ -79,26 +80,38 @@ class ApplicationTest {
     	catch(IOException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	/*
+	 * Checks whether the inputBox is empty when it loads 
+	 */
 	@Test
 		public void emptyTextArea(FxRobot robot) {
 			robot.clickOn("#startButton");
-			FxAssert.verifyThat("#inputBox", TextInputControlMatchers.hasText(""));
-			
-		}
+			FxAssert.verifyThat("#inputBox", TextInputControlMatchers.hasText(""));		
+	}
+	
+	/*
+	 *  Checks the convert button label
+	 */
 	
 	@Test
 	void should_contain_button_with_convert(FxRobot robot) {
 		FxAssert.verifyThat("#convert", LabeledMatchers.hasText("Convert"));
 	}
 	
+	/*
+	 *  Checks the start button label
+	 */
 	
     @Test
 	void should_contain_button_with_start(FxRobot robot) {
-   // 	robot.clickOn("#select");
-    //	assertEquals(true,Controller.select.isDisabled());
 	    FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
     }
+    
+    /*
+	 *  Checks the feature button label works and other buttons are enabled 
+	 */
     @Test
 	public void clickFeatureResult(FxRobot robot) {
     	robot.clickOn("#startButton");
@@ -106,55 +119,76 @@ class ApplicationTest {
 		FxAssert.verifyThat("#featureButton", LabeledMatchers.hasText("Show More Features"));
 	}
     
-    
+    /*
+	 *  Checks the help button label
+	 */
 
     @Test
  	void should_contain_button_with_help(FxRobot robot) {
    	    FxAssert.verifyThat("#helpButton", LabeledMatchers.hasText("Help"));
     }
     
-
+    /*
+	 *  Checks the save button label loaded at first 
+	 */
     @Test 
     void should_contain_button_with_save(FxRobot robot) {
     	 FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
     }
     
+    /*
+	 *  Checks the select button label
+	 */
 
     @Test 
     void should_contain_button_with_select(FxRobot robot) {
     	 FxAssert.verifyThat("#select", LabeledMatchers.hasText("Select File"));
     }
     
-
+    /*
+	 *  Checks the feature button label
+	 */
     @Test 
     void should_contain_button_with_feature(FxRobot robot) {
     	 FxAssert.verifyThat("#featureButton", LabeledMatchers.hasText("Show More Features"));
     }
 
+    /*
+	 *  Checks the timeSigButton label loaded
+	 */
 
     @Test 
     void should_contain_button_with_timeSigButton(FxRobot robot) {
     	 FxAssert.verifyThat("#timeSigButton", LabeledMatchers.hasText("Select Time Signiture"));
     }
     
-    
+    /*
+	 *  Checks the key button label
+	 */
 
     @Test 
     void should_contain_button_with_keyButton(FxRobot robot) {
     	 FxAssert.verifyThat("#keyButton", LabeledMatchers.hasText("Select Key"));
     }
    
+    /*
+	 *  Checks the title button label
+	 */
     @Test 
     void should_contain_button_with_titleButton(FxRobot robot) {
     	 FxAssert.verifyThat("#titleButton", LabeledMatchers.hasText("Specify Title "));
     }
-    
+    /*
+	 *  Checks the composer button label
+	 */
     @Test 
     void should_contain_button_with_composerButton(FxRobot robot) {
     	 FxAssert.verifyThat("#composerButton", LabeledMatchers.hasText("Specify Composer"));
     }
     
-    
+    /*
+	 *  Checks that program can handle error from user text gracefully 
+	 */
   
     
     @Test 
@@ -167,6 +201,9 @@ class ApplicationTest {
         FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
     }
     
+    /*
+	 *  Checks that program updates the instrument detection after an input 
+	 */
     @Test 
     public void properInputTest(FxRobot robot) throws AssertionError{
     	robot.clickOn("#startButton");
@@ -177,6 +214,9 @@ class ApplicationTest {
     	FxAssert.verifyThat("#insturmentID", LabeledMatchers.hasText("No Intrument Detected"));
     } 
     
+    /*
+	 *  Checks that program updates the title detection after an input 
+	 */
     @Test
     public void properSelection(FxRobot robot) {    
     	robot.clickOn("#startButton");
@@ -186,7 +226,10 @@ class ApplicationTest {
     	robot.doubleClickOn(300, 220);
     	 FxAssert.verifyThat("#select", LabeledMatchers.hasText("Select File"));
     }
-   
+    
+    /*
+   	 *  Checks that program successful can save a translated file without errors 
+   	 */
     
       @Test 
     public void verifySaving(FxRobot robot) throws InterruptedException {
@@ -203,7 +246,11 @@ class ApplicationTest {
       	FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
       //  FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
     }
-    
+     
+     /*
+  	 *  Checks that program saves any changes in the input box as a text file 
+  	 */
+      
     @Test
     public void testSaveTextFile(FxRobot robot) {
     	robot.clickOn("#startButton");
@@ -217,5 +264,5 @@ class ApplicationTest {
     	FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
     
     }
-}
+    }
 
