@@ -15,7 +15,9 @@ import TAB2MXL.TabReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -41,7 +43,7 @@ import javafx.stage.Stage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller {
+public class Controller{
 
 	/*
 	 * Translated File + Other Important Imports 
@@ -69,7 +71,15 @@ public class Controller {
 	private TextArea inputBox, outputBox, measureBox;
 
 	@FXML
-	private Button select, convert, save, featureButton, startButton;
+	public Button select;
+	@FXML
+	public  Button convert;
+	@FXML
+	private Button save;
+	@FXML
+	public Button featureButton;
+	@FXML
+	private Button startButton;
 
 	@FXML
 	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
@@ -170,13 +180,14 @@ public class Controller {
 	 * Tab parser
 	 */
 	private static TabReader reader = new TabReader();
+	
 
 	/*
 	 * 
 	 *  PrimaryStage Methods related to the FXML documents.  	
 	 *
 	 */
-
+	
 	@FXML
 	void saveInputFile(){
 		
@@ -184,6 +195,7 @@ public class Controller {
 			FileChooser fileChooser = new FileChooser();
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("textfiles files (*.txt)","*.txt");
 			fileChooser.getExtensionFilters().add(extFilter);
+			fileChooser.setInitialFileName("Music62");
 			File file = fileChooser.showSaveDialog(stage);
 			if(file != null){
 				FileWriter myWriter = new FileWriter(file);
@@ -200,6 +212,8 @@ public class Controller {
 		}
 	 }
 		
+	Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
+	 Button errorAl = (Button) errorAlert.getDialogPane().lookupButton(ButtonType.OK);
 	
 	@FXML
 	void ConvertClicked() {
@@ -228,10 +242,10 @@ public class Controller {
 
 	@FXML
 	void SaveClicked() {
-		if(startButton.isPressed()== false && file == null) {
-			Parent root;
+		/*if(startButton.isPressed()== false && file == null) {
+		//	Parent root;
 			try {
-				root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
+			root = FXMLLoader.load(getClass().getResource("NoFileUploaded.fxml"));
 				//new stage created with modality(events delivered)
 				// all stages created this way
 				final Stage popup = new Stage();
@@ -247,10 +261,11 @@ public class Controller {
 
 		}
 		if( checkTrue(file) == true) {
-			try { 
+		*/	try { 
 				FileChooser fileChooser = new FileChooser();
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
 				fileChooser.getExtensionFilters().add(extFilter);
+				fileChooser.setInitialFileName("Music52");
 				File file = fileChooser.showSaveDialog(stage);
 				if(file != null){
 					FileWriter myWriter = new FileWriter(file);
@@ -265,7 +280,7 @@ public class Controller {
 			catch (IOException ex) {
 				Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
 			}}
-	}
+	
 
 	int size =1;
 	@FXML
@@ -309,7 +324,7 @@ public class Controller {
 
 	}
 
-	private String readFile(File file) {
+	public String readFile(File file) {
 		String fileName = file.getAbsolutePath();
 
 		StringBuilder stringBuffer = new StringBuilder();
@@ -472,6 +487,7 @@ public class Controller {
 		keyButton.setVisible(false);
 		titleButton.setVisible(false);
 		composerButton.setVisible(false);
+		//titleButton.setDisable(false);
 		//convert.setVisible(false);
 		convert.setDisable(false);
 		saveInputChanges.setDisable(false);
@@ -487,8 +503,8 @@ public class Controller {
 	}
 
 
-	//	@FXML
-	public  void initialize() {
+/*
+	public void initialize() {
 		assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
 		if (inputBox != null) {
 			inputBox.setDisable(true);
@@ -551,7 +567,7 @@ public class Controller {
 		if (saveInputChanges != null) {
 			saveInputChanges.setDisable(true);
 		}
-	}
+	}*/
 
 
 	/*
@@ -1202,6 +1218,95 @@ public class Controller {
 	void ContinueToSave() {
 		continueButtonConvert.getScene().getWindow().hide();
 	}
+
+	public void initialize() {
+		// TODO Auto-generated method stub
+	//	assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
+		if (inputBox != null) {
+			inputBox.setDisable(true);
+		}		
+
+	//	assert outputBox != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
+		if (outputBox != null) {
+			outputBox.setDisable(true);
+		}	
+		
+	//	assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'Untitled'.";
+		if (measureBox != null) {
+			measureBox.setDisable(true);
+		}	
+
+		if (select != null) { 
+			select.setDisable(true);
+		}	
+		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
+		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
+		if (convert != null) { 
+			convert.setDisable(true);
+		}
+
+
+		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
+		if (save != null) { 
+			save.setDisable(true);
+		}
+
+		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+
+		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (timeSigButton != null) {
+			timeSigButton.setDisable(true);
+		}
+
+		assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (keyButton != null) {
+			keyButton.setDisable(true);
+		}	
+
+		assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (titleButton != null) {
+			titleButton.setDisable(true);
+		}
+		assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (composerButton != null) {
+			composerButton.setDisable(true);
+		}
+
+		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+
+		if (featureButton != null) {
+			featureButton.setDisable(true);
+		}
+		
+		assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
+		if (saveInputChanges != null) {
+			saveInputChanges.setDisable(true);
+		}
+		 assert outputBox != null : "fx:id=\"outputBox\" was not injected: check your FXML file 'fxml.fxml'.";
+	     //   assert step3Label != null : "fx:id=\"step3Label\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert select != null : "fx:id=\"select\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	       // assert step4Label != null : "fx:id=\"step4Label\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert inputBox != null : "fx:id=\"inputBox\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert insturmentID != null : "fx:id=\"insturmentID\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert titleID != null : "fx:id=\"titleID\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'fxml.fxml'.";
+	        assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'fxml.fxml'.";
+	    //    assert editMeasureButton != null : "fx:id=\"editMeasureButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	     //   assert addTimeSig != null : "fx:id=\"addTimeSig\" was not injected: check your FXML file 'fxml.fxml'.";
+
+	}
+
+
 
 }
 
