@@ -12,9 +12,10 @@ This is a project to be completed for EECS 2311
 
 Go to [Latest Release](https://github.com/Vishwa061/2311-Group-12/releases/tag/1.0) and download the user manual.
 
-#Documentation
+# Documentation
 
 There are four documentation this project has:
+
           1. Software Requirement Specfication Document
           2. User Manual Document
           3. Testing Document
