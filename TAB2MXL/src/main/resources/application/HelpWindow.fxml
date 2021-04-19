@@ -19,7 +19,7 @@
          </children>
       </Pane>
       <Button fx:id="closeButton" layoutX="494.0" layoutY="297.0" mnemonicParsing="false" onAction="#closeHelp" prefHeight="27.0" prefWidth="83.0" text="Close" />
-      <TextArea  fx:id="helpTextArea" layoutX="42.0" layoutY="84.0" prefHeight="199.0" prefWidth="500.0" style="-fx-border-color: #000000;" text="To use the application please refer to the following steps: &#10;&#10;1.      Click Select File. A pop up window will open and please select a text file &#10;         you want to translate.  You can also drag and drop. &#10;&#10;2.      Once file upload is successful please. You can decide the title, composer&#10;         time signature and key. &#10;&#10;3.      Click convert. The translated file will show up on the right hand side. &#10;&#10;4.      Once you are happy with your file, please save it on your computer. &#10;">
+      <TextArea  fx:id="helpTextArea" layoutX="42.0" layoutY="84.0" prefHeight="199.0" prefWidth="500.0" style="-fx-border-color: #000000;" text="To use the application please refer to the following steps: &#10;&#10;1.      Click Select. A pop up window will open and please select a textfile &#10;         you want to translate.  You can also drag and drop. &#10;&#10;2.      Once file upload is successful please. You can decide the title, composer&#10;         time signiture and key. &#10;&#10;3.      Click convert. The translated file will show up on the right hand side. &#10;&#10;4.      Once you are happy with your file, please save it on your machine. &#10;">
          <font>
             <Font name="Century" size="12.0" />
          </font>

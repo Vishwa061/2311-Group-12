@@ -24,7 +24,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		try {
 		//	FXMLLoader loader = new FXMLLoader(getClass().getResource("/PrimaryStage.fxml"));
-			Parent root = FXMLLoader.load(getClass().getResource("/PrimaryStage.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 			primaryStage.setTitle("TAB2XML");
 			
 			

@@ -8,7 +8,6 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/8.0.191" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="application.Controller">
    <children>
-   	  
       <Label alignment="CENTER" prefHeight="67.0" prefWidth="334.0" style="-fx-background-color: #DEB9B9;" text="Upload Successful">
          <font>
             <Font name="Century" size="24.0" />
@@ -28,7 +27,7 @@
             <Font name="Century" size="12.0" />
          </font>
       </Text>
-      <Text layoutX="98.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text file is uploaded successfully. ">
+      <Text layoutX="98.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your text file is uploaded. ">
          <font>
             <Font name="Century" size="12.0" />
          </font>
