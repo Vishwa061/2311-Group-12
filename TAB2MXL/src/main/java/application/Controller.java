@@ -82,7 +82,7 @@ public class Controller{
 	private Button startButton;
 
 	@FXML
-	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton;
+	private Button helpButton, timeSigButton, keyButton, titleButton, composerButton, editMeasureButton,addTimeSig;
 
 	//@FXML 
 	//private Label UploadFileLabel;
@@ -182,6 +182,128 @@ public class Controller{
 	private static TabReader reader = new TabReader();
 	
 
+
+	
+	
+	/*
+	 * Please see the edit Measure Window elements and methods below 
+	 * 
+	 */
+	@FXML
+	void editMeasureButton(){ //this is primary stage 
+		Parent root;
+		try {
+			// used the same style for all popup windows 
+			root = FXMLLoader.load(getClass().getResource("EditMeasureWindow.fxml"));
+		    Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Choose Measure to Edit");
+			popup.setScene(new Scene(root));
+			popup.show();
+			count ++;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//now its edit measure window elements 
+	
+	  @FXML
+	    private Button cancelMeasure;
+
+	    @FXML
+	    private Button saveMeasureEdit;
+
+	    @FXML
+	    private TextField startMeasureID;
+
+	    @FXML
+	    private TextField endMeasureID;
+
+	    @FXML
+	    private TextArea measureEditBox;
+
+	    @FXML
+	    private Button showMeasures;
+
+	    @FXML
+	    void cancelMeasureEdit() {
+	    	cancelMeasure.getScene().getWindow().hide();
+	    }
+
+	    @FXML
+	    void saveMeasureEdit(ActionEvent event) {
+	    	//IDK HOW TO DO THIS 
+	    }
+
+	    @FXML
+	    void showMeasures() {
+	    	int start = Integer.parseInt(startMeasureID.getText());
+	    	int end = Integer.parseInt(endMeasureID.getText());
+	    	String output =reader.getMeasures(start, end);
+	    	System.out.println(start);
+	    	System.out.println(output);
+	         measureEditBox.setText(output);
+	    }
+
+	//This is for editing the timeSig in primary stage
+	@FXML
+	void addTimeSig() {
+		Parent root;
+		try {
+			// used the same style for all popup windows 
+			root = FXMLLoader.load(getClass().getResource("AddTimeSigWindow.fxml"));
+			Stage popup = new Stage();
+			popup.initModality(Modality.APPLICATION_MODAL);
+			popup.setTitle("Error");
+			popup.setScene(new Scene(root));
+			popup.show();
+			count ++;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	//NOW ALL ELEMENTS RELATED TO EDIT_TIME_SIG_WINDOW 
+	
+	//PLEASE NOTE, WE WILL BE USING SAME METHODS FOR BEAT/BEAT TIME MENU as it was already declared. 
+	
+	@FXML 
+	private Button cancelEditTSButton, EditSaveTimeSig;
+	
+	@FXML 
+	private TextField startTimeSigField, endTimeSigField; 
+	
+	@FXML 
+	private void cancelTimeSigTS() {
+		cancelMeasure.getScene().getWindow().hide();
+	}
+	
+	@FXML 
+	private void saveTimeSigClickedEdit() {
+		int[] timeSig = new int[2];
+		timeSig[0] = 4;
+     	timeSig[1] = 4;
+     	try {
+		int startMeasure = Integer.parseInt(startTimeSigField.getText());
+		int endMeasure =  Integer.parseInt(endTimeSigField.getText());
+		} catch (NumberFormatException e) {
+			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
+			errorAlert.setHeaderText("Entered measures were not a number or was out of bounds"); 
+			errorAlert.showAndWait();
+		}
+		try {
+			timeSig[0] = Integer.parseInt(beatOption.getText());
+			timeSig[1] = Integer.parseInt(beatTimeOption.getText());
+		} catch(Exception e) {}
+		
+		//reader.setTimeSignature(timeSig);
+		// IDK HOW TO ADD THIS EDITTED TIME SIG FOR A CERTAIN MEASURE TO THE BACKEND!!!!
+		SaveTimeSig.getScene().getWindow().hide();
+	}
 	/*
 	 * 
 	 *  PrimaryStage Methods related to the FXML documents.  	
@@ -195,7 +317,7 @@ public class Controller{
 			FileChooser fileChooser = new FileChooser();
 			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("textfiles files (*.txt)","*.txt");
 			fileChooser.getExtensionFilters().add(extFilter);
-			fileChooser.setInitialFileName("Music62");
+			fileChooser.setInitialFileName("Music666");
 			File file = fileChooser.showSaveDialog(stage);
 			if(file != null){
 				FileWriter myWriter = new FileWriter(file);
@@ -265,7 +387,7 @@ public class Controller{
 				FileChooser fileChooser = new FileChooser();
 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("musicXML files (*.musicxml)","*.musicxml");
 				fileChooser.getExtensionFilters().add(extFilter);
-				fileChooser.setInitialFileName("Music52");
+				fileChooser.setInitialFileName("Music662");
 				File file = fileChooser.showSaveDialog(stage);
 				if(file != null){
 					FileWriter myWriter = new FileWriter(file);
@@ -1301,8 +1423,8 @@ public class Controller{
 	        assert titleID != null : "fx:id=\"titleID\" was not injected: check your FXML file 'fxml.fxml'.";
 	        assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'fxml.fxml'.";
 	        assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'fxml.fxml'.";
-	    //    assert editMeasureButton != null : "fx:id=\"editMeasureButton\" was not injected: check your FXML file 'fxml.fxml'.";
-	     //   assert addTimeSig != null : "fx:id=\"addTimeSig\" was not injected: check your FXML file 'fxml.fxml'.";
+	      assert editMeasureButton != null : "fx:id=\"editMeasureButton\" was not injected: check your FXML file 'fxml.fxml'.";
+	       assert addTimeSig != null : "fx:id=\"addTimeSig\" was not injected: check your FXML file 'fxml.fxml'.";
 
 	}
 
