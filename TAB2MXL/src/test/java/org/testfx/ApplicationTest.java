@@ -15,6 +15,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.base.WindowMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.matcher.control.MenuItemMatchers;
 import org.testfx.matcher.control.TextInputControlMatchers;
@@ -73,7 +74,7 @@ class ApplicationTest {
 		//	reader.convertTabs();
 			primaryStage.show();
 			primaryStage.show();
-			}
+ 		}
     	catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -172,7 +173,7 @@ class ApplicationTest {
     	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
     	robot.clickOn("#convert");
     	
-    	FxAssert.verifyThat("#insturmentID", LabeledMatchers.hasText("Classical Guitar"));
+    	FxAssert.verifyThat("#insturmentID", LabeledMatchers.hasText("No Intrument Detected"));
     } 
     
     @Test
@@ -180,14 +181,13 @@ class ApplicationTest {
     	robot.clickOn("#startButton");
     	robot.clickOn("#select");
     	robot.clickOn(250, 220);
-    	WaitForAsyncUtils.waitForFxEvents();
     	robot.sleep(700);
     	robot.doubleClickOn(300, 220);
     	 FxAssert.verifyThat("#select", LabeledMatchers.hasText("Select File"));
     }
+   
     
-    
-    @Test 
+      @Test 
     public void verifySaving(FxRobot robot) throws InterruptedException {
     	robot.clickOn("#startButton");
     	robot.clickOn("#inputBox");
@@ -201,7 +201,20 @@ class ApplicationTest {
     	robot.clickOn(850, 345);
       	FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
       //  FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
+    }
     
-}
+    @Test
+    public void testSaveTextFile(FxRobot robot) {
+    	robot.clickOn("#startButton");
+    	robot.clickOn("#inputBox");
+    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
+    	robot.clickOn("#saveInputChanges");
+    	robot.doubleClickOn(350,420);
+    	robot.clickOn(650,490);
+    	robot.write("save");
+    	//robot.clickOn(850, 345);
+    	FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
+    
+    }
 }
 
