@@ -655,10 +655,7 @@ public class TestTabReader {
 		boolean[] expecteds = new boolean[8];
 		Arrays.fill(expecteds, true);
 		int i = 0;
-		int testNumber = 0;
 		for (Measure m : test.getMeasures()) {
-			testNumber++;
-			System.out.println("Test Number: " + testNumber);
 			m.sortArray();
 			Note note1 = m.getNotes().get(0);
 			Note note2 = m.getNotes().get(1);
