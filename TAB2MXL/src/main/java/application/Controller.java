@@ -428,7 +428,7 @@ public class Controller{
 	private void displaySuccessConvert() {
 		Parent root;
 		TabError tError = reader.convertTabs();
-		String a = tError.getErrorMsg();
+		String a = tError == null ? "" : tError.getErrorMsg();
 		if (!a.equals("MAJOR ERROR")) {
 		try {
 			root = FXMLLoader.load(getClass().getResource("ConvertSuccess.fxml"));
@@ -468,11 +468,10 @@ public class Controller{
 	}
 	
 	private void displaygetMeasure() {
-		List<ArrayList<String>> allMeasures;
 		TabError tError = reader.convertTabs();
-		System.out.println(tError.getErrorMsg());
-		System.out.println(tError.getMeasureNumber());
-		String a = tError.getErrorMsg();
+//		System.out.println(tError.getErrorMsg());
+//		System.out.println(tError.getMeasureNumber());
+		String a = tError == null ? "" : tError.getErrorMsg();
 		measureBox.setDisable(false);
 		measureBox.setEditable(false);
 		measureBox.setWrapText(true);

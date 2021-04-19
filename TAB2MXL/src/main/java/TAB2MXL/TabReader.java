@@ -110,6 +110,7 @@ public class TabReader {
 	 * @return a TabError or NULL iff tabs were converted without warnings or errors
 	 */
 	public TabError convertTabs() {
+		errorMsg = "";
 		try {
 			instrument = getInstrument();
 			title = getTitle();
@@ -127,7 +128,7 @@ public class TabReader {
 			addRepeats();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new TabError(errorMeasure + 1, "", "ERROR");
+			return new TabError(errorMeasure + 1, "", "ERROR (Measure " + (errorMeasure + 1) + ")");
 		}
 		
 		if (errorMsg.equals("")) {
@@ -384,9 +385,9 @@ public class TabReader {
 					for (int k = 0; k < currentLine.length(); k++) {
 						if (!isCharAccepted(currentLine.charAt(k))) {
 							errorMeasure = i;
-							errorMsg = "WARNING (Measure " + (i + 1) + "):"
+							errorMsg += "WARNING (Measure " + (i + 1) + "):"
 									+ "\nCharacter \"" + currentLine.charAt(k) + "\" is not supported."
-									+ "\nThis character will be ignored.";
+									+ "\nThis character will be ignored.\n\n";
 						}
 						
 						if (currentLine.charAt(k) == '-' || currentLine.charAt(k) == '|'
@@ -585,9 +586,9 @@ public class TabReader {
 				for (int k = 0; k < lineLength; k++) {
 					if (!isCharAccepted(currentLine.charAt(k))) {
 						errorMeasure = i;
-						errorMsg = "WARNING (Measure " + (i + 1) + "):"
+						errorMsg += "WARNING (Measure " + (i + 1) + "):"
 								+ "\nCharacter \"" + currentLine.charAt(k) + "\" is not supported."
-								+ "\nThis character will be ignored.";
+								+ "\nThis character will be ignored.\n\n";
 					}
 					
 					if (drumsetTechniques.contains(currentLine.charAt(k))) {
