@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -234,14 +236,24 @@ public class Controller{
 
 	    @FXML
 	    void saveMeasureEdit(ActionEvent event) {
-	    	//IDK HOW TO DO THIS 
+	    	try {
+		    	int start = Integer.parseInt(startMeasureID.getText());
+		    	int end = Integer.parseInt(endMeasureID.getText());
+		    	final int INPUTBOX_ID = 10; // might need to change this later
+		    	
+				Parent p = Window.getWindows().get(0).getScene().getRoot();
+				TextArea input = (TextArea) p.getChildrenUnmodifiable().get(INPUTBOX_ID);
+//				System.out.println("INPUT BOX:\n" + input.getText());
+				input.setText(reader.editMeasure(start - 1, end - 1, measureEditBox.getText()));
+				saveMeasureEdit.getScene().getWindow().hide();
+			} catch (Exception e) {e.printStackTrace();}
 	    }
 
 	    @FXML
 	    void showMeasures() {
 	    	int start = Integer.parseInt(startMeasureID.getText());
 	    	int end = Integer.parseInt(endMeasureID.getText());
-	    	String output =reader.getMeasures(start, end);
+	    	String output = reader.getMeasures(start - 1, end - 1);
 	    	System.out.println(start);
 	    	System.out.println(output);
 	         measureEditBox.setText(output);
