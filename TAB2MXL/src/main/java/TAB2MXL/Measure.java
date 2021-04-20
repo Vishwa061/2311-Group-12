@@ -6,22 +6,28 @@ import java.util.Collections;
 public class Measure {
 	private ArrayList<Note> notes;
 	private int measureNumber;
-	public static Attributes a;
+	private Attributes a, a2;
 	private int indexTotal;
 	public double durationVal;
 	private Repeat repeat;
 
 	public Measure(int measureNumber) {
-		notes = new ArrayList<Note>();
+		this.notes = new ArrayList<Note>();
 		this.measureNumber = measureNumber;
+		this.a = null;
+		this.a2 = null;
 	}
 	
 	public void setRepeat(Repeat repeat) {
 		this.repeat = repeat;
 	}
 
-	public static void setAttributes(Attributes a) {
-		Measure.a = a;
+	public void setAttributes(Attributes a) {
+		this.a = a;
+	}
+	
+	public void setAttributes2(Attributes a2) {
+		this.a2 = a2;
 	}
 
 	public void addNote(Note note) {
@@ -33,8 +39,12 @@ public class Measure {
 		
 		String mxl = "<measure number=\"" + measureNumber + "\">\n";
 
-		if (measureNumber == 1) {
+		if (a != null) {
 			mxl += a + "\n";
+		}
+		
+		if (a2 != null) {
+			mxl += a2 + "\n";
 		}
 
 		for (Note note : notes) {

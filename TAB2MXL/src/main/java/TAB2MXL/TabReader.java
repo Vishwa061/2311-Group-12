@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 public class TabReader {
@@ -28,6 +29,7 @@ public class TabReader {
 	private List<Repeat> repeats;
 	private int errorMeasure;
 	private boolean useDefaultTuning;
+	private HashMap<Integer, Attributes> timeSigs;
 
 	public static void main(String[] args) {
 		TabReader reader = new TabReader();
@@ -63,6 +65,7 @@ public class TabReader {
 		beatType = 4;
 		key = 0;
 		errorMsg = "";
+		timeSigs = new HashMap<Integer, Attributes>();
 	}
 
 	private void init() {
@@ -119,16 +122,26 @@ public class TabReader {
 			instrument = getInstrument();
 			title = getTitle();
 			numStrings = countNumStrings(tabArray);
+			
 			if (useDefaultTuning) {
 				guitarTuning = numStrings == 4 ? Arrays.asList("G","D","A","E") : Arrays.asList("E","B","G","D","A","E");
 			} else {
 				guitarTuning = getTuning();
 			}
-			Attributes attr = new Attributes(guitarTuning, beats, beatType);
-			attr.setKey(key);
-			Measure.setAttributes(attr);
+			
 			allMeasures = compileMeasures();
 			measureElements = TabReader.instrument.equals("Drumset") ? makeDrumNotes() : makeNotes();
+			Attributes attr = new Attributes(guitarTuning, beats, beatType);
+			attr.setKey(key);
+			measureElements.get(0).setAttributes(attr);
+			
+			if (!timeSigs.isEmpty()) {
+				for (Entry<Integer, Attributes> ts : timeSigs.entrySet()) {
+					measureElements.get(ts.getKey()).setAttributes2(ts.getValue());
+				}
+				timeSigs.clear();
+			}
+			
 			addRepeats();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1048,12 +1061,19 @@ public class TabReader {
 	}
 
 	/**
-	 * @param timeSignature timeSignature[0] must have beat timeSignature[1] must
-	 *                      have beat time
+	 * @param timeSignature timeSignature[0] must have beats timeSignature[1] must
+	 *                      have beat type
 	 */
 	public void setTimeSignature(int[] timeSignature) {
 		this.beats = timeSignature[0];
 		this.beatType = timeSignature[1];
+	}
+	
+	public void setTimeSignatures(int[] timeSignature, int startMeasure, int endMeasure) {
+		Attributes a = new Attributes(timeSignature[0], timeSignature[1]);
+		for (int i = startMeasure; i <= endMeasure; i++) {
+			timeSigs.put(i, a);
+		}
 	}
 
 	public void addRepeats() {

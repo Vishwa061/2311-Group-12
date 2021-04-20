@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamResult;
 import TAB2MXL.Measure;
 import TAB2MXL.TabError;
 import TAB2MXL.TabReader;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -160,7 +161,7 @@ public class Controller{
 	private MenuButton keyOption;
 
 	@FXML 
-	private RadioMenuItem key1,key2,key3,key4,key5,key6,key7,key8,key9,key10,key11,key12,key13,key14; 
+	private RadioMenuItem key1,key2,key3,key4,key5,key6,key7,key8,key9,key10,key11,key12,key13,key14,key15; 
 
 	static int keyFifths = 0;
 
@@ -270,7 +271,7 @@ public class Controller{
 			root = FXMLLoader.load(getClass().getResource("AddTimeSigWindow.fxml"));
 			Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Error");
+			popup.setTitle("Add Time Signature");
 			popup.setScene(new Scene(root));
 			popup.show();
 			count ++;
@@ -301,23 +302,25 @@ public class Controller{
 		int[] timeSig = new int[2];
 		timeSig[0] = 4;
      	timeSig[1] = 4;
-     	try {
-		int startMeasure = Integer.parseInt(startTimeSigField.getText());
-		int endMeasure =  Integer.parseInt(endTimeSigField.getText());
-		} catch (NumberFormatException e) {
-			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
-			errorAlert.setHeaderText("Entered measures were not a number or was out of bounds"); 
-			errorAlert.showAndWait();
-		}
 		try {
 			timeSig[0] = Integer.parseInt(beatOption.getText());
 			timeSig[1] = Integer.parseInt(beatTimeOption.getText());
 		} catch(Exception e) {}
-		
-		//reader.setTimeSignature(timeSig);
-		// IDK HOW TO ADD THIS EDITTED TIME SIG FOR A CERTAIN MEASURE TO THE BACKEND!!!!
-		SaveTimeSig.getScene().getWindow().hide();
+     	
+     	try {
+			int startMeasure = Integer.parseInt(startTimeSigField.getText());
+			int endMeasure =  Integer.parseInt(endTimeSigField.getText());
+			
+			reader.setTimeSignatures(timeSig, startMeasure - 1, endMeasure - 1);
+		} catch (Exception e) {
+			Alert errorAlert = new Alert(AlertType.ERROR); //creates a displayable error allert window 
+			errorAlert.setHeaderText("Entered measures were not a number or was out of bounds"); 
+			errorAlert.showAndWait();
+		}
+
+		EditSaveTimeSig.getScene().getWindow().hide();
 	}
+	
 	/*
 	 * 
 	 *  PrimaryStage Methods related to the FXML documents.  	
@@ -1019,7 +1022,7 @@ public class Controller{
 
 	@FXML
 	void chosenKey10(ActionEvent event) {
-		keyFifths = 10;
+		keyFifths = -6;
 		setKey(key10.getText());
 		key10.setSelected(true); // need to add to all. 
 		keyOption.setText(key10.getText());
@@ -1036,11 +1039,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey11(ActionEvent event) {
-		keyFifths = 11;
+		keyFifths = -5;
 		key11.setSelected(true);
 		keyOption.setText(key11.getText());
 		key1.setSelected(false);
@@ -1056,11 +1061,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey12(ActionEvent event) {
-		keyFifths = 12;
+		keyFifths = -4;
 		key12.setSelected(true);
 		keyOption.setText(key12.getText());
 		key1.setSelected(false);
@@ -1076,11 +1083,13 @@ public class Controller{
 		key11.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey13(ActionEvent event) {
-		keyFifths = 13;
+		keyFifths = -3;
 		key13.setSelected(true);
 		keyOption.setText(key13.getText());
 		key1.setSelected(false);
@@ -1096,11 +1105,13 @@ public class Controller{
 		key11.setSelected(false);
 		key12.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey14(ActionEvent event) {
-		keyFifths = 14;
+		keyFifths = -2;
 		key14.setSelected(true);
 		keyOption.setText(key14.getText());
 		key1.setSelected(false);
@@ -1116,11 +1127,13 @@ public class Controller{
 		key11.setSelected(false);
 		key12.setSelected(false);
 		key13.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey2(ActionEvent event) {
-		keyFifths = 2;
+		keyFifths = 1;
 		key2.setSelected(true);
 		keyOption.setText(key2.getText());
 		key1.setSelected(false);
@@ -1136,11 +1149,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey3(ActionEvent event) {
-		keyFifths = 3;
+		keyFifths = 2;
 		key3.setSelected(true);
 		keyOption.setText(key3.getText());
 		key1.setSelected(false);
@@ -1156,11 +1171,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey4(ActionEvent event) {
-		keyFifths = 4;
+		keyFifths = 3;
 		key4.setSelected(true);
 		keyOption.setText(key4.getText());
 		key1.setSelected(false);
@@ -1176,11 +1193,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey5(ActionEvent event) {
-		keyFifths = 5;
+		keyFifths = 4;
 		key5.setSelected(true);
 		keyOption.setText(key5.getText());
 		key1.setSelected(false);
@@ -1196,11 +1215,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey6(ActionEvent event) {
-		keyFifths = 6;
+		keyFifths = 5;
 		key6.setSelected(true);
 		keyOption.setText(key6.getText());
 		key1.setSelected(false);
@@ -1216,11 +1237,12 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
 	}
 
 	@FXML
 	void chosenKey7(ActionEvent event) {
-		keyFifths = 7;
+		keyFifths = 6;
 		key7.setSelected(true);
 		keyOption.setText(key7.getText());
 		key1.setSelected(false);
@@ -1236,11 +1258,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey8(ActionEvent event) {
-		keyFifths = 8;
+		keyFifths = 7;
 		key8.setSelected(true);
 		keyOption.setText(key8.getText());
 		key1.setSelected(false);
@@ -1256,11 +1280,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenKey9(ActionEvent event) {
-		keyFifths = 9;
+		keyFifths = -7;
 		key9.setSelected(true);
 		keyOption.setText(key9.getText());
 		key1.setSelected(false);
@@ -1276,11 +1302,13 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
+		key15.setSelected(false);
+
 	}
 
 	@FXML
 	void chosenkey1() {
-		keyFifths = 1;
+		keyFifths = 0;
 		key1.setSelected(true);
 		keyOption.setText(key1.getText());
 		key2.setSelected(false);
@@ -1296,7 +1324,28 @@ public class Controller{
 		key12.setSelected(false);
 		key13.setSelected(false);
 		key14.setSelected(false);
-
+		key15.setSelected(false);
+	}
+	
+	@FXML
+	void chosenKey15(ActionEvent event) {
+		keyFifths = -1;
+		key15.setSelected(true);
+		keyOption.setText(key15.getText());
+		key1.setSelected(false);
+		key2.setSelected(false);
+		key3.setSelected(false);
+		key4.setSelected(false);
+		key5.setSelected(false);
+		key6.setSelected(false);
+		key7.setSelected(false);
+		key8.setSelected(false);
+		key9.setSelected(false);
+		key10.setSelected(false);
+		key11.setSelected(false);
+		key12.setSelected(false);
+		key13.setSelected(false);
+		key14.setSelected(false);
 	}
 
 

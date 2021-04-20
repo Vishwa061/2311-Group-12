@@ -4,21 +4,39 @@ import java.util.List;
 
 public class Attributes {
 	private List<String> guitarTuning;
-	private int key, beats, beatType;
+	private static int key;
+	private int beats, beatType;
+	boolean isOnlyTimeSig;
 	
 	public Attributes(List<String> guitarTuning, int beats, int beatType) {
 		this.guitarTuning = guitarTuning;
 		this.beats = beats;
 		this.beatType = beatType;
-		this.key = 0;
+		Attributes.key = 0;
+		this.isOnlyTimeSig = false;
+	}
+	
+	public Attributes(int beats, int beatType) {
+		this.beats = beats;
+		this.beatType = beatType;
+		this.isOnlyTimeSig = true;
 	}
 
 	public void setKey(int key) {
-		this.key = key;
+		Attributes.key = key;
 	}
 	
 	@Override
 	public String toString() {
+		if (isOnlyTimeSig) {
+			return "\t<attributes>\n"
+					+ "\t\t<time>\n"
+					+ "\t\t\t<beats>" + beats + "</beats>\n"
+					+ "\t\t\t<beat-type>" + beatType + "</beat-type>\n"
+					+ "\t\t</time>\n"
+					+ "\t</attributes>";
+		}
+		
 		if (TabReader.instrument.equals("Drumset")) {
 			return "\t<attributes>\n"
 					+ "\t\t<divisions>8</divisions>\n"

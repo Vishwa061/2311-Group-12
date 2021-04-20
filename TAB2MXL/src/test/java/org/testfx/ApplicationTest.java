@@ -67,14 +67,14 @@ class ApplicationTest {
 	@Start
      private void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/PrimaryStage.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 		primaryStage.setTitle("TAB2XML");
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			File file = new File("Resources/badMeasure.txt");
 		//	Controller.readFile(file);  
 		//	reader.convertTabs();
-			primaryStage.show();
+//			primaryStage.show();
 			primaryStage.show();
  		}
     	catch(IOException e) {
