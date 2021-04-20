@@ -24,7 +24,7 @@
             <Font name="Century" size="15.0" />
          </font>
       </Label>
-      <MenuButton fx:id="beatOption" alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat" textAlignment="CENTER">
+      <MenuButton fx:id="beatOption" alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beats" textAlignment="CENTER">
         <items>
             <RadioMenuItem fx:id="beat1" mnemonicParsing="false" onAction="#beat1Select" text="2" />
             <RadioMenuItem fx:id="beat2" mnemonicParsing="false" onAction="#beat2Select" text="3" />
@@ -34,7 +34,7 @@
             <RadioMenuItem fx:id="beat6" mnemonicParsing="false" onAction="#beat6Select" text="12" />
         </items>
       </MenuButton>
-      <MenuButton fx:id="beatTimeOption" alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Time">
+      <MenuButton fx:id="beatTimeOption" alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Type">
          <items>
             <RadioMenuItem fx:id="beatTime1" mnemonicParsing="false" onAction="#beatTime1" text="1" />
             <RadioMenuItem fx:id="beatTime2" mnemonicParsing="false" onAction="#beatTime2" text="2" />
@@ -47,4 +47,5 @@
       <Button fx:id="SaveTimeSig" layoutX="252.0" layoutY="197.0" mnemonicParsing="false" onAction="#saveTimeSigClicked" prefHeight="25.0" prefWidth="68.0" text="Save" />
    </children>
 </Pane>
+
 

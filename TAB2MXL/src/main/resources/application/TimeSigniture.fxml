@@ -7,24 +7,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
-      <Label alignment="CENTER" prefHeight="67.0" prefWidth="334.0" style="-fx-background-color: #DEB9B9;" text="Translation Signiture">
+      <Label alignment="CENTER" prefHeight="67.0" prefWidth="334.0" style="-fx-background-color: #DEB9B9;" text="Time Signature">
          <font>
             <Font name="Century" size="24.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="32.0" layoutY="85.0" prefHeight="20.0" prefWidth="39.0" text="Beat">
+      <Label alignment="CENTER" layoutX="22.0" layoutY="85.0" prefHeight="20.0" prefWidth="49.0" text="Beats">
          <font>
             <Font name="Century" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="14.0" layoutY="149.0" prefHeight="20.0" prefWidth="85.0" text="Beat Time">
+      <Label alignment="CENTER" layoutX="14.0" layoutY="149.0" prefHeight="20.0" prefWidth="85.0" text="Beat Type">
          <font>
             <Font name="Century" size="15.0" />
          </font>
       </Label>
-      <MenuButton fx:id="beatOption" alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat" textAlignment="CENTER">
+      <MenuButton fx:id="beatOption" alignment="CENTER" layoutX="110.0" layoutY="80.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beats" textAlignment="CENTER">
         <items>
             <RadioMenuItem fx:id="beat1" mnemonicParsing="false" onAction="#beat1Select" text="2" />
             <RadioMenuItem fx:id="beat2" mnemonicParsing="false" onAction="#beat2Select" text="3" />
@@ -34,7 +34,7 @@
             <RadioMenuItem fx:id="beat6" mnemonicParsing="false" onAction="#beat6Select" text="12" />
         </items>
       </MenuButton>
-      <MenuButton fx:id="beatTimeOption" alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Time">
+      <MenuButton fx:id="beatTimeOption" alignment="CENTER" layoutX="110.0" layoutY="145.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="178.0" style="-fx-border-radius: 10; -fx-border-color: #000000; -fx-border-width: 2;" text="Select Beat Type">
          <items>
             <RadioMenuItem fx:id="beatTime1" mnemonicParsing="false" onAction="#beatTime1" text="1" />
             <RadioMenuItem fx:id="beatTime2" mnemonicParsing="false" onAction="#beatTime2" text="2" />
@@ -47,3 +47,4 @@
       <Button fx:id="SaveTimeSig" layoutX="252.0" layoutY="197.0" mnemonicParsing="false" onAction="#saveTimeSigClicked" prefHeight="25.0" prefWidth="68.0" text="Save" />
    </children>
 </Pane>
+

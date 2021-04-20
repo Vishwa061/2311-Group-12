@@ -750,7 +750,7 @@ public class Controller{
 			root = FXMLLoader.load(getClass().getResource("TimeSigniture.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Time Signiture");
+			popup.setTitle("Time Signature");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
