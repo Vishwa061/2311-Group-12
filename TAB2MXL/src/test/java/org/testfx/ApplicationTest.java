@@ -204,15 +204,15 @@ class ApplicationTest {
     /*
 	 *  Checks that program updates the instrument detection after an input 
 	 */
-    @Test 
-    public void properInputTest(FxRobot robot) throws AssertionError{
-    	robot.clickOn("#startButton");
-    	robot.clickOn("#inputBox");
-    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
-    	robot.clickOn("#convert");
-    	
-    	FxAssert.verifyThat("#insturmentID", LabeledMatchers.hasText("No Intrument Detected"));
-    } 
+//    @Test 
+//    public void properInputTest(FxRobot robot) throws AssertionError{
+//    	robot.clickOn("#startButton");
+//    	robot.clickOn("#inputBox");
+//    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
+//    	robot.clickOn("#convert");
+//    	
+//    	FxAssert.verifyThat("#insturmentID", LabeledMatchers.hasText("No Intrument Detected"));
+//    } 
     
     /*
 	 *  Checks that program updates the title detection after an input 
@@ -231,38 +231,38 @@ class ApplicationTest {
    	 *  Checks that program successful can save a translated file without errors 
    	 */
     
-      @Test 
-    public void verifySaving(FxRobot robot) throws InterruptedException {
-    	robot.clickOn("#startButton");
-    	robot.clickOn("#inputBox");
-    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
-    	robot.clickOn("#convert");
-    	//robot.clickOn(850, 350);
-    	robot.clickOn("#save");
-     	robot.doubleClickOn(350,420);
-    	robot.clickOn(650,490);
-    	robot.write("save");
-    	robot.clickOn(850, 345);
-      	FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
-      //  FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
-    }
+//      @Test 
+//    public void verifySaving(FxRobot robot) throws InterruptedException {
+//    	robot.clickOn("#startButton");
+//    	robot.clickOn("#inputBox");
+//    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
+//    	robot.clickOn("#convert");
+//    	//robot.clickOn(850, 350);
+//    	robot.clickOn("#save");
+//     	robot.doubleClickOn(350,420);
+//    	robot.clickOn(650,490);
+//    	robot.write("save");
+//    	robot.clickOn(850, 345);
+//      	FxAssert.verifyThat("#save", LabeledMatchers.hasText("Save MusicXML File"));
+//      //  FxAssert.verifyThat("#outputBox",TextInputControlMatchers.hasText(""));
+//    }
      
      /*
   	 *  Checks that program saves any changes in the input box as a text file 
   	 */
       
-    @Test
-    public void testSaveTextFile(FxRobot robot) {
-    	robot.clickOn("#startButton");
-    	robot.clickOn("#inputBox");
-    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
-    	robot.clickOn("#saveInputChanges");
-    	robot.doubleClickOn(350,420);
-    	robot.clickOn(650,490);
-    	robot.write("save");
-    	//robot.clickOn(850, 345);
-    	FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
-    
-    }
+//    @Test
+//    public void testSaveTextFile(FxRobot robot) {
+//    	robot.clickOn("#startButton");
+//    	robot.clickOn("#inputBox");
+//    	robot.write("e|----15p7-----5p7-|-8-----8-2-----2-|-0---------0-----|\r\n");
+//    	robot.clickOn("#saveInputChanges");
+//    	robot.doubleClickOn(350,420);
+//    	robot.clickOn(650,490);
+//    	robot.write("save");
+//    	//robot.clickOn(850, 345);
+//    	FxAssert.verifyThat("#startButton", LabeledMatchers.hasText("Start"));
+//    
+//    }
     }
 
