@@ -163,7 +163,7 @@ public class Controller{
 	@FXML 
 	private RadioMenuItem key1,key2,key3,key4,key5,key6,key7,key8,key9,key10,key11,key12,key13,key14,key15; 
 
-	static int keyFifths = 0;
+	int keyFifths = 0;
 
 	String keySelected = "";
 	/*
@@ -294,7 +294,7 @@ public class Controller{
 	
 	@FXML 
 	private void cancelTimeSigTS() {
-		cancelMeasure.getScene().getWindow().hide();
+		cancelEditTSButton.getScene().getWindow().hide();
 	}
 	
 	@FXML 
@@ -753,7 +753,7 @@ public class Controller{
 			root = FXMLLoader.load(getClass().getResource("TimeSigniture.fxml"));
 			final Stage popup = new Stage();
 			popup.initModality(Modality.APPLICATION_MODAL);
-			popup.setTitle("Time Signiture");
+			popup.setTitle("Time Signature");
 			popup.setScene(new Scene(root, 334, 226));
 			popup.show();
 
@@ -1021,8 +1021,9 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey10(ActionEvent event) {
-		keyFifths = -6;
+	void chosenKey10() {
+		try {
+		this.keyFifths = -6;
 		setKey(key10.getText());
 		key10.setSelected(true); // need to add to all. 
 		keyOption.setText(key10.getText());
@@ -1040,12 +1041,15 @@ public class Controller{
 		key13.setSelected(false);
 		key14.setSelected(false);
 		key15.setSelected(false);
-
+		}
+		catch (Exception e) {
+		    System.out.println("wow");
+		}
 	}
 
 	@FXML
-	void chosenKey11(ActionEvent event) {
-		keyFifths = -5;
+	void chosenKey11() {
+		this.keyFifths = -5;
 		key11.setSelected(true);
 		keyOption.setText(key11.getText());
 		key1.setSelected(false);
@@ -1066,8 +1070,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey12(ActionEvent event) {
-		keyFifths = -4;
+	void chosenKey12() {
+		this.keyFifths = -4;
 		key12.setSelected(true);
 		keyOption.setText(key12.getText());
 		key1.setSelected(false);
@@ -1088,8 +1092,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey13(ActionEvent event) {
-		keyFifths = -3;
+	void chosenKey13() {
+		this.keyFifths = -3;
 		key13.setSelected(true);
 		keyOption.setText(key13.getText());
 		key1.setSelected(false);
@@ -1110,8 +1114,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey14(ActionEvent event) {
-		keyFifths = -2;
+	void chosenKey14() {
+		this.keyFifths = -2;
 		key14.setSelected(true);
 		keyOption.setText(key14.getText());
 		key1.setSelected(false);
@@ -1132,8 +1136,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey2(ActionEvent event) {
-		keyFifths = 1;
+	void chosenKey2() {
+		this.keyFifths = 1;
 		key2.setSelected(true);
 		keyOption.setText(key2.getText());
 		key1.setSelected(false);
@@ -1154,8 +1158,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey3(ActionEvent event) {
-		keyFifths = 2;
+	void chosenKey3() {
+		this.keyFifths = 2;
 		key3.setSelected(true);
 		keyOption.setText(key3.getText());
 		key1.setSelected(false);
@@ -1176,8 +1180,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey4(ActionEvent event) {
-		keyFifths = 3;
+	void chosenKey4() {
+		this.keyFifths = 3;
 		key4.setSelected(true);
 		keyOption.setText(key4.getText());
 		key1.setSelected(false);
@@ -1198,8 +1202,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey5(ActionEvent event) {
-		keyFifths = 4;
+	void chosenKey5() {
+		this.keyFifths = 4;
 		key5.setSelected(true);
 		keyOption.setText(key5.getText());
 		key1.setSelected(false);
@@ -1220,8 +1224,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey6(ActionEvent event) {
-		keyFifths = 5;
+	void chosenKey6() {
+		this.keyFifths = 5;
 		key6.setSelected(true);
 		keyOption.setText(key6.getText());
 		key1.setSelected(false);
@@ -1241,8 +1245,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey7(ActionEvent event) {
-		keyFifths = 6;
+	void chosenKey7() {
+		this.keyFifths = 6;
 		key7.setSelected(true);
 		keyOption.setText(key7.getText());
 		key1.setSelected(false);
@@ -1263,8 +1267,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey8(ActionEvent event) {
-		keyFifths = 7;
+	void chosenKey8() {
+		this.keyFifths = 7;
 		key8.setSelected(true);
 		keyOption.setText(key8.getText());
 		key1.setSelected(false);
@@ -1285,8 +1289,8 @@ public class Controller{
 	}
 
 	@FXML
-	void chosenKey9(ActionEvent event) {
-		keyFifths = -7;
+	void chosenKey9() {
+		this.keyFifths = -7;
 		key9.setSelected(true);
 		keyOption.setText(key9.getText());
 		key1.setSelected(false);
@@ -1308,7 +1312,7 @@ public class Controller{
 
 	@FXML
 	void chosenkey1() {
-		keyFifths = 0;
+		this.keyFifths = 0;
 		key1.setSelected(true);
 		keyOption.setText(key1.getText());
 		key2.setSelected(false);
@@ -1328,8 +1332,8 @@ public class Controller{
 	}
 	
 	@FXML
-	void chosenKey15(ActionEvent event) {
-		keyFifths = -1;
+	void chosenKey15() {
+		this.keyFifths = -1;
 		key15.setSelected(true);
 		keyOption.setText(key15.getText());
 		key1.setSelected(false);
