@@ -217,15 +217,16 @@ class ApplicationTest {
     /*
 	 *  Checks that program updates the title detection after an input 
 	 */
-    @Test
-    public void properSelection(FxRobot robot) {    
-    	robot.clickOn("#startButton");
-    	robot.clickOn("#select");
-    	robot.clickOn(250, 220);
-    	robot.sleep(700);
-    	robot.doubleClickOn(300, 220);
-    	 FxAssert.verifyThat("#select", LabeledMatchers.hasText("Select File"));
-    }
+//    
+//    @Test
+//   public void properSelection(FxRobot robot) {    
+//    	robot.clickOn("#startButton");
+//    	robot.clickOn("#select");
+//    	robot.clickOn(250, 220);
+//    	robot.sleep(700);
+//    	robot.doubleClickOn(300, 220);
+//    	 FxAssert.verifyThat("#select", LabeledMatchers.hasText("Select File"));
+//   }
     
     /*
    	 *  Checks that program successful can save a translated file without errors 

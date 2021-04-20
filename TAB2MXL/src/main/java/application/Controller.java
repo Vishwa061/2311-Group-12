@@ -418,7 +418,7 @@ public class Controller{
 					}
 
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			} else {
@@ -617,73 +617,6 @@ public class Controller{
 		select.setDisable(false);
 	
 	}
-
-
-/*
-	public void initialize() {
-		assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
-		if (inputBox != null) {
-			inputBox.setDisable(true);
-		}		
-
-		assert outputBox != null : "fx:id=\"textInputFileArea\" was not injected: check your FXML file 'Untitled'.";
-		if (outputBox != null) {
-			outputBox.setDisable(true);
-		}	
-		
-		assert measureBox != null : "fx:id=\"measureBox\" was not injected: check your FXML file 'Untitled'.";
-		if (measureBox != null) {
-			measureBox.setDisable(true);
-		}	
-
-		if (select != null) { 
-			select.setDisable(true);
-		}	
-		assert select != null : "fx:id=\"submit\" was not injected: check your FXML file 'Untitled'.";
-		assert convert != null : "fx:id=\"convert\" was not injected: check your FXML file 'Untitled'.";
-		if (convert != null) { 
-			convert.setDisable(true);
-		}
-
-
-		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'Untitled'.";
-		if (save != null) { 
-			save.setDisable(true);
-		}
-
-		assert helpButton != null : "fx:id=\"helpButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-
-		assert timeSigButton != null : "fx:id=\"timeSigButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (timeSigButton != null) {
-			timeSigButton.setDisable(true);
-		}
-
-		assert keyButton != null : "fx:id=\"keyButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (keyButton != null) {
-			keyButton.setDisable(true);
-		}	
-
-		assert titleButton != null : "fx:id=\"titleButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (titleButton != null) {
-			titleButton.setDisable(true);
-		}
-		assert composerButton != null : "fx:id=\"composerButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (composerButton != null) {
-			composerButton.setDisable(true);
-		}
-
-		assert startButton != null : "fx:id=\"startButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		assert featureButton != null : "fx:id=\"featureButton\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-
-		if (featureButton != null) {
-			featureButton.setDisable(true);
-		}
-		
-		assert saveInputChanges != null : "fx:id=\"saveInputChanges\" was not injected: check your FXML file 'PrimaryStage.fxml'.";
-		if (saveInputChanges != null) {
-			saveInputChanges.setDisable(true);
-		}
-	}*/
 
 
 	/*
@@ -1386,7 +1319,7 @@ public class Controller{
 	}
 
 	public void initialize() {
-		// TODO Auto-generated method stub
+		
 	//	assert inputBox != null : "fx:id=\"textOutputAreaXML\" was not injected: check your FXML file 'Untitled'.";
 		if (inputBox != null) {
 			inputBox.setDisable(true);
